@@ -16,9 +16,8 @@ class MyServices {
     ServiceLocator.setup();
     FontServices.initQuranFonts();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    await SharedPrefs.init();
     await Future.wait([
-      dotenv.load(fileName: ".env"),
+      SharedPrefs.init(),
       DbHelper.instance.initDBDirectories(),
     ]);
     return this;
