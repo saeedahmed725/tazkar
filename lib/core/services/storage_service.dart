@@ -9,6 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../constants/app_shared_keys.dart';
 import '../constants/app_static.dart';
+import '../utils/errors/exceptions.dart';
+import '../utils/errors/failure.dart';
 import '../utils/helpers/shared_pref.dart';
 
 enum StorageType { internal, external }
@@ -32,9 +34,6 @@ class StorageService {
   /// INTERNAL STORAGE – iOS + Android
   /// ================================
   static Future<String> getInternalPath() async {
-    if (!(await requestAllStoragePermissions())) {
-      throw Exception("Permission not granted");
-    }
     final dir = await getApplicationDocumentsDirectory();
     final path = join(dir.path, AppStatic.appFolder);
     final folder = Directory(path);
@@ -114,7 +113,10 @@ class StorageService {
     }
 
     if (!(await requestAllStoragePermissions())) {
-      throw Exception("Permission not granted");
+      throw LocalException(
+        "Permission not granted",
+        code: LocalFailure.PERMISSION_ERROR_CODE,
+      );
     }
 
     String? uri = getSavedExternalUri();

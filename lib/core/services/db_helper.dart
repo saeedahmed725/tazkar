@@ -2,123 +2,19 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
-import 'package:dartz/dartz.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../constants/app_apis.dart';
-import '../network/dio_factory.dart';
-import '../network/network_client.dart';
-import '../utils/errors/error_code.dart';
 import '../utils/errors/exceptions.dart';
-import '../utils/helpers/shared_pref.dart';
+import '../utils/errors/failure.dart';
 
 class DbHelper {
   DbHelper._internal();
 
   static final DbHelper instance = DbHelper._internal();
 
-  String? temp;
   String? databasePath;
 
-  // String? tafasserPath;
-  // String? hadithPath;
   Database? _database;
-
-  final String _dbPathsName = 'db_paths';
-  final String _wordsDbName = 'words.db';
-  final String _quranDatabaseV2 = 'quran_database_v2.zip';
-
-  Future<bool> downloadDatabase(
-    void Function(int count, int total)? onReceiveProgress,
-  ) async {
-    log('Downloading database...', name: 'Downloading database');
-    String tempDBZipPath = '$temp/$_quranDatabaseV2';
-    final dio = DioFactory.getDio(baseUrl: AppApis.baseDownloadUrl);
-    final response = await NetworkClient(
-      dio,
-    ).download(_quranDatabaseV2, tempDBZipPath, onReceiveProgress);
-    DioFactory.addDioHeaders(AppApis.baseUrl);
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  bool checkDatabaseZipFileIsExist() =>
-      File('$temp/$_quranDatabaseV2').existsSync();
-
-  Future<Unit> checkDatabaseIsUnzipOrNot() async {
-    try {
-      List<String> dbPathsName = SharedPrefs.getStringList(_dbPathsName);
-      if (dbPathsName.isEmpty) {
-        List<String> fileNames = await unzipDatabaseZipFileFromTempFiles();
-        SharedPrefs.setStringList(_dbPathsName, fileNames);
-      } else {
-        for (String path in dbPathsName) {
-          File file = File(path);
-          if (!file.existsSync()) {
-            List<String> fileNames = await unzipDatabaseZipFileFromTempFiles();
-            SharedPrefs.setStringList(_dbPathsName, fileNames);
-            break;
-          }
-        }
-      }
-    } catch (e) {
-      throw LocalException(
-        e.toString(),
-        code: LocalErrorCode.DATABASE_ERROR_CODE,
-      );
-    }
-    return unit;
-  }
-
-  Future<List<String>> unzipDatabaseZipFileFromTempFiles() async {
-    log('Unzipping files...', name: 'Unzipping files');
-    String tempDBZipPath = '$temp/$_quranDatabaseV2';
-    List<String> fileNames = [];
-    File zipFile = File(tempDBZipPath);
-    List<int> bytes = await zipFile.readAsBytes();
-    Archive archive = ZipDecoder().decodeBytes(bytes);
-
-    for (ArchiveFile file in archive) {
-      if (file.isFile) {
-        String filename = '$databasePath/${file.name}';
-        fileNames.add(filename);
-        File outFile = File(filename);
-        if (!outFile.existsSync()) {
-          await outFile.create(recursive: true);
-          await outFile.writeAsBytes(file.content as List<int>);
-          log('ملف JSON: $filename');
-          log('Unzipping file $filename: done.', name: 'Unzipping files');
-        }
-      }
-    }
-    return fileNames;
-  }
-
-  Future<void> initDBDirectories() async {
-    final paths = await Future.wait([
-      getDatabasesPath(),
-      getTemporaryDirectory(),
-    ]);
-    databasePath = paths[0] as String;
-    temp = "${(paths[1] as Directory).path}/temp";
-  }
-
-  Future<void> deleteDB() async {
-    log('Deleting temporary files...  $databasePath', name: 'Deleting files');
-    if (databasePath != null) {
-      final directory = Directory(databasePath!);
-      if (await directory.exists()) {
-        await directory.delete(recursive: true);
-        SharedPrefs.remove(_dbPathsName);
-        log('Temporary files deleted due to error.');
-      }
-    }
-  }
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -127,7 +23,13 @@ class DbHelper {
   }
 
   Future<Database> _initDatabase() async {
-    return await openDatabase('$databasePath/$_wordsDbName');
+    if (databasePath == null) {
+      throw LocalException(
+        'Database not found',
+        code: LocalFailure.DATABASE_ERROR_CODE,
+      );
+    }
+    return await openDatabase(databasePath!);
   }
 
   Future<T> readDatabaseFile<T>({
@@ -154,7 +56,7 @@ class DbHelper {
       log("Error loading data: $e", name: "Db Helper");
       throw LocalException(
         e.toString(),
-        code: LocalErrorCode.DATABASE_ERROR_CODE,
+        code: LocalFailure.DATABASE_ERROR_CODE,
       );
     }
   }
@@ -175,7 +77,7 @@ class DbHelper {
       log("Error loading data: $e", name: "Db Helper");
       throw LocalException(
         e.toString(),
-        code: LocalErrorCode.DATABASE_ERROR_CODE,
+        code: LocalFailure.DATABASE_ERROR_CODE,
       );
     }
   }

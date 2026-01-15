@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:tazkar/core/utils/errors/error_code.dart';
 import 'package:tazkar/core/utils/errors/exceptions.dart';
+
 enum FailureType { network, internal, local }
 
 abstract class Failure {
@@ -23,6 +23,12 @@ abstract class Failure {
       return Result.success(result);
     } on InternetException catch (error) {
       return Result.error(NetworkFailure.fromInternetError(error));
+    } on LocalException catch (error) {
+      return Result.error(LocalFailure.fromException(error));
+    } on FileSystemException catch (error) {
+      return Result.error(LocalFailure.fromException(error));
+    } on FormatException catch (error) {
+      return Result.error(LocalFailure.fromException(error));
     } on RemoteException catch (error) {
       return Result.error(NetworkFailure(error.message, code: error.code));
     } on DioException catch (error) {
@@ -32,7 +38,6 @@ abstract class Failure {
       return Result.error(NetworkFailure("$errorMessage: $e"));
     }
   }
-
 
   static Stream<Result<T>> handleStreamOperation<T>({
     required Stream<T> Function() operation,
@@ -46,13 +51,18 @@ abstract class Failure {
       yield Result.error(NetworkFailure(error.message, code: error.code));
     } on DioException catch (error) {
       yield Result.error(NetworkFailure.fromDioError(error));
+    } on FileSystemException catch (error) {
+      yield Result.error(LocalFailure.fromException(error));
+    } on FormatException catch (error) {
+      yield Result.error(LocalFailure.fromException(error));
+    } on LocalException catch (error) {
+      yield Result.error(LocalFailure.fromException(error));
     } catch (e, stack) {
       log("Handled error: $e", stackTrace: stack);
-      yield Result.error(NetworkFailure("$errorMessage: $e"));
+      yield Result.error(LocalFailure.fromException(Exception(e.toString())));
     }
   }
 }
-
 
 class Result<T> {
   final Either<Failure, T> data;
@@ -77,10 +87,10 @@ class Result<T> {
 
 // Represent failures from Network.
 class NetworkFailure extends Failure {
-  NetworkFailure(
-    String message, {
-    int? code = RemoteErrorCode.INTERNET_ERROR_CODE,
-  }) : super(message, FailureType.network, errorCode: code);
+  static const INTERNET_ERROR_CODE = 101;
+
+  NetworkFailure(String message, {int? code = INTERNET_ERROR_CODE})
+    : super(message, FailureType.network, errorCode: code);
 
   factory NetworkFailure.fromInternetError(InternetException exception) {
     return NetworkFailure('No internet connection', code: exception.code);
@@ -140,27 +150,21 @@ class LocalFailure extends Failure {
   const LocalFailure(String message, {int? code})
     : super(message, FailureType.local, errorCode: code);
 
-  factory LocalFailure.fromIoException(Exception exception) {
+  // ignore_for_file: constant_identifier_names
+  static const LOCATION_ERROR_CODE = 1;
+  static const DATABASE_ERROR_CODE = 2;
+  static const PERMISSION_ERROR_CODE = 4;
+  static const GENERIC_ERROR_CODE = 3;
+
+  factory LocalFailure.fromException(Exception exception) {
     if (exception is FileSystemException) {
-      return LocalFailure(
-        'File System Error: ${exception.message}',
-        code: LocalErrorCode.DATABASE_ERROR_CODE,
-      );
+      return LocalFailure(exception.message, code: DATABASE_ERROR_CODE);
     } else if (exception is FormatException) {
-      return LocalFailure(
-        'Data format error: ${exception.message}',
-        code: LocalErrorCode.DATABASE_ERROR_CODE,
-      );
+      return LocalFailure(exception.message, code: DATABASE_ERROR_CODE);
     } else if (exception is LocalException) {
-      return LocalFailure(
-        'Local Exception error: ${exception.message}',
-        code: exception.code,
-      );
+      return LocalFailure(exception.message, code: exception.code);
     } else {
-      return LocalFailure(
-        'Unexpected Local Error: ${exception.toString()}',
-        code: LocalErrorCode.DATABASE_ERROR_CODE,
-      );
+      return LocalFailure(exception.toString(), code: GENERIC_ERROR_CODE);
     }
   }
 

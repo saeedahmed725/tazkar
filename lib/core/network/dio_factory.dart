@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../constants/app_apis.dart';
 import '../utils/Interceptors/internet_interceptor.dart';
-
 
 class DioFactory {
   DioFactory._();
@@ -28,7 +26,7 @@ class DioFactory {
   }
 
   static void addDioHeaders(String? baseUrl) {
-    dio?.options.baseUrl = baseUrl ?? AppApis.baseUrl;
+    dio?.options.baseUrl = baseUrl ?? dio!.options.baseUrl;
     dio?.options.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tazkar/core/utils/errors/error_code.dart';
 import 'package:tazkar/core/utils/errors/failure.dart';
 
 class RemoteFailureContent extends StatelessWidget {
@@ -10,25 +9,21 @@ class RemoteFailureContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (failure.errorCode == RemoteErrorCode.INTERNET_ERROR_CODE) {
+    if (failure.errorCode == NetworkFailure.INTERNET_ERROR_CODE) {
       return Container(
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: 500
-              ),
+              constraints: BoxConstraints(maxWidth: 500),
               child: ClipOval(
                 child: LottieBuilder.asset(
                   'assets/images/error/no_internet.json',
                 ),
               ),
             ),
-            SizedBox(
-              height: 16,
-            ),
+            SizedBox(height: 16),
             Text(
               failure.message,
               style: Theme.of(context).textTheme.bodyLarge,
@@ -42,16 +37,10 @@ class RemoteFailureContent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 500,
-          ),
-          child: LottieBuilder.asset(
-            'assets/images/error/general_error.json',
-          ),
+          constraints: BoxConstraints(maxWidth: 500),
+          child: LottieBuilder.asset('assets/images/error/general_error.json'),
         ),
-        SizedBox(
-          height: 16
-        ),
+        SizedBox(height: 16),
         Text(
           failure.message,
           style: Theme.of(context).textTheme.bodyLarge,

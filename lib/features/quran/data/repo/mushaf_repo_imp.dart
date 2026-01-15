@@ -59,7 +59,7 @@ class MushafRepoImp extends MushafRepo {
 
       return Result(data: right((quranText: quran, ayahs: allMushafPagesData)));
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
@@ -73,7 +73,7 @@ class MushafRepoImp extends MushafRepo {
       final ayahs = await local.getSurahs();
       return Result(data: Right(ayahs));
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
@@ -87,7 +87,7 @@ class MushafRepoImp extends MushafRepo {
       final ayahs = await local.getJuzs();
       return Result(data: Right(ayahs));
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
@@ -100,7 +100,7 @@ class MushafRepoImp extends MushafRepo {
     try {
       return Result(data: Right(await local.getSurahsInfoFromJson()));
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
@@ -125,7 +125,7 @@ class MushafRepoImp extends MushafRepo {
         ),
       );
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
@@ -150,7 +150,7 @@ class MushafRepoImp extends MushafRepo {
         ),
       );
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
@@ -175,7 +175,7 @@ class MushafRepoImp extends MushafRepo {
         ),
       );
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
@@ -200,7 +200,7 @@ class MushafRepoImp extends MushafRepo {
         ),
       );
     } on LocalException catch (exception) {
-      return Result(data: Left(LocalFailure.fromIoException(exception)));
+      return Result(data: Left(LocalFailure.fromException(exception)));
     } catch (exception) {
       return Result(
         data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),

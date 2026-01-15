@@ -1,9 +1,7 @@
-import 'dart:developer';
-
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tazkar/core/utils/errors/error_code.dart';
 import 'package:tazkar/core/utils/errors/failure.dart';
 
 class LocalFailureContent extends StatelessWidget {
@@ -13,15 +11,43 @@ class LocalFailureContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (failure.errorCode == LocalErrorCode.LOCTION_ERROR_CODE) {
-      return Container(
-        color: Colors.white,
+    if (failure.errorCode == LocalFailure.LOCATION_ERROR_CODE) {
+      return Center(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: context.width * 0.6),
+                child: LottieBuilder.asset('assets/images/error/no_gps.json'),
+              ),
+              SizedBox(height: 16),
+              Text(
+                failure.message,
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 8),
+              GestureDetector(
+                onTap: () async => await Geolocator.openLocationSettings(),
+                child: Text('To App Setting'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    if (failure.errorCode == LocalFailure.DATABASE_ERROR_CODE) {
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 500),
-              child: LottieBuilder.asset('assets/images/error/no_gps.json'),
+              constraints: BoxConstraints(maxWidth: context.width * 0.6),
+              child: LottieBuilder.asset(
+                'assets/images/error/database_error.json',
+              ),
             ),
             SizedBox(height: 16),
             Text(
@@ -29,23 +55,18 @@ class LocalFailureContent extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 8),
-            GestureDetector(
-              onTap: () async => await Geolocator.openLocationSettings(),
-              child: Text('To App Setting'),
-            ),
           ],
         ),
       );
     }
-    if (failure.errorCode == LocalErrorCode.DATABASE_ERROR_CODE) {
-      return Column(
+    return Center(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 500),
+            constraints: BoxConstraints(maxWidth: context.width * 0.6),
             child: LottieBuilder.asset(
-              'assets/images/error/database_error.json',
+              'assets/images/error/general_error.json',
             ),
           ),
           SizedBox(height: 16),
@@ -55,23 +76,7 @@ class LocalFailureContent extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-      );
-    }
-    log(failure.toString());
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 500),
-          child: LottieBuilder.asset('assets/images/error/general_error.json'),
-        ),
-        SizedBox(height: 16),
-        Text(
-          failure.message,
-          style: Theme.of(context).textTheme.bodyLarge,
-          textAlign: TextAlign.center,
-        ),
-      ],
+      ),
     );
   }
 }

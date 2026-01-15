@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tazkar/app/app.dart';
 
-import 'config/routes/language/app_language.dart';
+import 'config/language/app_language.dart';
 import 'core/services/my_services.dart';
 
 Future<void> main() async {
@@ -13,7 +13,7 @@ Future<void> main() async {
   runApp(
     EasyLocalization(
       supportedLocales: AppLanguage.locals,
-      fallbackLocale: AppLanguage.englishLocal,
+      fallbackLocale: AppLanguage.arabicLocal,
       path: AppLanguage.localizationPath,
       child: const QuranApp(),
     ),

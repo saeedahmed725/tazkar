@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:archive/archive.dart';
 import 'package:crypto/crypto.dart';
@@ -19,6 +18,19 @@ import '../../../../core/services/storage_service.dart';
 class QuranLocalDataSource {
   final String _assetsZipPath = 'assets/database/quran_database_v2.zip';
   final String _wordsDbName = 'words.db';
+
+  QuranLocalDataSource() {
+    if (DbHelper.instance.databasePath == null) {
+      () async {
+        DbHelper.instance.databasePath = await dbPath;
+      }();
+    }
+  }
+
+  Future<String> get dbPath async {
+    final destinationPath = await StorageService.getInternalPath();
+    return '$destinationPath/$_wordsDbName';
+  }
 
   Future<bool> findDBFile() async {
     final file = await StorageService.findFile(
@@ -48,27 +60,24 @@ class QuranLocalDataSource {
 
     final total = archive.length;
     int done = 0;
-    final destinationPath = await StorageService.getInternalPath();
 
     for (final file in archive) {
-      final filePath = '$destinationPath/${file.name}';
-
       if (file.isFile) {
         await StorageService.save(
           storage: StorageType.internal,
           fileName: file.name,
           bytes: file.content,
         );
-      } else {
-        await Directory(filePath).create(recursive: true);
       }
-
       done++;
       onProgress(done, total);
     }
 
     await SharedPrefs.setString(AppSharedKeys.zipHash, currentHash);
   }
+
+  ///  if any error occurs during unzip process, delete the database
+  Future<void> deleteDB() async {}
 
   // Get all ayahs quran
   Future<List<QuranModel>> getQuranData() async {

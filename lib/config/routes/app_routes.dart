@@ -36,7 +36,8 @@ class AppRoutes {
   );
 
   static final splashRoute = GoRoute(
-    path: AppRoutes.splash,
+    path: "/$splash",
+    name: splash,
     builder: (context, state) => BlocProvider(
       create: (_) => ServiceLocator.get<QuranGlobalBloc>(),
       child: SplashScreen(),
@@ -44,12 +45,14 @@ class AppRoutes {
   );
 
   static final homeRoute = GoRoute(
-    path: AppRoutes.home,
+    path: "/$home",
+    name: home,
     builder: (context, state) => HomeScreen(),
   );
 
   static final quranRoute = GoRoute(
-    path: AppRoutes.quran,
+    path: '/$quran',
+    name: quran,
     builder: (context, state) => MushafScreen(
       pageNumber: state.uri.queryParameters['page_number'] != null
           ? int.tryParse(state.uri.queryParameters['page_number']!) ?? 1
@@ -58,7 +61,8 @@ class AppRoutes {
   );
 
   static final surahsListRoute = GoRoute(
-    path: AppRoutes.surahsList,
+    path: '/$surahsList',
+    name: surahsList,
     builder: (context, state) => MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ServiceLocator.get<SurahInfosBloc>()),

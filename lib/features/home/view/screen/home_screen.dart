@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
@@ -202,7 +203,7 @@ class HomeTopLayoutSliverList extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => context.pushNamed(AppRoutes.surahsList),
+            onTap: () => GoRouter.of(context).pushNamed(AppRoutes.surahsList),
             child: _buildIconContainer(
               context: context,
               icon: FlutterIslamicIcons.solidQuran2,
@@ -290,7 +291,7 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () => context.pushNamed(AppRoutes.qibla),
+            onTap: () => GoRouter.of(context).pushNamed(AppRoutes.qibla),
             child: _buildSmallIconContainer(
               context: context,
               icon: FlutterIslamicIcons.solidKaaba,
@@ -298,7 +299,7 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () => context.pushNamed(AppRoutes.prayer),
+            onTap: () => GoRouter.of(context).pushNamed(AppRoutes.prayer),
             child: _buildSmallIconContainer(
               context: context,
               icon: FlutterIslamicIcons.solidKowtow,
@@ -306,7 +307,7 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () => context.pushNamed(AppRoutes.calendar),
+            onTap: () => GoRouter.of(context).pushNamed(AppRoutes.calendar),
             child: _buildSmallIconContainer(
               context: context,
               icon: FlutterIslamicIcons.calendar,
