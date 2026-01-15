@@ -1,15 +1,15 @@
 import 'dart:ui';
 
 import 'package:animations/animations.dart';
+import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tazkar/core/constants/app_color.dart';
+import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
 import 'package:tazkar/core/utils/components/blur_background.dart';
-import 'package:tazkar/core/utils/extension/extension.dart';
 import 'package:tazkar/features/home/view/controller/home_controller.dart';
 import 'package:tazkar/features/home/view/widgets/prayer_sliver_card.dart';
 
@@ -28,29 +28,30 @@ class _HomeScreenState extends State<HomeScreen> {
     final controller = HomeController.instance;
     return Scaffold(
       key: controller.scaffoldKey,
-      backgroundColor: AppColor.kPrimaryColor,
-      drawer: Menu(),
+      backgroundColor: context.primaryColor,
       bottomNavigationBar: CustomBottomNavigationBar(),
       body: ValueListenableBuilder<int>(
-          valueListenable: controller.selectedIndexNotifier,
-          builder: (context, selectedIndex, child) {
-            return PageTransitionSwitcher(
-              duration: const Duration(milliseconds: 400),
-              transitionBuilder: (
-                Widget child,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-              ) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  fillColor: Colors.transparent,
-                  child: child,
-                );
-              },
-              child: getPages(selectedIndex),
-            );
-          }),
+        valueListenable: controller.selectedIndexNotifier,
+        builder: (context, selectedIndex, child) {
+          return PageTransitionSwitcher(
+            duration: const Duration(milliseconds: 400),
+            transitionBuilder:
+                (
+                  Widget child,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                ) {
+                  return FadeThroughTransition(
+                    animation: animation,
+                    secondaryAnimation: secondaryAnimation,
+                    fillColor: Colors.transparent,
+                    child: child,
+                  );
+                },
+            child: getPages(selectedIndex),
+          );
+        },
+      ),
     );
   }
 
@@ -102,9 +103,7 @@ class StatisticsPage extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -120,39 +119,39 @@ class HomePage extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fromRect(
-              rect: Rect.fromLTWH(1.sw / 8 - 50.w, 170, 100.w, 100.h),
+              rect: Rect.fromLTWH(1 / 8 - 50, 170, 100, 100),
               child: Container(
-                width: 60.w,
-                height: 60.w,
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                width: 60,
+                height: 60,
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: AppColor.kOffWhiteColor,
+                      color: AppColors.kOffWhiteColor,
                       blurRadius: 20.0,
                     ),
                   ],
-                  color: AppColor.kSecondaryColor,
+                  color: AppColors.kSecondaryColor,
                   shape: BoxShape.circle,
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: CustomScrollView(
                 scrollBehavior: ScrollBehavior(),
                 slivers: [
-                  SliverToBoxAdapter(child: SizedBox(height: 8.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 8)),
                   HomeSliverAppBar(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 20)),
                   PrayerSliverCard(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 20)),
                   HomeTopLayoutSliverList(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 20)),
                   HomeBottomLayoutSliverList(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 20)),
                   HomeStatisticsSliver(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 20)),
                 ],
               ),
             ),
@@ -173,18 +172,18 @@ class HomeStatisticsSliver extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: BlurBackground(
-            width: 1.sw - 32.w,
-            height: 269.h,
-            color: AppColor.kOffWhiteColor,
-            borderRadius: BorderRadius.circular(20.r),
+            width: MediaQuery.of(context).size.width - 32,
+            height: 269,
+            color: AppColors.kOffWhiteColor,
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
-                color: AppColor.kSecondaryColor.withValues(alpha: 0.5), width: 1),
+              color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
+              width: 1,
+            ),
             child: Center(
               child: Text(
-                context.tr.statistics,
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+                'statistics'.tr(),
+                style: const TextStyle(color: Colors.black),
               ),
             ),
           ),
@@ -203,33 +202,44 @@ class HomeTopLayoutSliverList extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => context.toNamed(AppRoutes.surahsList),
+            onTap: () => context.pushNamed(AppRoutes.surahsList),
             child: _buildIconContainer(
-                icon: FlutterIslamicIcons.solidQuran2, label: context.tr.quran),
+              context: context,
+              icon: FlutterIslamicIcons.solidQuran2,
+              label: 'quran'.tr(),
+            ),
           ),
-          SizedBox(width: 16.w),
+          SizedBox(width: 16),
           GestureDetector(
             onTap: () {},
             child: _buildIconContainer(
-                imagePath: AppImageAssets.chatbotSolidIcon,
-                label: context.tr.chatbot),
+              context: context,
+              imagePath: AppImageAssets.chatbotSolidIcon,
+              label: 'chatbot'.tr(),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildIconContainer(
-      {IconData? icon, String? imagePath, required String label}) {
+  Widget _buildIconContainer({
+    required BuildContext context,
+    IconData? icon,
+    String? imagePath,
+    required String label,
+  }) {
     return Container(
-      height: 70.h,
-      width: (1.sw - 32.w) / 2 - 8.w,
-      padding: EdgeInsets.symmetric(horizontal: 14.w),
+      height: 70,
+      width: (MediaQuery.of(context).size.width - 32) / 2 - 8,
+      padding: EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: AppColor.kOffWhiteColor,
+        color: AppColors.kOffWhiteColor,
         border: Border.all(
-            color: AppColor.kSecondaryColor.withValues(alpha: 0.5), width: 1),
-        borderRadius: BorderRadius.circular(20.r),
+          color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -238,23 +248,21 @@ class HomeTopLayoutSliverList extends StatelessWidget {
           if (imagePath != null)
             SvgPicture.asset(
               imagePath,
-              colorFilter:
-                  ColorFilter.mode(AppColor.kPrimaryColor, BlendMode.srcIn),
-              width: 30.h,
-              height: 30.h,
+              colorFilter: ColorFilter.mode(
+                context.primaryColor,
+                BlendMode.srcIn,
+              ),
+              width: 30,
+              height: 30,
             ),
           if (icon != null)
-            Icon(
-              icon,
-              color: AppColor.kPrimaryColor,
-              size: 30.sp,
-            ),
-          SizedBox(width: 5.w),
+            Icon(icon, color: context.primaryColor, size: 30),
+          SizedBox(width: 5),
           Text(
             label,
             style: TextStyle(
-              color: AppColor.kPrimaryColor,
-              fontSize: 16.sp,
+              color: context.primaryColor,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -276,64 +284,77 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
           GestureDetector(
             onTap: () {},
             child: _buildSmallIconContainer(
-                icon: Icons.menu_book, label: "قصص الانبياء"),
+              context: context,
+              icon: Icons.menu_book,
+              label: 'قصص الانبياء',
+            ),
           ),
           GestureDetector(
-            onTap: () => context.toNamed(AppRoutes.qibla),
+            onTap: () => context.pushNamed(AppRoutes.qibla),
             child: _buildSmallIconContainer(
-                icon: FlutterIslamicIcons.solidKaaba, label: context.tr.qibla),
+              context: context,
+              icon: FlutterIslamicIcons.solidKaaba,
+              label: 'qibla'.tr(),
+            ),
           ),
           GestureDetector(
-            onTap: () => context.toNamed(AppRoutes.prayer),
+            onTap: () => context.pushNamed(AppRoutes.prayer),
             child: _buildSmallIconContainer(
-                icon: FlutterIslamicIcons.solidKowtow,
-                label: context.tr.prayer),
+              context: context,
+              icon: FlutterIslamicIcons.solidKowtow,
+              label: 'prayer'.tr(),
+            ),
           ),
           GestureDetector(
-            onTap: () => context.toNamed(AppRoutes.calendar),
+            onTap: () => context.pushNamed(AppRoutes.calendar),
             child: _buildSmallIconContainer(
-                icon: FlutterIslamicIcons.calendar, label: context.tr.calendar),
+              context: context,
+              icon: FlutterIslamicIcons.calendar,
+              label: 'calendar'.tr(),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSmallIconContainer(
-      {IconData? icon, String? imagePath, required String label}) {
+  Widget _buildSmallIconContainer({
+    required BuildContext context,
+    IconData? icon,
+    String? imagePath,
+    required String label,
+  }) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          height: 70.h,
-          width: (1.sw - 32.w) / 4 - 8.w,
-          padding: EdgeInsets.symmetric(horizontal: 14.w),
+          height: 70,
+          width: (MediaQuery.of(context).size.width - 32) / 4 - 8,
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
-            color: AppColor.kOffWhiteColor,
+            color: AppColors.kOffWhiteColor,
             border: Border.all(
-                color: AppColor.kSecondaryColor.withValues(alpha: 0.5), width: 1),
-            borderRadius: BorderRadius.circular(20.r),
+              color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: (imagePath != null)
               ? Image.asset(
                   imagePath,
-                  color: AppColor.kPrimaryColor,
-                  width: 30.h,
-                  height: 30.h,
+                  color: context.primaryColor,
+                  width: 30,
+                  height: 30,
                 )
-              : Icon(
-                  icon,
-                  color: AppColor.kPrimaryColor,
-                  size: 30.sp,
-                ),
+              : Icon(icon, color: context.primaryColor, size: 30),
         ),
-        SizedBox(height: 4.h),
+        const SizedBox(height: 4),
         Text(
           label,
           style: TextStyle(
-            color: AppColor.kOffWhiteColor,
-            fontSize: 14.sp,
+            color: AppColors.kOffWhiteColor,
+            fontSize: 14,
             fontFamily: AppFonts.kSAFonts,
             fontWeight: FontWeight.bold,
           ),
@@ -355,9 +376,12 @@ class HomeSliverAppBar extends StatelessWidget {
       snap: true,
       floating: true,
       shape: RoundedRectangleBorder(
-          side: BorderSide(color: AppColor.kSecondaryColor.withValues(alpha: 0.5)),
-          borderRadius: BorderRadius.circular(20.r)),
-      flexibleSpace: BlurBackground(borderRadius: BorderRadius.circular(20.r)),
+        side: BorderSide(
+          color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      flexibleSpace: BlurBackground(borderRadius: BorderRadius.circular(20)),
       actions: [
         Padding(
           padding: EdgeInsetsDirectional.only(end: 10.0),
@@ -377,27 +401,29 @@ class HomeSliverAppBar extends StatelessWidget {
           Text(
             'As-salamu alaykum',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
           Text(
             'username',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.white70,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.white70),
           ),
         ],
       ),
       leading: IconButton(
         icon: Transform(
           alignment: Alignment.center,
-          transform: Matrix4.identity()
-            ..scale(context.locale == "ar" ? -1.0 : 1.0, 1.0, 1.0),
-          child: SvgPicture.asset(AppImageAssets.menuLineIcon,
-              colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+          transform: Matrix4.diagonal3Values(
+            context.locale.languageCode == "ar" ? -1.0 : 1.0,
+            1.0,
+            1.0,
+          ),
+          child: SvgPicture.asset(
+            AppImageAssets.menuLineIcon,
+            colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          ),
         ),
         onPressed: () =>
             HomeController.instance.scaffoldKey.currentState?.openDrawer(),
@@ -414,14 +440,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
     final controller = HomeController.instance;
 
     List<String> itemsNames = [
-      context.tr.home,
-      context.tr.statistics,
-      context.tr.favorites,
-      context.tr.profile,
-      context.tr.settings,
+      'home'.tr(),
+      'statistics'.tr(),
+      'favorites'.tr(),
+      'profile'.tr(),
+      'settings'.tr(),
     ];
     return Container(
-      height: 70.h,
+      height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -432,36 +458,33 @@ class CustomBottomNavigationBar extends StatelessWidget {
             offset: Offset(0.0, -10.0),
           ),
         ],
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.r),
-          topRight: Radius.circular(20.r),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
       ),
       child: Row(
-        children: List.generate(
-          5,
-          (index) {
-            return ValueListenableBuilder<int>(
-              valueListenable: controller.selectedIndexNotifier,
-              builder: (context, selectedIndex, child) {
-                final solisIcon = controller.itemsSolidIcons[index];
-                final outlinedIcons = controller.itemsOutlinedIcons[index];
-                final isSelected = selectedIndex == index;
-                return CustomBottomNavButton(
-                  icon: solisIcon is IconData
-                      ? (isSelected ? solisIcon : outlinedIcons)
-                      : null,
-                  image: solisIcon is String
-                      ? (isSelected ? solisIcon : outlinedIcons)
-                      : null,
-                  label: itemsNames[index],
-                  isSelect: isSelected,
-                  onTap: () => controller.setPageIndex(index),
-                );
-              },
-            );
-          },
-        ),
+        children: List.generate(5, (index) {
+          return ValueListenableBuilder<int>(
+            valueListenable: controller.selectedIndexNotifier,
+            builder: (context, selectedIndex, child) {
+              final solisIcon = controller.itemsSolidIcons[index];
+              final outlinedIcons = controller.itemsOutlinedIcons[index];
+              final isSelected = selectedIndex == index;
+              return CustomBottomNavButton(
+                icon: solisIcon is IconData
+                    ? (isSelected ? solisIcon : outlinedIcons)
+                    : null,
+                image: solisIcon is String
+                    ? (isSelected ? solisIcon : outlinedIcons)
+                    : null,
+                label: itemsNames[index],
+                isSelect: isSelected,
+                onTap: () => controller.setPageIndex(index),
+              );
+            },
+          );
+        }),
       ),
     );
   }
@@ -489,50 +512,51 @@ class CustomBottomNavButton extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(20),
           onTap: onTap,
           child: Ink(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                (15.h).heightGap,
+                15.heightBox,
                 if (image != null)
                   SvgPicture.asset(
                     image!,
                     colorFilter: ColorFilter.mode(
-                        isSelect ? AppColor.kPrimaryColor : Colors.grey,
-                        BlendMode.srcIn),
-                    width: 22.h,
-                    height: 22.h,
+                      isSelect ? context.primaryColor : Colors.grey,
+                      BlendMode.srcIn,
+                    ),
+                    width: 22,
+                    height: 22,
                   ),
                 if (icon != null)
                   Icon(
                     icon,
-                    color: isSelect ? AppColor.kPrimaryColor : Colors.grey,
-                    size: 22.h,
+                    color: isSelect ? context.primaryColor : Colors.grey,
+                    size: 22
                   ),
-                5.heightGap,
+                5.heightBox,
                 Text(
                   label,
                   style: TextStyle(
-                    color: isSelect ? AppColor.kPrimaryColor : Colors.grey,
-                    fontSize: 11.sp,
+                    color: isSelect ? context.primaryColor : Colors.grey,
+                    fontSize: 11,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                (2.h).heightGap,
+                (2).heightBox,
                 Container(
-                  height: 4.h,
-                  width: 50.w,
-                  margin: EdgeInsets.only(bottom: 4.h),
+                  height: 4,
+                  width: 50,
+                  margin: EdgeInsets.only(bottom: 4),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
+                    borderRadius: BorderRadius.circular(10),
                     color: isSelect
-                        ? AppColor.kSecondaryColor
+                        ? AppColors.kSecondaryColor
                         : Colors.transparent,
                     shape: BoxShape.rectangle,
                   ),
@@ -541,167 +565,6 @@ class CustomBottomNavButton extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class Menu extends StatelessWidget {
-  const Menu({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-        child: Container(
-          color: AppColor.kPrimaryColor.withValues(alpha: 0.2),
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
-          child: ListView(
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: AppColor.kPrimaryColor,
-                    child: Icon(
-                      Icons.face_4,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Salma Ahmed', // User name
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Online', // User status (optional)
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              16.heightGap,
-              MenuItem(
-                icon: Icons.language,
-                title: 'Change Language',
-                onTap: () {},
-              ),
-              MenuItem(
-                icon: Icons.book,
-                title: 'Quran',
-                onTap: () {
-                  context.toNamed(AppRoutes.quran);
-                },
-              ),
-              MenuItem(
-                icon: Icons.chat,
-                title: 'Chatbot',
-                onTap: () {},
-              ),
-              MenuItem(
-                icon: Icons.explore,
-                title: 'Qibla Direction',
-                onTap: () {
-                  context.toNamed(AppRoutes.prayer);
-                },
-              ),
-              MenuItem(
-                icon: Icons.access_time,
-                title: 'Prayer Time',
-                onTap: () {
-                  context.toNamed(AppRoutes.prayer);
-                },
-              ),
-              MenuItem(
-                icon: Icons.favorite_border,
-                title: 'Prophets Story',
-                onTap: () {},
-              ),
-              16.heightGap,
-              Divider(),
-              16.heightGap,
-              MenuItem(
-                icon: Icons.logout,
-                title: 'logout',
-                onTap: () {
-                  context.toNamed(AppRoutes.splash);
-                },
-              ),
-              16.heightGap,
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Text(
-                  'Version 1.0.0', // App version
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Text(
-                  'Privacy Policy | Terms of Service', // Footer links
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MenuItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-
-  const MenuItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColor.kOffWhiteColor,
-        borderRadius: BorderRadius.circular(15.r),
-      ),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: AppColor.kPrimaryColor,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            color: AppColor.kPrimaryColor,
-            fontSize: 16.sp,
-          ),
-        ),
-        onTap: onTap,
       ),
     );
   }

@@ -10,8 +10,14 @@ import 'package:tazkar/features/quran/data/model/surah_info_data.dart';
 import 'package:tazkar/features/quran/data/model/surah_model.dart';
 
 abstract class MushafRepo {
+  Future<Result<bool>> findDBFile();
+
+  Future<Result<void>> extractZip({
+    required void Function(int done, int total) onProgress,
+  });
+
   Future<Result<({List<QuranModel> quranText, List<List<AyahGlyph>> ayahs})>>
-      getQuranTextAndAyahGlyphs();
+  getQuranTextAndAyahGlyphs();
 
   Future<Result<List<SurahInfo>>> getSurahsInfo();
 
@@ -42,6 +48,7 @@ abstract class MushafRepo {
     required int verseNumber,
     required int wordNumber,
   });
+
   Future<Result<List<CorrectionModel>>> recitation({
     required int pageNumber,
     required File file,

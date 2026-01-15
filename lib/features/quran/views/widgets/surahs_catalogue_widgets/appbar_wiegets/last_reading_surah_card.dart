@@ -1,11 +1,13 @@
 import 'dart:ui';
 
+import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tazkar/core/constants/app_color.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
-import 'package:tazkar/core/utils/extension/extension.dart';
+
+import '../../../../../../core/constants/app_colors.dart';
 
 class LastReadingSurahCard extends StatefulWidget {
   const LastReadingSurahCard({super.key, required this.scrollController});
@@ -58,7 +60,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
             filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColor.kScaffoldBackgroundColor.withOpacity(0.3),
+                color: AppColors.kScaffoldBackgroundColor.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Column(
@@ -74,7 +76,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
                     height: 35,
                   ),
                   Divider(
-                    color: AppColor.kPrimaryColor.withOpacity(0.3),
+                    color: AppColors.primary.withValues(alpha: 0.3),
                     endIndent: 60,
                     indent: 60,
                   ),
@@ -104,7 +106,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
                           ),
                         ],
                       ),
-                      20.widthGap,
+                      20.widthBox,
                       Material(
                         type: MaterialType.transparency,
                         child: InkWell(
@@ -114,15 +116,17 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
                             width: 140,
                             padding: EdgeInsets.all(7),
                             decoration: BoxDecoration(
-                                color: AppColor.kPrimaryColor,
+                                color: AppColors.primary,
                                 borderRadius: BorderRadius.circular(12)),
                             child: Row(
                               children: [
-                                Text(context.tr.continue_reading,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    )),
+                                Text(
+                                  'continue_reading'.tr(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
                                 Spacer(),
                                 ClipRRect(
                                     borderRadius: BorderRadius.circular(12),

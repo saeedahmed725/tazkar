@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:tazkar/core/services/network_client.dart';
+import 'package:tazkar/core/network/network_client.dart';
 import 'package:tazkar/core/utils/errors/failure.dart';
 import 'package:tazkar/features/quran/data/model/correction_model.dart';
 

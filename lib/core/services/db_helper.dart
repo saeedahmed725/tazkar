@@ -6,13 +6,13 @@ import 'package:archive/archive_io.dart';
 import 'package:dartz/dartz.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:tazkar/core/services/shared_prefs.dart';
 
 import '../constants/app_apis.dart';
+import '../network/dio_factory.dart';
+import '../network/network_client.dart';
 import '../utils/errors/error_code.dart';
 import '../utils/errors/exceptions.dart';
-import 'dio_factory.dart';
-import 'network_client.dart';
+import '../utils/helpers/shared_pref.dart';
 
 class DbHelper {
   DbHelper._internal();
@@ -31,12 +31,14 @@ class DbHelper {
   final String _quranDatabaseV2 = 'quran_database_v2.zip';
 
   Future<bool> downloadDatabase(
-      void Function(int count, int total)? onReceiveProgress) async {
+    void Function(int count, int total)? onReceiveProgress,
+  ) async {
     log('Downloading database...', name: 'Downloading database');
     String tempDBZipPath = '$temp/$_quranDatabaseV2';
     final dio = DioFactory.getDio(baseUrl: AppApis.baseDownloadUrl);
-    final response = await NetworkClient(dio)
-        .download(_quranDatabaseV2, tempDBZipPath, onReceiveProgress);
+    final response = await NetworkClient(
+      dio,
+    ).download(_quranDatabaseV2, tempDBZipPath, onReceiveProgress);
     DioFactory.addDioHeaders(AppApis.baseUrl);
     if (response.statusCode == 200) {
       return true;
@@ -65,8 +67,10 @@ class DbHelper {
         }
       }
     } catch (e) {
-      throw LocalException(e.toString(),
-          code: LocalErrorCode.DATABASE_ERROR_CODE);
+      throw LocalException(
+        e.toString(),
+        code: LocalErrorCode.DATABASE_ERROR_CODE,
+      );
     }
     return unit;
   }
@@ -122,7 +126,7 @@ class DbHelper {
     return _database!;
   }
 
-  _initDatabase() async {
+  Future<Database> _initDatabase() async {
     return await openDatabase('$databasePath/$_wordsDbName');
   }
 
@@ -135,8 +139,10 @@ class DbHelper {
   }) async {
     try {
       final db = await database;
-      log('Open Database: ${db.isOpen} Reading database file: $table',
-          name: 'Db Helper');
+      log(
+        'Open Database: ${db.isOpen} Reading database file: $table',
+        name: 'Db Helper',
+      );
       final List<Map<String, Object?>> data = await db.query(
         table,
         where: where,
@@ -146,16 +152,19 @@ class DbHelper {
       return fromJson(data);
     } catch (e) {
       log("Error loading data: $e", name: "Db Helper");
-      throw LocalException(e.toString(),
-          code: LocalErrorCode.DATABASE_ERROR_CODE);
+      throw LocalException(
+        e.toString(),
+        code: LocalErrorCode.DATABASE_ERROR_CODE,
+      );
     }
   }
 
-  Future<T> readDatabaseJsonFile<T>(
-      {required String fileName,
-        required T Function(dynamic json) fromJson,
-        dynamic Function(dynamic error)? onError,
-        String? specificPath}) async {
+  Future<T> readDatabaseJsonFile<T>({
+    required String fileName,
+    required T Function(dynamic json) fromJson,
+    dynamic Function(dynamic error)? onError,
+    String? specificPath,
+  }) async {
     try {
       File file = File((specificPath ?? databasePath!) + fileName);
       String fileContents = await file.readAsString();
@@ -164,8 +173,10 @@ class DbHelper {
     } catch (e) {
       onError?.call(e);
       log("Error loading data: $e", name: "Db Helper");
-      throw LocalException(e.toString(),
-          code: LocalErrorCode.DATABASE_ERROR_CODE);
+      throw LocalException(
+        e.toString(),
+        code: LocalErrorCode.DATABASE_ERROR_CODE,
+      );
     }
   }
 }

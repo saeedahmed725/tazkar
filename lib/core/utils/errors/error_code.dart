@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 /// local error
 class LocalErrorCode {
   static const LOCTION_ERROR_CODE = 1;

@@ -1,11 +1,25 @@
-class InternetException implements Exception {
+import 'package:dio/dio.dart';
+
+class InternetException extends DioException implements Exception {
   final int? code;
 
-  InternetException({this.code});
+  InternetException({this.code, required super.requestOptions});
 
   @override
   String toString() {
     return 'InternalException: No internet Error code :$code';
+  }
+}
+
+class RemoteException implements Exception {
+  final String message;
+  final int? code;
+
+  RemoteException(this.message, {this.code});
+
+  @override
+  String toString() {
+    return 'RemoteDataSourceException: $message, Error code :$code';
   }
 }
 
@@ -20,10 +34,4 @@ class LocalException implements Exception {
   String toString() {
     return 'LocalException: $message Error Code: $code';
   }
-}
-
-class RouteException implements Exception {
-  final String message;
-
-  RouteException(this.message);
 }

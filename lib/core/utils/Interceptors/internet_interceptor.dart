@@ -1,28 +1,22 @@
 import 'package:dio/dio.dart';
+import 'package:tazkar/core/network/connectivity.dart';
 
-import '../../services/locator.dart';
-import '../errors/error_code.dart';
+import '../../locator/locator.dart';
 import '../errors/exceptions.dart';
 
 class InternetInterceptor extends Interceptor {
   @override
-  Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    final hasInternet =
-    await ServiceLocator.networkController.checkConnectivity();
-
+  void onRequest(
+      RequestOptions options,
+      RequestInterceptorHandler handler,
+      ) async {
+    final hasInternet = await ServiceLocator.get<NetworkController>()
+        .checkConnectivity();
     if (!hasInternet) {
       return handler.reject(
-        DioException(
-          requestOptions: options,
-          error: InternetException(
-            code: RemoteErrorCode.CONNECTION_INTERUPTED_ERROR_CODE,
-          ),
-          type: DioExceptionType.connectionError,
-        ),
+        InternetException(requestOptions: options, code: -1),
       );
     }
-
-    return handler.next(options);
+    return super.onRequest(options, handler);
   }
 }

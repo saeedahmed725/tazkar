@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedPrefHelper {
-  // private constructor as I don't want to allow creating an instance of this class itself.
-  SharedPrefHelper._();
+class SharedPrefs {
+  // Private constructor
+  SharedPrefs._();
 
   // SharedPreferences object
   static late SharedPreferences _preferences;
@@ -14,80 +13,86 @@ class SharedPrefHelper {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  /// Removes a value from SharedPreferences with given [key].
-  static Future<void> removeData(String key) async {
-    debugPrint('SharedPrefHelper : data with key : $key has been removed');
-    await _preferences.remove(key);
+  // -------------------- Setters --------------------
+
+  // Set String value
+  static Future<void> setString(String key, String value) async {
+    await _preferences.setString(key, value);
   }
 
-  /// Removes all keys and values in the SharedPreferences
-  static Future<void> clearAllData() async {
-    debugPrint('SharedPrefHelper : all data has been cleared');
-    await _preferences.clear();
+  // Set int value
+  static void setInt(String key, int value) {
+    _preferences.setInt(key, value);
   }
 
-  /// Saves a [value] with a [key] in the SharedPreferences.
-  static Future<Null> setData(String key, value) async {
-    debugPrint("SharedPrefHelper : setData with key : $key and value : $value");
-    switch (value.runtimeType) {
-      case const (String):
-        await _preferences.setString(key, value);
-        break;
-      case const (int):
-        await _preferences.setInt(key, value);
-        break;
-      case const (bool):
-        await _preferences.setBool(key, value);
-        break;
-      case const (double):
-        await _preferences.setDouble(key, value);
-        break;
-      default:
-        return null;
-    }
+  // Set bool value
+  static void setBool(String key, bool value) {
+    _preferences.setBool(key, value);
   }
 
-  /// Gets a bool value from SharedPreferences with given [key].
-  static Future<bool> getBool(String key) async {
-    debugPrint('SharedPrefHelper : getBool with key : $key');
+  // Set double value
+  static void setDouble(String key, double value) {
+    _preferences.setDouble(key, value);
+  }
+
+  // Set List<String> value
+  static Future<void> setStringList(String key, List<String> value) async {
+    await _preferences.setStringList(key, value);
+  }
+
+  // -------------------- Getters --------------------
+
+  // Get String value
+  static String getString(String key) {
+    return _preferences.getString(key) ?? '';
+  }
+
+  // Get int value
+  static int? getInt(String key) {
+    return _preferences.getInt(key);
+  }
+
+  // Get bool value
+  static bool getBool(String key) {
     return _preferences.getBool(key) ?? false;
   }
 
-  /// Gets a double value from SharedPreferences with given [key].
-  static Future<double> getDouble(String key) async {
-    debugPrint('SharedPrefHelper : getDouble with key : $key');
-    return _preferences.getDouble(key) ?? 0.0;
+  // Get double value
+  static double? getDouble(String key) {
+    return _preferences.getDouble(key);
   }
 
-  /// Gets an int value from SharedPreferences with given [key].
-  static Future<int> getInt(String key) async {
-    debugPrint('SharedPrefHelper : getInt with key : $key');
-    return _preferences.getInt(key) ?? 0;
+  // Get List<String> value
+  static List<String> getStringList(String key) {
+    return _preferences.getStringList(key) ?? [];
   }
 
-  /// Gets an String value from SharedPreferences with given [key].
-  static Future<String> getString(String key) async {
-    debugPrint('SharedPrefHelper : getString with key : $key');
-    return _preferences.getString(key) ?? '';
+  // -------------------- Remove and Clear --------------------
+
+  // Remove value
+  static void remove(String key) {
+    _preferences.remove(key);
+  }
+
+  // Clear all values
+  static void clear() {
+    _preferences.clear();
   }
 
   /// Saves a [value] with a [key] in the FlutterSecureStorage.
   static Future<void> setSecuredString(String key, String value) async {
     const flutterSecureStorage = FlutterSecureStorage();
-    debugPrint("FlutterSecureStorage : setSecuredString with key : $key and value : $value");
     await flutterSecureStorage.write(key: key, value: value);
   }
 
   /// Gets an String value from FlutterSecureStorage with given [key].
   static Future<String> getSecuredString(String key) async {
     const flutterSecureStorage = FlutterSecureStorage();
-    debugPrint('FlutterSecureStorage : getSecuredString with key :');
     return await flutterSecureStorage.read(key: key) ?? '';
   }
 
   /// Removes all keys and values in the FlutterSecureStorage
   static Future<void> clearAllSecuredData() async {
-    debugPrint('FlutterSecureStorage : all data has been cleared');
     const flutterSecureStorage = FlutterSecureStorage();
     await flutterSecureStorage.deleteAll();
   }

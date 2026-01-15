@@ -12,6 +12,10 @@ enum TimingProps {
   Isha,
 }
 class AppStatic {
+  static String appFolder = "tazakar";
+
+
+
   static List<String> listOfIcons = [];
   static const int GLYPH_TYPE_WORD = 1;
   static const int GLYPH_TYPE_AYAH_NUMBER = 2;

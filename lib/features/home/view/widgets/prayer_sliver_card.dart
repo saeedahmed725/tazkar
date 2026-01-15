@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart' as intl;
-import 'package:tazkar/core/constants/app_color.dart';
+import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
 import 'package:tazkar/core/utils/components/blur_background.dart';
@@ -10,25 +8,9 @@ import 'package:tazkar/core/utils/components/blur_background.dart';
 class PrayerSliverCard extends StatelessWidget {
   const PrayerSliverCard({super.key});
 
-  String _formatDuration(Duration duration) {
-    int hours = duration.inHours;
-    int minutes = duration.inMinutes % 60;
-    String hoursStr = hours > 0 ? "$hours hours " : "";
-    String minutesStr = minutes > 0 ? "$minutes minutes " : "";
-    return "$hoursStr$minutesStr".trim();
-  }
 
   String formatTime(DateTime time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} ${time.hour < 12 ? 'AM' : 'PM'}';
-  }
-
-  String timeLeft(DateTime time) {
-    final now = DateTime.now();
-    final difference = time.difference(now);
-
-    if (difference.isNegative) return 'Passed';
-
-    return '${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ${difference.inMinutes % 60} min left';
   }
 
   @override
@@ -41,22 +23,14 @@ class PrayerSliverCard extends StatelessWidget {
       {'name': 'Isha', 'time': DateTime(2025, 1, 1, 19, 30)},
     ];
 
-    DateTime currentTime = DateTime.now().toUtc().add(Duration(hours: 2));
-    DateTime nextPrayerTime =
-        DateTime.now().add(Duration(hours: 3, minutes: 9));
-    String formattedTime = intl.DateFormat('hh:MM').format(DateTime.now());
-    String formattedTimeA = intl.DateFormat('a').format(DateTime.now());
-
-    // Duration timeLeft = nextPrayerTime.difference(currentTime);
-    // String timeLeftFormatted = _formatDuration(timeLeft);
     return SliverToBoxAdapter(
       child: BlurBackground(
-        width: 1.sw - 32.w,
-        height: 269.h,
-        color: AppColor.kOffWhiteColor.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(20.r),
+        width: MediaQuery.of(context).size.width - 32,
+        height: 269,
+        color: AppColors.kOffWhiteColor.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-            color: AppColor.kSecondaryColor.withOpacity(0.5), width: 1),
+          color: AppColors.kSecondaryColor.withValues(alpha: 0.5), width: 1),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -64,14 +38,14 @@ class PrayerSliverCard extends StatelessWidget {
               TextSpan(text: 'اقْرَأْ بِاسْمِ رَبِّكَ', children: [
                 TextSpan(
                   text: '\nالَّذِي خَلَقَ',
-                  style: TextStyle(
-                    fontSize: 23.sp,
+                  style: const TextStyle(
+                    fontSize: 23,
                   ),
                 ),
               ]),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 30.sp,
+              style: const TextStyle(
+                fontSize: 30,
                 height: 1.7,
                 color: Colors.white,
                 fontFamily: AppFonts.neiriziQuranFonts,
@@ -87,8 +61,8 @@ class PrayerSliverCard extends StatelessWidget {
             Text(
               "04:41 AM",
               textDirection: TextDirection.ltr,
-              style: TextStyle(
-                fontSize: 32.sp,
+              style: const TextStyle(
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
                 fontFamily: AppFonts.robotoFonts,
                 color: Colors.white,
@@ -102,8 +76,8 @@ class PrayerSliverCard extends StatelessWidget {
             ),
             Text(
               'Fajr 3 hour 9 min left',
-              style: TextStyle(
-                fontSize: 11.sp,
+              style: const TextStyle(
+                fontSize: 11,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 fontFamily: AppFonts.neiriziQuranFonts,
@@ -116,12 +90,12 @@ class PrayerSliverCard extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
 
             Container(
-              height: 66.h,
-              width: 1.sw - 32.w,
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              height: 66,
+              width: MediaQuery.of(context).size.width - 32,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 children: List.generate(
                   prayerTimes.length,
@@ -145,15 +119,15 @@ class PrayerSliverCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(height: 5.h),
+                          const SizedBox(height: 5),
                           SvgPicture.asset(
                             AppImageAssets.getPrayerImage(index),
-                            width: 28.sp,
-                            height: 28.sp,
+                            width: 28,
+                            height: 28,
                             colorFilter:
                                 ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
-                          SizedBox(height: 5.h),
+                          const SizedBox(height: 5),
                           Text(
                             formatTime(prayer['time']),
                             style: TextStyle(

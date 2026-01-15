@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tazkar/core/utils/errors/error_code.dart';
 import 'package:tazkar/core/utils/errors/failure.dart';
@@ -19,7 +18,7 @@ class RemoteFailureContent extends StatelessWidget {
           children: [
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: 500.w,
+                maxWidth: 500
               ),
               child: ClipOval(
                 child: LottieBuilder.asset(
@@ -28,7 +27,7 @@ class RemoteFailureContent extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 16.h,
+              height: 16,
             ),
             Text(
               failure.message,
@@ -44,14 +43,14 @@ class RemoteFailureContent extends StatelessWidget {
       children: [
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: 500.w,
+            maxWidth: 500,
           ),
           child: LottieBuilder.asset(
             'assets/images/error/general_error.json',
           ),
         ),
         SizedBox(
-          height: 16.h,
+          height: 16
         ),
         Text(
           failure.message,

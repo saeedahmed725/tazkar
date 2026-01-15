@@ -1,64 +1,99 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common_extensions/flutter_common_extensions.dart';
-import 'package:tazkar/core/shared/arabic_responsive_text.dart';
+import 'package:go_router/go_router.dart';
 
 class Sheets extends StatefulWidget {
-  const Sheets({super.key, this.child});
+  const Sheets({
+    super.key,
+    this.children = const [],
+    this.initialChildSize,
+    this.minChildSize,
+    this.maxChildSize,
+  });
 
-  final Widget? child;
+  final List<Widget> children;
+  final double? initialChildSize;
+  final double? minChildSize;
+  final double? maxChildSize;
 
   @override
   State<Sheets> createState() => _SheetsState();
 
-  static show(
+  static PersistentBottomSheetController show(
     BuildContext context, {
     required Widget child,
     bool enableDrag = true,
     bool showDragHandle = true,
     Color? backgroundColor,
   }) {
-    return _SheetsState().showAppBottomSheet(
+    isBottomSheetOpen.value = true;
+    final result = _SheetsState().showAppBottomSheet(
       context,
       child: child,
       enableDrag: enableDrag,
       showDragHandle: showDragHandle,
       backgroundColor: backgroundColor,
     );
+    isBottomSheetOpen.value = false;
+    return result;
   }
 
-  static showModel(BuildContext context,
-      {required Widget child,
-      ShapeBorder? shape,
-      Clip? clipBehavior,
-      Color? backgroundColor,
-      bool showDragHandle = true,
-      double? elevation,
-      Color? barrierColor,
-      bool enableDrag = true,
-      BoxConstraints? constraints,
-      bool isDismissible = true,
-      bool useSafeArea = true,
-      bool isScrollControlled = false}) {
-    return _SheetsState().showAppModelBottomSheet(
-      context,
-      child: child,
-      shape: shape,
-      clipBehavior: clipBehavior,
-      backgroundColor: backgroundColor,
-      showDragHandle: showDragHandle,
-      elevation: elevation,
-      barrierColor: barrierColor,
-      enableDrag: enableDrag,
-      constraints: constraints,
-      isDismissible: isDismissible,
-      useSafeArea: useSafeArea,
-      isScrollControlled: isScrollControlled,
-    );
+  static void toggleBottomSheet({bool? isOpen}) {
+    isBottomSheetOpen.value = isOpen ?? !isBottomSheetOpen.value;
+  }
+
+  static void close(BuildContext context, [Object? result]) {
+    GoRouter.of(context).pop(result);
+  }
+
+  static ValueNotifier<bool> isBottomSheetOpen = ValueNotifier(false);
+
+  static final _sheet = GlobalKey();
+
+  static DraggableScrollableSheet get sheet =>
+      (_sheet.currentWidget as DraggableScrollableSheet);
+
+  static Future<T?> showModel<T>(
+    BuildContext context, {
+    required Widget child,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    Color? backgroundColor,
+    bool showDragHandle = true,
+    double? elevation,
+    Color? barrierColor,
+    bool enableDrag = true,
+    BoxConstraints? constraints,
+    bool isDismissible = true,
+    bool useSafeArea = true,
+    bool isScrollControlled = false,
+    bool showCupertino = false,
+    bool useNestedNavigation = false,
+  }) {
+    isBottomSheetOpen.value = true;
+    return _SheetsState()
+        .showAppModelBottomSheet<T>(
+          context,
+          child: child,
+          shape: shape,
+          clipBehavior: clipBehavior,
+          backgroundColor: backgroundColor,
+          showDragHandle: showDragHandle,
+          elevation: elevation,
+          barrierColor: barrierColor,
+          enableDrag: enableDrag,
+          constraints: constraints,
+          isDismissible: isDismissible,
+          useSafeArea: useSafeArea,
+          isScrollControlled: isScrollControlled,
+          showCupertino: showCupertino,
+          useNestedNavigation: useNestedNavigation,
+        )
+        .whenComplete(() => isBottomSheetOpen.value = false);
   }
 }
 
 class _SheetsState extends State<Sheets> {
-  final _sheet = GlobalKey();
   final _controller = DraggableScrollableController();
 
   @override
@@ -69,14 +104,14 @@ class _SheetsState extends State<Sheets> {
 
   void _onChanged() {
     final currentSize = _controller.size;
-    if (currentSize <= 0.05) _collapse();
+    if (currentSize <= 0.05) collapse();
   }
 
-  void _collapse() => _animateSheet(sheet.snapSizes!.first);
+  void collapse() => _animateSheet(Sheets.sheet.snapSizes!.first);
 
-  void _expand() => _animateSheet(sheet.maxChildSize);
+  void expand() => _animateSheet(Sheets.sheet.maxChildSize);
 
-  void _hide() => _animateSheet(sheet.minChildSize);
+  void hide() => _animateSheet(0);
 
   void _animateSheet(double size) {
     _controller.animateTo(
@@ -92,57 +127,23 @@ class _SheetsState extends State<Sheets> {
     super.dispose();
   }
 
-  DraggableScrollableSheet get sheet =>
-      (_sheet.currentWidget as DraggableScrollableSheet);
-
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      key: _sheet,
-      initialChildSize: 0.35,
-      maxChildSize: 1,
-      minChildSize: 0.1,
-      expand: true,
+      key: Sheets._sheet,
+      initialChildSize: widget.initialChildSize ?? 0.35,
+      maxChildSize: widget.maxChildSize ?? 1,
+      minChildSize: widget.minChildSize ?? 0.1,
+      expand: false,
       snap: true,
-      snapSizes: const [0.35],
+      snapSizes: [widget.minChildSize ?? 0.35, widget.maxChildSize ?? 1.0],
       controller: _controller,
       builder: (BuildContext context, ScrollController scrollController) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).shadowColor,
-                blurRadius: 6,
-              ),
-            ],
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
-            ),
-          ),
-          child: CustomScrollView(
-            controller: scrollController,
-            slivers: [
-              SliverToBoxAdapter(
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 14.0),
-                    child: ArabicResponsiveText(
-                      fontSize: 18,
-                      text: 'تعديل الحساب',
-                    ),
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: 14.height,
-              ),
-              SliverToBoxAdapter(
-                child: widget.child,
-              )
-            ],
-          ),
+        return ListView(
+          padding: EdgeInsets.zero,
+          physics: const BouncingScrollPhysics(),
+          controller: scrollController,
+          children: widget.children,
         );
       },
     );
@@ -164,44 +165,64 @@ class _SheetsState extends State<Sheets> {
         vsync: Navigator.of(context),
         duration: const Duration(milliseconds: 400),
       ),
+      sheetAnimationStyle: AnimationStyle(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      ),
       (context) => child,
     );
   }
 
   ///[showAppBottomSheet]
-  Future<T?> showAppModelBottomSheet<T>(BuildContext context,
-      {required Widget child,
-      ShapeBorder? shape,
-      Clip? clipBehavior,
-      Color? backgroundColor,
-      bool showDragHandle = true,
-      double? elevation,
-      Color? barrierColor,
-      bool enableDrag = true,
-      BoxConstraints? constraints,
-      bool isDismissible = true,
-      bool useSafeArea = true,
-      bool isScrollControlled = false}) {
-    return showModalBottomSheet<T>(
+  Future<T?> showAppModelBottomSheet<T>(
+    BuildContext context, {
+    required Widget child,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    Color? backgroundColor,
+    bool showDragHandle = true,
+    double? elevation,
+    Color? barrierColor,
+    bool enableDrag = true,
+    BoxConstraints? constraints,
+    bool isDismissible = true,
+    bool useSafeArea = true,
+    bool isScrollControlled = false,
+    bool showCupertino = false,
+    bool useNestedNavigation = false,
+  }) {
+    if (showCupertino) {
+      return showCupertinoSheet<T>(
         context: context,
-        shape: shape,
-        constraints: constraints,
-        barrierColor: barrierColor,
-        isScrollControlled: isScrollControlled,
-        clipBehavior: clipBehavior,
-        elevation: elevation,
-        transitionAnimationController: AnimationController(
-          vsync: Navigator.of(context),
-          duration: const Duration(milliseconds: 400),
-        ),
-        isDismissible: isDismissible,
         enableDrag: enableDrag,
-        showDragHandle: showDragHandle,
-        useSafeArea: useSafeArea,
-        backgroundColor:
-            backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+        useNestedNavigation: useNestedNavigation,
         builder: (context) {
-          return child;
-        });
+          return Material(child: child);
+        },
+      );
+    }
+
+    return showModalBottomSheet<T>(
+      context: context,
+      shape: shape,
+      constraints: constraints,
+      barrierColor: barrierColor,
+      isScrollControlled: isScrollControlled,
+      clipBehavior: clipBehavior,
+      elevation: elevation,
+      transitionAnimationController: AnimationController(
+        vsync: Navigator.of(context),
+        duration: const Duration(milliseconds: 400),
+      ),
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      showDragHandle: showDragHandle,
+      useSafeArea: useSafeArea,
+      backgroundColor:
+          backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+      builder: (context) {
+        return child;
+      },
+    );
   }
 }

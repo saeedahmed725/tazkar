@@ -1,10 +1,12 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tazkar/core/constants/app_color.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
-import 'package:tazkar/core/utils/extension/extension.dart';
 import 'package:tazkar/features/quran/views/widgets/surahs_catalogue_widgets/appbar_wiegets/flexible_space_background.dart';
+
+import '../../../../../../core/constants/app_colors.dart';
 
 class CustomSurahsCatalogueAppBar extends StatelessWidget {
   const CustomSurahsCatalogueAppBar(
@@ -25,7 +27,7 @@ class CustomSurahsCatalogueAppBar extends StatelessWidget {
             fontFamily: AppFonts.neiriziQuranFonts,
             shadows: [
               Shadow(
-                  color: AppColor.kSecondaryColor,
+                  color: AppColors.kSecondaryColor,
                   offset: const Offset(-0.5, -0.5),
                   blurRadius: 0.5)
             ]),
@@ -51,16 +53,16 @@ class CustomSurahsCatalogueAppBar extends StatelessWidget {
           ),
         )
       ],
-      backgroundColor: AppColor.kPrimaryColor,
-      surfaceTintColor: AppColor.kPrimaryColor,
+      backgroundColor: AppColors.primary,
+      surfaceTintColor: AppColors.primary,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(48),
         child: TabBar(
           dividerColor: Colors.transparent,
           indicatorSize: TabBarIndicatorSize.tab,
           tabs: [
-            Tab(text: context.tr.surahs),
-            Tab(text: context.tr.juzs),
+            Tab(text: 'surahs'.tr()),
+            Tab(text: 'juzs'.tr()),
           ],
         ),
       ),
@@ -74,7 +76,7 @@ class CustomSurahsCatalogueAppBar extends StatelessWidget {
         stretchModes: [StretchMode.zoomBackground, StretchMode.blurBackground],
         background: Container(
           decoration: BoxDecoration(
-            color: AppColor.kPrimaryColor,
+            color: AppColors.primary,
           ),
           child: FlexibleSpaceBackground(scrollController: scrollController),
         ),

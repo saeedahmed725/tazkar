@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tazkar/config/routes/app_routes.dart';
-import 'package:tazkar/core/constants/app_color.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
-import 'package:tazkar/core/services/locator.dart';
+import 'package:tazkar/core/utils/components/toast.dart';
 import 'package:tazkar/core/utils/errors/failure_widget.dart';
-import 'package:tazkar/core/utils/extension/extension.dart';
-import 'package:tazkar/features/quran/views/bloc/quran_global/quran_global_bloc.dart';
+
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/locator/locator.dart';
+import '../../../../core/quran/global_quran_data.dart';
+import '../bloc/quran_global_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,43 +24,60 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<QuranGlobalBloc>().add(GetQuranAndAyahGlyphs());
+    context.read<QuranGlobalBloc>().add(InitDB());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.kPrimaryColor,
       body: BlocConsumer<QuranGlobalBloc, QuranGlobalState>(
         listener: (context, state) async {
-          if (state is QuranTextAndAyahGlyphsLoaded) {
-            final globalQuranData = ServiceLocator.globalQuranData;
+          if (state.isLoaded) {
+            final globalQuranData = ServiceLocator.get<GlobalQuranData>();
             globalQuranData.setAyahGlyphs(state.ayahGlyphs);
             globalQuranData.setQuranText(state.quranText);
-            return context.toNamedAndOffAll(AppRoutes.home);
-            final token = await FlutterSessionJwt.retrieveToken();
-
-            if (!context.mounted) return;
-
-            if (token == null) {
-              context.toNamedAndOffAll(AppRoutes.register);
-            } else {
-              final isTokenExpired = await FlutterSessionJwt.isTokenExpired();
-              if (!context.mounted) return;
-
-              if (isTokenExpired) {
-                context.toNamedAndOffAll(AppRoutes.register);
-              } else {
-                context.toNamedAndOffAll(AppRoutes.home);
-              }
-            }
-          } else if (state is AyahGlyphsError) {
-            context.showSnackBar(state.failure.message);
+            return context.goNamed(AppRoutes.home);
+          } else if (state.isError && state.hasError) {
+            ModernToast.show(
+              context,
+              title: 'Error',
+              state: ToastState.error,
+              message: state.failure!.message,
+            );
           }
         },
         builder: (context, state) {
-          if (state is AyahGlyphsError) {
-            return AppFailureWidget(failure: state.failure);
+          if (state.isError && state.hasError) {
+            return AppFailureWidget(failure: state.failure!);
+          }
+
+          if (state.isUnzipping) {
+            return Container(
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage(AppImageAssets.aqsaBackgroundImage),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(
+                      color: AppColors.kSecondaryColor,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Initializing database... ${state.zipProgress}%',
+                      style: TextStyle(
+                        color: AppColors.kSecondaryColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
 
           return Container(
@@ -74,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Container(),
                 Image.asset(
                   AppImageAssets.starsIconsBackground,
-                  color: AppColor.kSecondaryColor.withOpacity(0.4),
+                  color: AppColors.kSecondaryColor.withValues(alpha: 0.4),
                 ),
                 SvgPicture.asset(
                   AppImageAssets.basmalaSvg,
@@ -85,8 +104,9 @@ class _SplashScreenState extends State<SplashScreen> {
                     AppImageAssets.mandalaIcon,
                     height: 500,
                     colorFilter: ColorFilter.mode(
-                        AppColor.kSecondaryColor.withOpacity(0.2),
-                        BlendMode.srcIn),
+                      AppColors.kSecondaryColor.withValues(alpha: 0.2),
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ],
@@ -97,40 +117,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-// Container(
-//   alignment: Alignment.center,
-//   height: 200,
-//   width: 220,
-//   margin: const EdgeInsets.only(top: 100),
-//   padding: EdgeInsets.only(top: 10),
-//   decoration: BoxDecoration(
-//     color: AppColor.kPrimaryColor.withOpacity(0.9),
-//     boxShadow: [
-//       BoxShadow(
-//         color:
-//             AppColor.kScaffoldBackgroundColor.withOpacity(0.5),
-//         blurRadius: 50,
-//         spreadRadius: 8,
-//       )
-//     ],
-//     borderRadius: BorderRadius.circular(16),
-//   ),
-//   child: Text(
-//     ' إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ\nوَإِنَّا لَهُ لَحَافِظُونَ ',
-//     textAlign: TextAlign.center,
-//     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-//           height: 1.7,
-//           color: AppColor.kSecondaryHomeCardColor,
-//           fontFamily: AppFonts.neiriziQuranFonts,
-//           fontWeight: FontWeight.bold,
-//         ),
-//   ),
-// ),
-// SvgPicture.asset(
-//   AppImageAssets.mosqueIcon,
-//   colorFilter:
-//       ColorFilter.mode(AppColor.kPrimaryColor, BlendMode.srcIn),
-//   width: double.maxFinite,
-//   height: 200,
-// )

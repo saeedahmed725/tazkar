@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:tazkar/core/utils/errors/error_code.dart';
 import 'package:tazkar/core/utils/errors/exceptions.dart';
+enum FailureType { network, internal, local }
 
 abstract class Failure {
   final String message;
@@ -22,37 +23,36 @@ abstract class Failure {
       return Result.success(result);
     } on InternetException catch (error) {
       return Result.error(NetworkFailure.fromInternetError(error));
+    } on RemoteException catch (error) {
+      return Result.error(NetworkFailure(error.message, code: error.code));
     } on DioException catch (error) {
       return Result.error(NetworkFailure.fromDioError(error));
-    } on LocalException catch (error) {
-      return Result.error(LocalFailure(error.message));
-    } catch (e) {
-      log(e.toString());
-      return Result.error(NetworkFailure(errorMessage));
+    } catch (e, stack) {
+      log("Handled error: $e", stackTrace: stack);
+      return Result.error(NetworkFailure("$errorMessage: $e"));
     }
   }
 
+
   static Stream<Result<T>> handleStreamOperation<T>({
-    required Future<T> Function() operation,
+    required Stream<T> Function() operation,
     required String errorMessage,
   }) async* {
     try {
-      final result = await operation();
-      yield Result.success(result);
+      yield* operation().map((data) => Result.success(data));
     } on InternetException catch (error) {
       yield Result.error(NetworkFailure.fromInternetError(error));
+    } on RemoteException catch (error) {
+      yield Result.error(NetworkFailure(error.message, code: error.code));
     } on DioException catch (error) {
       yield Result.error(NetworkFailure.fromDioError(error));
-    } on LocalException catch (error) {
-      yield Result.error(LocalFailure(error.message));
-    } catch (e) {
-      log(e.toString());
-      yield Result.error(NetworkFailure(errorMessage));
+    } catch (e, stack) {
+      log("Handled error: $e", stackTrace: stack);
+      yield Result.error(NetworkFailure("$errorMessage: $e"));
     }
   }
 }
 
-enum FailureType { network, internal, local }
 
 class Result<T> {
   final Either<Failure, T> data;
@@ -67,10 +67,10 @@ class Result<T> {
 
   bool get isFailure => data.isLeft();
 
-  B fold<B>(
-    B Function(Failure failure) onFailure,
-    B Function(T success) onSuccess,
-  ) {
+  B when<B>({
+    required B Function(Failure failure) onFailure,
+    required B Function(T success) onSuccess,
+  }) {
     return data.fold(onFailure, onSuccess);
   }
 }
@@ -83,27 +83,32 @@ class NetworkFailure extends Failure {
   }) : super(message, FailureType.network, errorCode: code);
 
   factory NetworkFailure.fromInternetError(InternetException exception) {
-    return NetworkFailure('No Internet Connection', code: exception.code);
+    return NetworkFailure('No internet connection', code: exception.code);
   }
 
   factory NetworkFailure.fromDioError(DioException exception) {
     switch (exception.type) {
       case DioExceptionType.connectionTimeout:
-        return NetworkFailure('Connection timeout with ApiServer');
+        return NetworkFailure('Connection timeout with server');
 
       case DioExceptionType.sendTimeout:
-        return NetworkFailure('Send timeout with ApiServer');
+        return NetworkFailure('Send timeout with server');
 
       case DioExceptionType.receiveTimeout:
-        return NetworkFailure('Receive timeout with ApiServer');
+        return NetworkFailure('Receive timeout with server');
 
       case DioExceptionType.badResponse:
-        return NetworkFailure.fromResponse(
+        return _fromResponse(
           exception.response!.statusCode,
           exception.response!.data,
         );
       case DioExceptionType.cancel:
-        return NetworkFailure('Request to ApiServer was canceled');
+        return NetworkFailure('Request to server was canceled');
+      case DioExceptionType.unknown:
+        if (exception.error is SocketException) {
+          return NetworkFailure('No Internet Connection');
+        }
+        return NetworkFailure('Unexpected Error, Please try again!');
 
       case DioExceptionType.badCertificate:
         if (exception.message.toString().contains('SocketException')) {
@@ -115,9 +120,11 @@ class NetworkFailure extends Failure {
     }
   }
 
-  factory NetworkFailure.fromResponse(int? statusCode, dynamic response) {
+  static NetworkFailure _fromResponse(int? statusCode, dynamic response) {
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
-      return NetworkFailure("response['error']['message']");
+      return NetworkFailure(
+        response['detail'] ?? 'Unauthorized request, Please try later!',
+      );
     } else if (statusCode == 404) {
       return NetworkFailure('Your request not found, Please try later!');
     } else if (statusCode == 500) {

@@ -1,5 +1,5 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:tazkar/core/constants/app_color.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
 import 'package:tazkar/features/quran/views/widgets/surahs_catalogue_widgets/appbar_wiegets/last_reading_surah_card.dart';
 
@@ -12,7 +12,7 @@ class FlexibleSpaceBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.kPrimaryColor,
+        color: context.primaryColor,
         image: DecorationImage(
             image: AssetImage(AppImageAssets.lastReadingBackground),
             fit: BoxFit.cover),

@@ -22,18 +22,39 @@ class MushafRepoImp extends MushafRepo {
   MushafRepoImp({required this.local, required this.remote});
 
   @override
+  Future<Result<bool>> findDBFile() {
+    return Failure.handleOperation(
+      operation: () => local.findDBFile(),
+      errorMessage: 'Failed to find Quran database file',
+    );
+  }
+
+  @override
+  Future<Result<void>> extractZip({
+    required void Function(int done, int total) onProgress,
+  }) async {
+    return Failure.handleOperation(
+      operation: () => local.extractZip(onProgress: onProgress),
+      errorMessage: 'Failed to initialize Quran database',
+    );
+  }
+
+  @override
   Future<Result<({List<QuranModel> quranText, List<List<AyahGlyph>> ayahs})>>
-      getQuranTextAndAyahGlyphs() async {
+  getQuranTextAndAyahGlyphs() async {
     try {
-      final result =
-          await Future.wait([local.getQuranData(), local.getQuranAyahGlyphs()]);
+      final result = await Future.wait([
+        local.getQuranData(),
+        local.getQuranAyahGlyphs(),
+      ]);
       final ayahs = result[1] as List<AyahGlyph>;
       final quran = result[0] as List<QuranModel>;
       List<List<AyahGlyph>> allMushafPagesData = [];
 
       for (int page = 1; page <= 604; page++) {
-        allMushafPagesData
-            .add(ayahs.where((ayah) => ayah.pageNumber == page).toList());
+        allMushafPagesData.add(
+          ayahs.where((ayah) => ayah.pageNumber == page).toList(),
+        );
       }
 
       return Result(data: right((quranText: quran, ayahs: allMushafPagesData)));
@@ -41,8 +62,8 @@ class MushafRepoImp extends MushafRepo {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
@@ -55,8 +76,8 @@ class MushafRepoImp extends MushafRepo {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
@@ -69,8 +90,8 @@ class MushafRepoImp extends MushafRepo {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
@@ -82,88 +103,108 @@ class MushafRepoImp extends MushafRepo {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
   @override
-  Future<Result<QuranIrabWordsModel>> getQuranIrabWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<Result<QuranIrabWordsModel>> getQuranIrabWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     try {
       return Result(
-          data: Right(await local.getQuranIrabWords(
-              surahNumber: surahNumber,
-              verseNumber: verseNumber,
-              wordNumber: wordNumber)));
+        data: Right(
+          await local.getQuranIrabWords(
+            surahNumber: surahNumber,
+            verseNumber: verseNumber,
+            wordNumber: wordNumber,
+          ),
+        ),
+      );
     } on LocalException catch (exception) {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
   @override
-  Future<Result<QuranMeaningWordsModel>> getQuranMeaningWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<Result<QuranMeaningWordsModel>> getQuranMeaningWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     try {
       return Result(
-          data: Right(await local.getQuranMeaningWords(
-              surahNumber: surahNumber,
-              verseNumber: verseNumber,
-              wordNumber: wordNumber)));
+        data: Right(
+          await local.getQuranMeaningWords(
+            surahNumber: surahNumber,
+            verseNumber: verseNumber,
+            wordNumber: wordNumber,
+          ),
+        ),
+      );
     } on LocalException catch (exception) {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
   @override
-  Future<Result<QuranRasmWordsModel>> getQuranRasmWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<Result<QuranRasmWordsModel>> getQuranRasmWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     try {
       return Result(
-          data: Right(await local.getQuranRasmWords(
-              surahNumber: surahNumber,
-              verseNumber: verseNumber,
-              wordNumber: wordNumber)));
+        data: Right(
+          await local.getQuranRasmWords(
+            surahNumber: surahNumber,
+            verseNumber: verseNumber,
+            wordNumber: wordNumber,
+          ),
+        ),
+      );
     } on LocalException catch (exception) {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
   @override
-  Future<Result<QuranSarfWordsModel>> getQuranSarfWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<Result<QuranSarfWordsModel>> getQuranSarfWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     try {
       return Result(
-          data: Right(await local.getQuranSarfWords(
-              surahNumber: surahNumber,
-              verseNumber: verseNumber,
-              wordNumber: wordNumber)));
+        data: Right(
+          await local.getQuranSarfWords(
+            surahNumber: surahNumber,
+            verseNumber: verseNumber,
+            wordNumber: wordNumber,
+          ),
+        ),
+      );
     } on LocalException catch (exception) {
       return Result(data: Left(LocalFailure.fromIoException(exception)));
     } catch (exception) {
       return Result(
-          data:
-              Left(LocalFailure('Unexpected error: ${exception.toString()}')));
+        data: Left(LocalFailure('Unexpected error: ${exception.toString()}')),
+      );
     }
   }
 
@@ -173,17 +214,23 @@ class MushafRepoImp extends MushafRepo {
     required File file,
   }) async {
     try {
-      List<CorrectionModel> correctionVerses =
-          await remote.uploadAudioFile(file: file, pageNum: pageNumber);
+      List<CorrectionModel> correctionVerses = await remote.uploadAudioFile(
+        file: file,
+        pageNum: pageNumber,
+      );
       return Result.success(correctionVerses);
     } on NetworkFailure catch (exception) {
       return Result(data: Left(exception));
     } on DioException catch (exception) {
-      return Result.error(NetworkFailure(
-          'Network error: ${exception.message ?? 'Unknown error'}'));
+      return Result.error(
+        NetworkFailure(
+          'Network error: ${exception.message ?? 'Unknown error'}',
+        ),
+      );
     } catch (exception) {
       return Result.error(
-          NetworkFailure('Unexpected error: ${exception.toString()}'));
+        NetworkFailure('Unexpected error: ${exception.toString()}'),
+      );
     }
   }
 }

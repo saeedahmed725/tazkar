@@ -1,9 +1,10 @@
 import 'dart:core';
 import 'dart:developer';
 
-import 'package:tazkar/core/services/locator.dart';
 import 'package:tazkar/features/quran/data/model/quran_data_model.dart';
 
+import '../locator/locator.dart';
+import 'global_quran_data.dart';
 import 'juz_data.dart';
 import 'page_data.dart';
 import 'sajdah_verses.dart';
@@ -13,7 +14,7 @@ class Quran {
   static final Quran instance = Quran._();
 
   Quran._() {
-    quranText = ServiceLocator.globalQuranData.quranText;
+    quranText = ServiceLocator.get<GlobalQuranData>().quranText;
   }
 
   List<QuranModel> quranText = [];
@@ -39,7 +40,7 @@ class Quran {
     555,
     557,
     583,
-    584
+    584,
   ];
 
   List<int> downThePageIndex = [
@@ -61,7 +62,7 @@ class Quran {
     547,
     554,
     556,
-    583
+    583,
   ];
 
   List juzNames = [
@@ -218,7 +219,7 @@ class Quran {
     5,
     4,
     5,
-    6
+    6,
   ];
 
   ///The most standard and common copy of Arabic only Quran total pages count
@@ -271,8 +272,9 @@ class Quran {
     }
     int totalVerseCount = 0;
     for (int i = 0; i < pageData[pageNumber - 1].length; i++) {
-      totalVerseCount +=
-          int.parse(pageData[pageNumber - 1][i]!["end"].toString());
+      totalVerseCount += int.parse(
+        pageData[pageNumber - 1][i]!["end"].toString(),
+      );
     }
     return totalVerseCount;
   }
@@ -282,7 +284,9 @@ class Quran {
       if (juz["verses"].keys.contains(surahNumber)) {
         if (verseNumber >= juz["verses"][surahNumber][0] &&
             verseNumber <= juz["verses"][surahNumber][1]) {
-          log("Juz found for given surahNumber and verseNumber ${int.parse(juz["id"].toString())}");
+          log(
+            "Juz found for given surahNumber and verseNumber ${int.parse(juz["id"].toString())}",
+          );
           return int.parse(juz["id"].toString());
         }
       }
@@ -294,7 +298,9 @@ class Quran {
     for (var juz in juz) {
       if (juz["verses"].keys.contains(surahNumber)) {
         if (verseNumber == juz["verses"][surahNumber][0]) {
-          log("Juz found for given surahNumber and verseNumber ${int.parse(juz["id"].toString())}");
+          log(
+            "Juz found for given surahNumber and verseNumber ${int.parse(juz["id"].toString())}",
+          );
           return int.parse(juz["id"].toString());
         }
       }
@@ -365,9 +371,11 @@ class Quran {
     }
 
     for (int pageIndex = 0; pageIndex < pageData.length; pageIndex++) {
-      for (int surahIndexInPage = 0;
-          surahIndexInPage < pageData[pageIndex].length;
-          surahIndexInPage++) {
+      for (
+        int surahIndexInPage = 0;
+        surahIndexInPage < pageData[pageIndex].length;
+        surahIndexInPage++
+      ) {
         final e = pageData[pageIndex][surahIndexInPage];
         if (e['surah'] == surahNumber &&
             e['start'] <= verseNumber &&
@@ -410,8 +418,12 @@ class Quran {
   }
 
   ///Takes [surahNumber], [verseNumber] & [verseEndSymbol] (optional) and returns the Verse in Arabic
-  String getVerse(int surahNumber, int verseNumber,
-      {bool verseEndSymbol = false, List<QuranModel>? quran}) {
+  String getVerse(
+    int surahNumber,
+    int verseNumber, {
+    bool verseEndSymbol = false,
+    List<QuranModel>? quran,
+  }) {
     String verse = "";
     for (var i in (quran ?? quranText)) {
       if (i.soraNum == surahNumber && i.ayaNum == verseNumber) {
@@ -428,8 +440,12 @@ class Quran {
   }
 
   ///Takes [surahNumber], [verseNumber] & [verseEndSymbol] (optional) and returns the Verse in Arabic
-  String getClearVerse(int surahNumber, int verseNumber,
-      {bool verseEndSymbol = false, List<QuranModel>? quran}) {
+  String getClearVerse(
+    int surahNumber,
+    int verseNumber, {
+    bool verseEndSymbol = false,
+    List<QuranModel>? quran,
+  }) {
     String verse = "";
     for (var i in (quran ?? quranText)) {
       if (i.soraNum == surahNumber && i.ayaNum == verseNumber) {
@@ -445,8 +461,12 @@ class Quran {
     return verse + (verseEndSymbol ? getVerseEndSymbol(verseNumber) : "");
   }
 
-  String getVerseWithTashkil(int surahNumber, int verseNumber,
-      {bool verseEndSymbol = false, List<QuranModel>? quran}) {
+  String getVerseWithTashkil(
+    int surahNumber,
+    int verseNumber, {
+    bool verseEndSymbol = false,
+    List<QuranModel>? quran,
+  }) {
     String verse = "";
     for (var i in (quran ?? quranText)) {
       if (i.soraNum == surahNumber && i.ayaNum == verseNumber) {
@@ -463,7 +483,9 @@ class Quran {
   }
 
   ({int page, String text}) getVerseTextWithPage(
-      int surahNumber, int verseNumber) {
+    int surahNumber,
+    int verseNumber,
+  ) {
     int page = 0;
     String verse = "";
 
@@ -481,8 +503,11 @@ class Quran {
     return (text: verse, page: page);
   }
 
-  String getVerseUniCode(int surahNumber, int verseNumber,
-      {bool verseEndSymbol = false}) {
+  String getVerseUniCode(
+    int surahNumber,
+    int verseNumber, {
+    bool verseEndSymbol = false,
+  }) {
     String verse = "";
     for (var i in (quranText)) {
       if (i.soraNum == surahNumber && i.ayaNum == verseNumber) {
@@ -530,7 +555,7 @@ class Quran {
       "6": "٦",
       "7": "۷",
       "8": "۸",
-      "9": "۹"
+      "9": "۹",
     };
 
     for (var e in digits) {

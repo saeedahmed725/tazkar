@@ -1,6 +1,12 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:archive/archive.dart';
+import 'package:crypto/crypto.dart';
+import 'package:flutter/services.dart';
+import 'package:tazkar/core/constants/app_shared_keys.dart';
 import 'package:tazkar/core/services/db_helper.dart';
+import 'package:tazkar/core/utils/helpers/shared_pref.dart';
 import 'package:tazkar/features/quran/data/model/ayah_glyph.dart';
 import 'package:tazkar/features/quran/data/model/juz_model.dart';
 import 'package:tazkar/features/quran/data/model/quran_data_model.dart';
@@ -8,7 +14,62 @@ import 'package:tazkar/features/quran/data/model/quran_words_model.dart';
 import 'package:tazkar/features/quran/data/model/surah_info_data.dart';
 import 'package:tazkar/features/quran/data/model/surah_model.dart';
 
+import '../../../../core/services/storage_service.dart';
+
 class QuranLocalDataSource {
+  final String _assetsZipPath = 'assets/database/quran_database_v2.zip';
+  final String _wordsDbName = 'words.db';
+
+  Future<bool> findDBFile() async {
+    final file = await StorageService.findFile(
+      fileName: _wordsDbName,
+      storage: StorageType.internal,
+    );
+    return file != null;
+  }
+
+  Future<void> extractZip({
+    required void Function(int done, int total) onProgress,
+  }) async {
+    final bytes = await rootBundle.load(_assetsZipPath);
+    final zipData = bytes.buffer.asUint8List();
+
+    final currentHash = sha256.convert(zipData).toString();
+    final savedHash = SharedPrefs.getString(AppSharedKeys.zipHash);
+
+    if (currentHash == savedHash) {
+      log("ZIP not changed — skip extraction 🚀");
+      return;
+    }
+
+    log("ZIP changed — extracting 🔥");
+
+    final archive = ZipDecoder().decodeBytes(zipData);
+
+    final total = archive.length;
+    int done = 0;
+    final destinationPath = await StorageService.getInternalPath();
+
+    for (final file in archive) {
+      final filePath = '$destinationPath/${file.name}';
+
+      if (file.isFile) {
+        await StorageService.save(
+          storage: StorageType.internal,
+          fileName: file.name,
+          bytes: file.content,
+        );
+      } else {
+        await Directory(filePath).create(recursive: true);
+      }
+
+      done++;
+      onProgress(done, total);
+    }
+
+    await SharedPrefs.setString(AppSharedKeys.zipHash, currentHash);
+  }
+
   // Get all ayahs quran
   Future<List<QuranModel>> getQuranData() async {
     return DbHelper.instance.readDatabaseFile<List<QuranModel>>(
@@ -63,50 +124,58 @@ class QuranLocalDataSource {
   }
 
   // Get all ayahs irab
-  Future<QuranIrabWordsModel> getQuranIrabWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<QuranIrabWordsModel> getQuranIrabWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     return DbHelper.instance.readDatabaseFile<QuranIrabWordsModel>(
-        table: 'word_irab',
-        where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
-        whereArgs: [surahNumber, verseNumber, wordNumber],
-        fromJson: (json) => QuranIrabWordsModel.fromJson(json[0]));
+      table: 'word_irab',
+      where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
+      whereArgs: [surahNumber, verseNumber, wordNumber],
+      fromJson: (json) => QuranIrabWordsModel.fromJson(json[0]),
+    );
   }
 
   // Get all ayahs rasm
-  Future<QuranRasmWordsModel> getQuranRasmWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<QuranRasmWordsModel> getQuranRasmWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     return DbHelper.instance.readDatabaseFile<QuranRasmWordsModel>(
-        table: 'word_rasm',
-        where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
-        whereArgs: [surahNumber, verseNumber, wordNumber],
-        fromJson: (json) => QuranRasmWordsModel.fromJson(json[0]));
+      table: 'word_rasm',
+      where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
+      whereArgs: [surahNumber, verseNumber, wordNumber],
+      fromJson: (json) => QuranRasmWordsModel.fromJson(json[0]),
+    );
   }
 
   // Get all ayahs meaning
-  Future<QuranMeaningWordsModel> getQuranMeaningWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<QuranMeaningWordsModel> getQuranMeaningWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     return DbHelper.instance.readDatabaseFile<QuranMeaningWordsModel>(
-        table: 'word_meaning',
-        where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
-        whereArgs: [surahNumber, verseNumber, wordNumber],
-        fromJson: (json) => QuranMeaningWordsModel.fromJson(json[0]));
+      table: 'word_meaning',
+      where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
+      whereArgs: [surahNumber, verseNumber, wordNumber],
+      fromJson: (json) => QuranMeaningWordsModel.fromJson(json[0]),
+    );
   }
 
   // Get all ayahs sarf
-  Future<QuranSarfWordsModel> getQuranSarfWords(
-      {required int surahNumber,
-      required int verseNumber,
-      required int wordNumber}) async {
+  Future<QuranSarfWordsModel> getQuranSarfWords({
+    required int surahNumber,
+    required int verseNumber,
+    required int wordNumber,
+  }) async {
     return DbHelper.instance.readDatabaseFile<QuranSarfWordsModel>(
-        table: 'word_sarf',
-        where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
-        whereArgs: [surahNumber, verseNumber, wordNumber],
-        fromJson: (json) => QuranSarfWordsModel.fromJson(json[0]));
+      table: 'word_sarf',
+      where: 'surahNo = ? AND ayahNo = ? AND wordNo = ?',
+      whereArgs: [surahNumber, verseNumber, wordNumber],
+      fromJson: (json) => QuranSarfWordsModel.fromJson(json[0]),
+    );
   }
 }

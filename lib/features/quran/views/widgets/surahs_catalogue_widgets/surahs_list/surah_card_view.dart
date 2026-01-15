@@ -1,10 +1,11 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tazkar/core/constants/app_color.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
-import 'package:tazkar/core/utils/extension/extension.dart';
 import 'package:tazkar/core/utils/functions/functions.dart';
+
+import '../../../../../../core/constants/app_colors.dart';
 
 class SurahCardView extends StatelessWidget {
   const SurahCardView({
@@ -33,8 +34,8 @@ class SurahCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      splashColor: AppColor.kPrimaryColor.withOpacity(0.1),
-      hoverColor: AppColor.kPrimaryColor.withOpacity(0.1),
+      splashColor: context.primaryColor.withValues(alpha: 0.1),
+      hoverColor: context.primaryColor.withValues(alpha: 0.1),
       trailing: SizedBox(
         width: 200,
         child: Row(
@@ -48,30 +49,32 @@ class SurahCardView extends StatelessWidget {
                 Row(
                   children: [
                     Text(surahType == 1 ? "Mecca" : "Madinan"),
-                    5.widthGap,
+                    5.widthBox,
                     CircleAvatar(
                       radius: 5,
-                      backgroundColor: AppColor.kSecondaryColor,
+                      backgroundColor: AppColors.kSecondaryColor,
                     ),
-                    5.widthGap,
+                    5.widthBox,
                     Text("$ayahLength verses"),
                   ],
-                )
+                ),
               ],
             ),
-            10.widthGap,
+            10.widthBox,
             Stack(
               alignment: Alignment.center,
               children: [
                 SvgPicture.asset(
                   AppImageAssets.borderNoIcon,
                   height: 40,
-                  colorFilter:
-                      ColorFilter.mode(AppColor.kPrimaryColor, BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(
+                    context.primaryColor,
+                    BlendMode.srcIn,
+                  ),
                 ),
                 CircleAvatar(
                   radius: 12,
-                  backgroundColor: AppColor.kPrimaryColor,
+                  backgroundColor: context.primaryColor,
                   child: Text(
                     AppFunctions.toArabicNumbers(surahId.toString()),
                     style: TextStyle(
@@ -87,10 +90,7 @@ class SurahCardView extends StatelessWidget {
       ),
       title: Text(
         arName,
-        style: TextStyle(
-          fontFamily: AppFonts.surahNamesFonts,
-          fontSize: 20,
-        ),
+        style: TextStyle(fontFamily: AppFonts.surahNamesFonts, fontSize: 20),
       ),
       onTap: onTap,
     );

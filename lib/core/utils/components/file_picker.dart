@@ -20,7 +20,6 @@ class FilePickerHelper {
         dialogTitle: dialogTitle,
         allowedExtensions: allowedExtensions,
         lockParentWindow: lockParentWindow,
-        allowCompression: true,
         compressionQuality: 70,
       );
       return result?.files.first;
@@ -44,7 +43,6 @@ class FilePickerHelper {
         dialogTitle: dialogTitle,
         allowedExtensions: allowedExtensions,
         lockParentWindow: lockParentWindow,
-        allowCompression: true,
         compressionQuality: 70,
       );
       return result?.files;
