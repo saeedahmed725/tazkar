@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:tazkar/core/services/font_services.dart';
 
@@ -24,7 +25,10 @@ class MyServices {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     /// Initialize Shared Preferences and Database Directories
-    await Future.wait([SharedPrefs.init()]);
+    await Future.wait([
+      SharedPrefs.init(),
+      EasyLocalization.ensureInitialized(),
+    ]);
 
     // Initialize Bloc Observer
     Bloc.observer = AppBlocObserver();

@@ -10,7 +10,7 @@ extension ThemeExtensionX on ThemeData {
       case 'system':
         return ThemeMode.system;
       default:
-        return ThemeMode.system;
+        return ThemeMode.light;
     }
   }
 }

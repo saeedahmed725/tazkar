@@ -1,3 +1,4 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tazkar/core/constants/app_colors.dart';
@@ -7,7 +8,6 @@ import 'package:tazkar/core/utils/components/blur_background.dart';
 
 class PrayerSliverCard extends StatelessWidget {
   const PrayerSliverCard({super.key});
-
 
   String formatTime(DateTime time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} ${time.hour < 12 ? 'AM' : 'PM'}';
@@ -27,34 +27,32 @@ class PrayerSliverCard extends StatelessWidget {
       child: BlurBackground(
         width: MediaQuery.of(context).size.width - 32,
         height: 269,
-        color: AppColors.kOffWhiteColor.withValues(alpha: 0.4),
+        color: context.colorScheme.primaryContainer.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.kSecondaryColor.withValues(alpha: 0.5), width: 1),
+          color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
+          width: 1,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text.rich(
-              TextSpan(text: 'اقْرَأْ بِاسْمِ رَبِّكَ', children: [
-                TextSpan(
-                  text: '\nالَّذِي خَلَقَ',
-                  style: const TextStyle(
-                    fontSize: 23,
+              TextSpan(
+                text: 'اقْرَأْ بِاسْمِ رَبِّكَ',
+                children: [
+                  TextSpan(
+                    text: '\nالَّذِي خَلَقَ',
+                    style: const TextStyle(fontSize: 23),
                   ),
-                ),
-              ]),
+                ],
+              ),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 30,
                 height: 1.7,
                 color: Colors.white,
                 fontFamily: AppFonts.neiriziQuranFonts,
-                shadows: [
-                  Shadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                  ),
-                ],
+                shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
               ),
             ),
 
@@ -66,12 +64,7 @@ class PrayerSliverCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontFamily: AppFonts.robotoFonts,
                 color: Colors.white,
-                shadows: [
-                  Shadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                  ),
-                ],
+                shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
               ),
             ),
             Text(
@@ -81,12 +74,7 @@ class PrayerSliverCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 fontFamily: AppFonts.neiriziQuranFonts,
-                shadows: [
-                  Shadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                  ),
-                ],
+                shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
               ),
             ),
 
@@ -97,59 +85,52 @@ class PrayerSliverCard extends StatelessWidget {
               width: MediaQuery.of(context).size.width - 32,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
-                children: List.generate(
-                  prayerTimes.length,
-                  (index) {
-                    final prayer = prayerTimes[index];
-                    return Expanded(
-                      child: Column(
-                        children: [
-                          Text(
-                            prayer['name'],
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontFamily: AppFonts.robotoFonts,
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black26,
-                                  blurRadius: 10,
-                                ),
-                              ],
-                            ),
+                children: List.generate(prayerTimes.length, (index) {
+                  final prayer = prayerTimes[index];
+                  return Expanded(
+                    child: Column(
+                      children: [
+                        Text(
+                          prayer['name'],
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontFamily: AppFonts.robotoFonts,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(color: Colors.black26, blurRadius: 10),
+                            ],
                           ),
-                          const SizedBox(height: 5),
-                          SvgPicture.asset(
-                            AppImageAssets.getPrayerImage(index),
-                            width: 28,
-                            height: 28,
-                            colorFilter:
-                                ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                        ),
+                        const SizedBox(height: 5),
+                        SvgPicture.asset(
+                          AppImageAssets.getPrayerImage(index),
+                          width: 28,
+                          height: 28,
+                          colorFilter: ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            formatTime(prayer['time']),
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontFamily: AppFonts.robotoFonts,
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black26,
-                                  blurRadius: 10,
-                                ),
-                              ],
-                            ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          formatTime(prayer['time']),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontFamily: AppFonts.robotoFonts,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(color: Colors.black26, blurRadius: 10),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               ),
-            )
+            ),
           ],
         ),
       ),

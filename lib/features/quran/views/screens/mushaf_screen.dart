@@ -46,17 +46,16 @@ class _MushafScreenState extends State<MushafScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kMushafBackgroundColor,
       body: ColorfulSafeArea(
-        color: AppColors.kAppBarColor,
+        color: context.primaryColor,
         child: InkWell(
           onTap: () {
             setState(() {
               isVisible = !isVisible;
             });
           },
-          splashColor: AppColors.kAppBarColor.withValues(alpha: 0.06),
-          highlightColor: AppColors.kAppBarColor.withValues(alpha: 0.06),
+          splashColor: context.primaryColor.withValues(alpha: 0.06),
+          highlightColor: context.primaryColor.withValues(alpha: 0.06),
           child: Stack(
             children: [
               MushafBuilder(),
@@ -175,7 +174,7 @@ class MushafPainter extends StatelessWidget {
           12.heightBox,
           MushafPageHeaderDetails(glyphs: glyphs[15], index: index),
           Spacer(),
-          ..._buildAyahGlyphWithEndsRows(),
+          ..._buildAyahGlyphWithEndsRows(context),
           Spacer(),
           MushafPageFooterDetails(pageIndex: index),
           12.heightBox,
@@ -184,7 +183,7 @@ class MushafPainter extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildAyahGlyphWithEndsRows() {
+  List<Widget> _buildAyahGlyphWithEndsRows(BuildContext context) {
     final myGroup = AutoSizeGroup();
     int rowCount = (index == 0 || index == 1) ? 8 : 15;
 
@@ -248,13 +247,8 @@ class MushafPainter extends StatelessWidget {
                 height: 2,
                 fontFamily: 'P${index + 1}',
                 wordSpacing: 0,
-                color:
-                    AppStatic.GLYPH_TYPE_AYAH_NUMBER ==
-                        ayahs[wordIndex].glyphTypeId
-                    ? AppColors.kOverlyColor
-                    : null,
                 backgroundColor: selectedVerses[0]
-                    ? AppColors.kOverlyColor.withValues(alpha: 0.3)
+                    ? context.primaryColor.withValues(alpha: 0.3)
                     : Colors.transparent,
               ),
             );

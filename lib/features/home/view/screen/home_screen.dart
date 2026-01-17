@@ -4,9 +4,11 @@ import 'package:animations/animations.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tazkar/core/classes/colorful_safe_area.dart';
 import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
@@ -108,55 +110,59 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppImageAssets.starsIconsBackground),
-            fit: BoxFit.cover,
-            opacity: 0.5,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: ColorfulSafeArea(
+        color: context.primaryColor,
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppImageAssets.starsIconsBackground),
+              fit: BoxFit.cover,
+              opacity: 0.5,
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fromRect(
-              rect: Rect.fromLTWH(1 / 8 - 50, 170, 100, 100),
-              child: Container(
-                width: 60,
-                height: 60,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.kOffWhiteColor,
-                      blurRadius: 20.0,
-                    ),
-                  ],
-                  color: AppColors.kSecondaryColor,
-                  shape: BoxShape.circle,
+          child: Stack(
+            children: [
+              Positioned.fromRect(
+                rect: Rect.fromLTWH(1 / 8 - 50, 170, 100, 100),
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: context.colorScheme.primaryContainer,
+                        blurRadius: 20.0,
+                      ),
+                    ],
+                    color: AppColors.kSecondaryColor,
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: CustomScrollView(
-                scrollBehavior: ScrollBehavior(),
-                slivers: [
-                  SliverToBoxAdapter(child: SizedBox(height: 8)),
-                  HomeSliverAppBar(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  PrayerSliverCard(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  HomeTopLayoutSliverList(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  HomeBottomLayoutSliverList(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  HomeStatisticsSliver(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20)),
-                ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: CustomScrollView(
+                  physics: BouncingScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(child: SizedBox(height: 8)),
+                    HomeSliverAppBar(),
+                    SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    PrayerSliverCard(),
+                    SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    HomeTopLayoutSliverList(),
+                    SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    HomeBottomLayoutSliverList(),
+                    SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    HomeStatisticsSliver(),
+                    SliverToBoxAdapter(child: SizedBox(height: 20)),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -175,7 +181,7 @@ class HomeStatisticsSliver extends StatelessWidget {
           child: BlurBackground(
             width: MediaQuery.of(context).size.width - 32,
             height: 269,
-            color: AppColors.kOffWhiteColor,
+            color: context.colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
@@ -235,7 +241,7 @@ class HomeTopLayoutSliverList extends StatelessWidget {
       width: (MediaQuery.of(context).size.width - 32) / 2 - 8,
       padding: EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: AppColors.kOffWhiteColor,
+        color: context.colorScheme.primaryContainer,
         border: Border.all(
           color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
           width: 1,
@@ -256,8 +262,7 @@ class HomeTopLayoutSliverList extends StatelessWidget {
               width: 30,
               height: 30,
             ),
-          if (icon != null)
-            Icon(icon, color: context.primaryColor, size: 30),
+          if (icon != null) Icon(icon, color: context.primaryColor, size: 30),
           SizedBox(width: 5),
           Text(
             label,
@@ -334,7 +339,7 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
           width: (MediaQuery.of(context).size.width - 32) / 4 - 8,
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
-            color: AppColors.kOffWhiteColor,
+            color: context.colorScheme.primaryContainer,
             border: Border.all(
               color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
               width: 1,
@@ -354,7 +359,7 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.kOffWhiteColor,
+            color: context.colorScheme.primaryContainer,
             fontSize: 14,
             fontFamily: AppFonts.kSAFonts,
             fontWeight: FontWeight.bold,
@@ -516,9 +521,7 @@ class CustomBottomNavButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           onTap: onTap,
           child: Ink(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -538,7 +541,7 @@ class CustomBottomNavButton extends StatelessWidget {
                   Icon(
                     icon,
                     color: isSelect ? context.primaryColor : Colors.grey,
-                    size: 22
+                    size: 22,
                   ),
                 5.heightBox,
                 Text(

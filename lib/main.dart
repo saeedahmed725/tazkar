@@ -7,11 +7,11 @@ import 'core/services/my_services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
   await MyServices.instance.init();
 
   runApp(
     EasyLocalization(
+      startLocale: AppLanguage.arabicLocal,
       supportedLocales: AppLanguage.locals,
       fallbackLocale: AppLanguage.arabicLocal,
       path: AppLanguage.localizationPath,

@@ -60,7 +60,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
             filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.kScaffoldBackgroundColor.withValues(alpha: 0.3),
+                color: context.colorScheme.primaryContainer.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Column(
