@@ -1,7 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
 import 'package:tazkar/core/utils/components/blur_background.dart';
@@ -25,56 +25,62 @@ class PrayerSliverCard extends StatelessWidget {
 
     return SliverToBoxAdapter(
       child: BlurBackground(
+        padding: const EdgeInsets.symmetric(vertical: 12),
         width: MediaQuery.of(context).size.width - 32,
-        height: 269,
-        color: context.colorScheme.primaryContainer.withValues(alpha: 0.4),
+        color: context.colorScheme.primaryContainer.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
+          color: context.colorScheme.secondary.withValues(alpha: 0.5),
           width: 1,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text.rich(
-              TextSpan(
-                text: 'اقْرَأْ بِاسْمِ رَبِّكَ',
-                children: [
-                  TextSpan(
-                    text: '\nالَّذِي خَلَقَ',
-                    style: const TextStyle(fontSize: 23),
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 30,
-                height: 1.7,
-                color: Colors.white,
-                fontFamily: AppFonts.neiriziQuranFonts,
-                shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
+            // Text.rich(
+            //   TextSpan(
+            //     text: 'اقْرَأْ بِاسْمِ رَبِّكَ',
+            //     children: [
+            //       TextSpan(
+            //         text: '\nالَّذِي خَلَقَ',
+            //         style: const TextStyle(fontSize: 23),
+            //       ),
+            //     ],
+            //   ),
+            //   textAlign: TextAlign.center,
+            //   style: const TextStyle(
+            //     fontSize: 30,
+            //     height: 1.7,
+            //     color: Colors.white,
+            //     fontFamily: AppFonts.neiriziQuranFonts,
+            //     shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
+            //   ),
+            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Text(
+                "04:41 AM",
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: AppFonts.robotoFonts,
+                  color: Colors.white,
+                  shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
+                ),
               ),
             ),
-
-            Text(
-              "04:41 AM",
-              textDirection: TextDirection.ltr,
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppFonts.robotoFonts,
-                color: Colors.white,
-                shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
-              ),
-            ),
-            Text(
-              'Fajr 3 hour 9 min left',
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: AppFonts.neiriziQuranFonts,
-                shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child:  Text(
+                'next_prayer_time'.tr(
+                  namedArgs: {'time': '12:30 PM', 'prayer_name': 'الظهر'},
+                ),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: AppFonts.robotoFonts,
+                  color: Colors.white,
+                  shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
+                ),
               ),
             ),
 

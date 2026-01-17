@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:animations/animations.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +12,10 @@ import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
 import 'package:tazkar/core/utils/components/blur_background.dart';
-import 'package:tazkar/features/home/view/controller/home_controller.dart';
 import 'package:tazkar/features/home/view/widgets/prayer_sliver_card.dart';
 
 import '../../../../config/routes/app_routes.dart';
+import '../../../quran/views/widgets/surahs_catalogue_widgets/appbar_wiegets/last_reading_surah_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,140 +27,154 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final controller = HomeController.instance;
     return Scaffold(
-      key: controller.scaffoldKey,
       backgroundColor: context.primaryColor,
-      bottomNavigationBar: CustomBottomNavigationBar(),
-      body: ValueListenableBuilder<int>(
-        valueListenable: controller.selectedIndexNotifier,
-        builder: (context, selectedIndex, child) {
-          return PageTransitionSwitcher(
-            duration: const Duration(milliseconds: 400),
-            transitionBuilder:
-                (
-                  Widget child,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation,
-                ) {
-                  return FadeThroughTransition(
-                    animation: animation,
-                    secondaryAnimation: secondaryAnimation,
-                    fillColor: Colors.transparent,
-                    child: child,
-                  );
-                },
-            child: getPages(selectedIndex),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget getPages(int index) {
-    return [
-      HomePage(),
-      StatisticsPage(),
-      FavoritePage(),
-      ProfilePage(),
-      SettingsPage(),
-    ][index];
-  }
-}
-
-class FavoritePage extends StatelessWidget {
-  const FavoritePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class StatisticsPage extends StatelessWidget {
-  const StatisticsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: ColorfulSafeArea(
-        color: context.primaryColor,
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AppImageAssets.starsIconsBackground),
-              fit: BoxFit.cover,
-              opacity: 0.5,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: ColorfulSafeArea(
+          color: context.primaryColor,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AppImageAssets.starsIconsBackground),
+                fit: BoxFit.cover,
+                opacity: 0.5,
+              ),
             ),
-          ),
-          child: Stack(
-            children: [
-              Positioned.fromRect(
-                rect: Rect.fromLTWH(1 / 8 - 50, 170, 100, 100),
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: context.colorScheme.primaryContainer,
-                        blurRadius: 20.0,
-                      ),
-                    ],
-                    color: AppColors.kSecondaryColor,
-                    shape: BoxShape.circle,
+            child: Stack(
+              children: [
+                Positioned.fromRect(
+                  rect: Rect.fromLTWH(1 / 8 - 50, 170, 100, 100),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.colorScheme.primaryContainer,
+                          blurRadius: 20.0,
+                        ),
+                      ],
+                      color: AppColors.kSecondaryColor,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: CustomScrollView(
-                  physics: BouncingScrollPhysics(),
-                  slivers: [
-                    SliverToBoxAdapter(child: SizedBox(height: 8)),
-                    HomeSliverAppBar(),
-                    SliverToBoxAdapter(child: SizedBox(height: 20)),
-                    PrayerSliverCard(),
-                    SliverToBoxAdapter(child: SizedBox(height: 20)),
-                    HomeTopLayoutSliverList(),
-                    SliverToBoxAdapter(child: SizedBox(height: 20)),
-                    HomeBottomLayoutSliverList(),
-                    SliverToBoxAdapter(child: SizedBox(height: 20)),
-                    HomeStatisticsSliver(),
-                    SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: CustomScrollView(
+                    physics: BouncingScrollPhysics(),
+                    slivers: [
+                      SliverToBoxAdapter(child: SizedBox(height: 8)),
+                      HomeSliverAppBar(),
+                      SliverToBoxAdapter(child: SizedBox(height: 12)),
+                      SliverToBoxAdapter(child:  BlurBackground(
+                        width: MediaQuery.of(context).size.width - 32,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        color: context.colorScheme.primaryContainer.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: context.colorScheme.secondary.withValues(alpha: 0.5),
+                          width: 1,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              AppImageAssets.basmalaSvg,
+                              colorFilter: ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                              height: 35,
+                            ),
+                            Divider(
+                              color: AppColors.primary.withValues(alpha: 0.3),
+                              endIndent: 60,
+                              indent: 60,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "ﭑ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: AppFonts.surahNamesFonts,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                    Text(
+                                      "الآية ٢٥٠",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: AppFonts.kSAFonts,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                20.widthBox,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: InkWell(
+                                    onTap: () {},
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Ink(
+                                      width: 140,
+                                      padding: EdgeInsets.all(7),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primary,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'continue_reading'.tr(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(12),
+                                            child: Image.asset(
+                                              AppImageAssets.lastReadingAvatar,
+                                              height: 45,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )),
+                      SliverToBoxAdapter(child: SizedBox(height: 12)),
+                      PrayerSliverCard(),
+                      SliverToBoxAdapter(child: SizedBox(height: 12)),
+                      HomeTopLayoutSliverList(),
+                      SliverToBoxAdapter(child: SizedBox(height: 12)),
+                      HomeBottomLayoutSliverList(),
+                      SliverToBoxAdapter(child: SizedBox(height: 12)),
+                      HomeStatisticsSliver(),
+                      SliverToBoxAdapter(child: SizedBox(height: 12)),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -378,197 +391,125 @@ class HomeSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
-      centerTitle: true,
       snap: true,
       floating: true,
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
+          width: 1.5,
         ),
         borderRadius: BorderRadius.circular(20),
       ),
-      flexibleSpace: BlurBackground(borderRadius: BorderRadius.circular(20)),
+      flexibleSpace: BlurBackground(
+        color: context.colorScheme.primaryContainer.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: context.colorScheme.secondary.withValues(alpha: 0.5),
+          width: 1,
+        ),
+      ),
       actions: [
+        // Notification badge
         Padding(
-          padding: EdgeInsetsDirectional.only(end: 10.0),
-          child: IconButton(
-            icon: SvgPicture.asset(
-              AppImageAssets.searchIcon,
-              colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          padding: const EdgeInsetsDirectional.only(end: 4.0),
+          child: Stack(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                onPressed: () {},
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.redAccent.withValues(alpha: 0.5),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                  constraints: BoxConstraints(minWidth: 8, minHeight: 8),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Enhanced search button
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: 10.0),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {},
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    width: 1,
+                  ),
+                ),
+                child: SvgPicture.asset(
+                  AppImageAssets.searchIcon,
+                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                  width: 20,
+                  height: 20,
+                ),
+              ),
             ),
-            onPressed: () {},
           ),
         ),
       ],
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'As-salamu alaykum',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          // Avatar with glow effect
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: context.colorScheme.secondary.withValues(
+              alpha: 0.3,
+            ),
+            child: Text(
+              'س',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
-          Text(
-            'username',
-            style: TextStyle(fontSize: 14, color: Colors.white70),
-          ),
-        ],
-      ),
-      leading: IconButton(
-        icon: Transform(
-          alignment: Alignment.center,
-          transform: Matrix4.diagonal3Values(
-            context.locale.languageCode == "ar" ? -1.0 : 1.0,
-            1.0,
-            1.0,
-          ),
-          child: SvgPicture.asset(
-            AppImageAssets.menuLineIcon,
-            colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          ),
-        ),
-        onPressed: () =>
-            HomeController.instance.scaffoldKey.currentState?.openDrawer(),
-      ),
-    );
-  }
-}
-
-class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = HomeController.instance;
-
-    List<String> itemsNames = [
-      'home'.tr(),
-      'statistics'.tr(),
-      'favorites'.tr(),
-      'profile'.tr(),
-      'settings'.tr(),
-    ];
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 10.0,
-            spreadRadius: 0.0,
-            offset: Offset(0.0, -10.0),
-          ),
-        ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      child: Row(
-        children: List.generate(5, (index) {
-          return ValueListenableBuilder<int>(
-            valueListenable: controller.selectedIndexNotifier,
-            builder: (context, selectedIndex, child) {
-              final solisIcon = controller.itemsSolidIcons[index];
-              final outlinedIcons = controller.itemsOutlinedIcons[index];
-              final isSelected = selectedIndex == index;
-              return CustomBottomNavButton(
-                icon: solisIcon is IconData
-                    ? (isSelected ? solisIcon : outlinedIcons)
-                    : null,
-                image: solisIcon is String
-                    ? (isSelected ? solisIcon : outlinedIcons)
-                    : null,
-                label: itemsNames[index],
-                isSelect: isSelected,
-                onTap: () => controller.setPageIndex(index),
-              );
-            },
-          );
-        }),
-      ),
-    );
-  }
-}
-
-class CustomBottomNavButton extends StatelessWidget {
-  final IconData? icon;
-  final String? image;
-  final String label;
-  final bool isSelect;
-  final VoidCallback? onTap;
-
-  const CustomBottomNavButton({
-    super.key,
-    this.icon,
-    this.image,
-    required this.label,
-    required this.isSelect,
-    this.onTap,
-  }) : assert(icon != null || image != null);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Material(
-        type: MaterialType.transparency,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: onTap,
-          child: Ink(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+          SizedBox(width: 12),
+          Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 2,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                15.heightBox,
-                if (image != null)
-                  SvgPicture.asset(
-                    image!,
-                    colorFilter: ColorFilter.mode(
-                      isSelect ? context.primaryColor : Colors.grey,
-                      BlendMode.srcIn,
-                    ),
-                    width: 22,
-                    height: 22,
-                  ),
-                if (icon != null)
-                  Icon(
-                    icon,
-                    color: isSelect ? context.primaryColor : Colors.grey,
-                    size: 22,
-                  ),
-                5.heightBox,
                 Text(
-                  label,
+                  'greetings'.tr(namedArgs: {'name': 'سعيد'}),
                   style: TextStyle(
-                    color: isSelect ? context.primaryColor : Colors.grey,
-                    fontSize: 11,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                (2).heightBox,
-                Container(
-                  height: 4,
-                  width: 50,
-                  margin: EdgeInsets.only(bottom: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: isSelect
-                        ? AppColors.kSecondaryColor
-                        : Colors.transparent,
-                    shape: BoxShape.rectangle,
+                    color: Colors.white,
                   ),
                 ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

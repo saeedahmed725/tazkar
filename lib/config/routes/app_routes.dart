@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tazkar/features/home/view/screen/home_screen.dart';
+import 'package:tazkar/features/home/view/screen/home_shell_view.dart';
 import 'package:tazkar/features/quran/views/bloc/juz_infos/juz_infos_bloc.dart';
 import 'package:tazkar/features/quran/views/bloc/surah_infos/surah_infos_bloc.dart';
 import 'package:tazkar/features/quran/views/screens/mushaf_screen.dart';
@@ -31,11 +32,11 @@ class AppRoutes {
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
-    routes: [splashRoute, homeRoute, quranRoute, surahsListRoute],
+    routes: [_splashRoute, _homeShellRoute, _quranRoute, _surahsListRoute],
     errorBuilder: (context, state) => _errorRoute(),
   );
 
-  static final splashRoute = GoRoute(
+  static final _splashRoute = GoRoute(
     path: "/$splash",
     name: splash,
     builder: (context, state) => BlocProvider(
@@ -44,13 +45,41 @@ class AppRoutes {
     ),
   );
 
-  static final homeRoute = GoRoute(
+  static final _homeShellRoute = StatefulShellRoute.indexedStack(
+    builder: (context, state, child) {
+      return HomeShellView(child: child);
+    },
+    branches: [
+      StatefulShellBranch(routes: [_homeRoute]),
+      StatefulShellBranch(routes: [_prayerRoute]),
+      StatefulShellBranch(routes: [_favoriteRoute]),
+      StatefulShellBranch(routes: [_settingsRoute]),
+    ],
+  );
+
+  static final _homeRoute = GoRoute(
     path: "/$home",
     name: home,
     builder: (context, state) => HomeScreen(),
   );
 
-  static final quranRoute = GoRoute(
+  static final _favoriteRoute = GoRoute(
+    path: "/$favorite",
+    name: favorite,
+    builder: (context, state) => Scaffold(),
+  );
+  static final _prayerRoute = GoRoute(
+    path: "/$prayer",
+    name: prayer,
+    builder: (context, state) => Scaffold(),
+  );
+  static final _settingsRoute = GoRoute(
+    path: "/$settings",
+    name: settings,
+    builder: (context, state) => Scaffold(),
+  );
+
+  static final _quranRoute = GoRoute(
     path: '/$quran',
     name: quran,
     builder: (context, state) => MushafScreen(
@@ -60,7 +89,7 @@ class AppRoutes {
     ),
   );
 
-  static final surahsListRoute = GoRoute(
+  static final _surahsListRoute = GoRoute(
     path: '/$surahsList',
     name: surahsList,
     builder: (context, state) => MultiBlocProvider(

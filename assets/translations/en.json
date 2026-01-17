@@ -3,6 +3,8 @@
   "welcomeMessage": "Welcome to the Quran App\n",
   "startMessage": "Write your message to get started",
   "placeholderMessage": "Write your message here...",
+  "greetings" : "As-salamu alaykum, {name} 👋",
+  "next_prayer_time": "Next prayer {prayer_name} after {time}",
   "quranChatbot": "Quran Chatbot",
   "surahs": "Surahs",
   "juzs": "Juzs",

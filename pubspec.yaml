@@ -67,6 +67,7 @@ dependencies:
   geocoding: ^4.0.0
   flutter_qiblah: ^3.1.0+1
   flutter_upgrade_version: ^1.1.8
+  jiffy: ^6.4.4
 
 
 dev_dependencies:
