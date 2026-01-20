@@ -3,11 +3,9 @@ import 'dart:ui';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tazkar/core/classes/colorful_safe_area.dart';
 import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_image_assets.dart';
@@ -15,7 +13,7 @@ import 'package:tazkar/core/utils/components/blur_background.dart';
 import 'package:tazkar/features/home/view/widgets/prayer_sliver_card.dart';
 
 import '../../../../config/routes/app_routes.dart';
-import '../../../quran/views/widgets/surahs_catalogue_widgets/appbar_wiegets/last_reading_surah_card.dart';
+import '../../../../core/constants/app_static.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,157 +23,80 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TimingProps currentPrayer = TimingProps.asr;
+
+  void cycleNextPrayer() {
+    setState(() {
+      int nextIndex = (currentPrayer.index + 1) % TimingProps.values.length;
+      currentPrayer = TimingProps.values[nextIndex];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.primaryColor,
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: ColorfulSafeArea(
-          color: context.primaryColor,
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AppImageAssets.starsIconsBackground),
-                fit: BoxFit.cover,
-                opacity: 0.5,
+      appBar: HomeSliverAppBar(onPressed: cycleNextPrayer),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(AppImageAssets.starsIconsBackground),
+            fit: BoxFit.cover,
+            opacity: 0.5,
+          ),
+        ),
+        child: Stack(
+          children: [
+            AnimatedPositioned.fromRect(
+              rect: currentPrayer.prayerPosition(MediaQuery.sizeOf(context)),
+              duration: const Duration(milliseconds: 800),
+              curve: Curves.easeInOutBack,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: currentPrayer.isDayTime
+                          ? Colors.amberAccent.withValues(alpha: 0.2)
+                          : Colors.blueGrey.withValues(alpha: 0.3),
+                      blurRadius: 20.0,
+                      spreadRadius: 5.0,
+                    ),
+                  ],
+                ),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 400),
+                  child: Icon(
+                    currentPrayer.isDayTime
+                        ? Icons.wb_sunny
+                        : Icons.nightlight_round,
+                    key: ValueKey<bool>(currentPrayer.isDayTime),
+                    color: currentPrayer.isDayTime
+                        ? Colors.amber
+                        : Colors.white,
+                    size: 60,
+                  ),
+                ),
               ),
             ),
-            child: Stack(
-              children: [
-                Positioned.fromRect(
-                  rect: Rect.fromLTWH(1 / 8 - 50, 170, 100, 100),
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: context.colorScheme.primaryContainer,
-                          blurRadius: 20.0,
-                        ),
-                      ],
-                      color: AppColors.kSecondaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: CustomScrollView(
-                    physics: BouncingScrollPhysics(),
-                    slivers: [
-                      SliverToBoxAdapter(child: SizedBox(height: 8)),
-                      HomeSliverAppBar(),
-                      SliverToBoxAdapter(child: SizedBox(height: 12)),
-                      SliverToBoxAdapter(child:  BlurBackground(
-                        width: MediaQuery.of(context).size.width - 32,
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        color: context.colorScheme.primaryContainer.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: context.colorScheme.secondary.withValues(alpha: 0.5),
-                          width: 1,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              AppImageAssets.basmalaSvg,
-                              colorFilter: ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                              height: 35,
-                            ),
-                            Divider(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              endIndent: 60,
-                              indent: 60,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "ﭑ",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: AppFonts.surahNamesFonts,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                    Text(
-                                      "الآية ٢٥٠",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: AppFonts.kSAFonts,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                20.widthBox,
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: InkWell(
-                                    onTap: () {},
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Ink(
-                                      width: 140,
-                                      padding: EdgeInsets.all(7),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primary,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'continue_reading'.tr(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(12),
-                                            child: Image.asset(
-                                              AppImageAssets.lastReadingAvatar,
-                                              height: 45,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-                      SliverToBoxAdapter(child: SizedBox(height: 12)),
-                      PrayerSliverCard(),
-                      SliverToBoxAdapter(child: SizedBox(height: 12)),
-                      HomeTopLayoutSliverList(),
-                      SliverToBoxAdapter(child: SizedBox(height: 12)),
-                      HomeBottomLayoutSliverList(),
-                      SliverToBoxAdapter(child: SizedBox(height: 12)),
-                      HomeStatisticsSliver(),
-                      SliverToBoxAdapter(child: SizedBox(height: 12)),
-                    ],
-                  ),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: CustomScrollView(
+                physics: BouncingScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(child: SizedBox(height: 12)),
+                  PrayerSliverCard(),
+                  SliverToBoxAdapter(child: SizedBox(height: 12)),
+                  HomeTopLayoutSliverList(),
+                  SliverToBoxAdapter(child: SizedBox(height: 12)),
+                  HomeBottomLayoutSliverList(),
+                  SliverToBoxAdapter(child: SizedBox(height: 12)),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -383,30 +304,26 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
   }
 }
 
-class HomeSliverAppBar extends StatelessWidget {
-  const HomeSliverAppBar({super.key});
+class HomeSliverAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const HomeSliverAppBar({super.key, required this.onPressed});
+
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
+    return AppBar(
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
-      snap: true,
-      floating: true,
+      // snap: true,
+      // floating: true,
+      // collapsedHeight: 120,
       shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: AppColors.kSecondaryColor.withValues(alpha: 0.5),
-          width: 1.5,
-        ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
       ),
       flexibleSpace: BlurBackground(
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         color: context.colorScheme.primaryContainer.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: context.colorScheme.secondary.withValues(alpha: 0.5),
-          width: 1,
-        ),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
       ),
       actions: [
         // Notification badge
@@ -420,7 +337,7 @@ class HomeSliverAppBar extends StatelessWidget {
                   color: Colors.white,
                   size: 24,
                 ),
-                onPressed: () {},
+                onPressed: onPressed,
               ),
               Positioned(
                 right: 8,
@@ -442,33 +359,6 @@ class HomeSliverAppBar extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-        // Enhanced search button
-        Padding(
-          padding: const EdgeInsetsDirectional.only(end: 10.0),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(12),
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    width: 1,
-                  ),
-                ),
-                child: SvgPicture.asset(
-                  AppImageAssets.searchIcon,
-                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                  width: 20,
-                  height: 20,
-                ),
-              ),
-            ),
           ),
         ),
       ],
@@ -513,4 +403,7 @@ class HomeSliverAppBar extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
