@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/utils/components/blur_background.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
@@ -74,7 +74,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                AppImageAssets.basmalaSvg,
+                AppAssets.basmalaSvg,
                 colorFilter: ColorFilter.mode(
                   Colors.white,
                   BlendMode.srcIn,
@@ -138,7 +138,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: Image.asset(
-                                AppImageAssets.lastReadingAvatar,
+                                AppAssets.lastReadingAvatar,
                                 height: 45,
                               ),
                             ),

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tazkar/core/classes/colorful_safe_area.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/constants/app_static.dart';
 import 'package:tazkar/core/utils/functions/functions.dart';
 import 'package:tazkar/features/quran/data/model/ayah_glyph.dart';
@@ -91,13 +91,13 @@ class _OverlayWidgetsState extends State<OverlayWidgets> {
             child: Row(
               children: [
                 SvgPicture.asset(
-                  AppImageAssets.searchIcon,
+                  AppAssets.searchIcon,
                   height: 20,
                   colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 ),
                 Spacer(),
                 SvgPicture.asset(
-                  AppImageAssets.menuLineIcon,
+                  AppAssets.menuLineIcon,
                   height: 15,
                   colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 ),
@@ -209,7 +209,7 @@ class MushafPainter extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    SvgPicture.asset(AppImageAssets.icAyahNoSvg, height: 27),
+                    SvgPicture.asset(AppAssets.icAyahNoSvg, height: 27),
                     Text(
                       AppFunctions.toArabicNumbers(
                         ayahs[wordIndex].ayahNumber.toString(),
@@ -291,9 +291,9 @@ class SurahBannerPlace extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          SvgPicture.asset(AppImageAssets.surahHeader1Svg, width: width),
+          SvgPicture.asset(AppAssets.surahHeader1Svg, width: width),
           SvgPicture.asset(
-            AppImageAssets.getSurahImage(ayah.surahNumber),
+            AppAssets.getSurahImage(ayah.surahNumber),
             height: 25,
             colorFilter: ColorFilter.mode(
               context.theme.colorScheme.onSurface,
@@ -336,8 +336,8 @@ class Basmala extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: SvgPicture.asset(
         isSecondTypeBasmala
-            ? AppImageAssets.basmala3Svg
-            : AppImageAssets.basmala2Svg,
+            ? AppAssets.basmala3Svg
+            : AppAssets.basmala2Svg,
         colorFilter: ColorFilter.mode(
           context.theme.colorScheme.onSurface,
           BlendMode.srcIn,

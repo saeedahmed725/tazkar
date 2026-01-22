@@ -2,7 +2,7 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/utils/functions/functions.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
@@ -65,7 +65,7 @@ class SurahCardView extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 SvgPicture.asset(
-                  AppImageAssets.borderNoIcon,
+                  AppAssets.borderNoIcon,
                   height: 40,
                   colorFilter: ColorFilter.mode(
                     context.primaryColor,

@@ -1,6 +1,6 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/features/quran/views/widgets/surahs_catalogue_widgets/appbar_wiegets/last_reading_surah_card.dart';
 
 class FlexibleSpaceBackground extends StatelessWidget {
@@ -14,14 +14,14 @@ class FlexibleSpaceBackground extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.primaryColor,
         image: DecorationImage(
-            image: AssetImage(AppImageAssets.lastReadingBackground),
+            image: AssetImage(AppAssets.lastReadingBackground),
             fit: BoxFit.cover),
       ),
       child: Stack(
         fit: StackFit.expand,
         children: [
           Image.asset(
-            AppImageAssets.starsIconsBackground,
+            AppAssets.starsIconsBackground,
             opacity: const AlwaysStoppedAnimation<double>(0.2),
             fit: BoxFit.cover,
           ),

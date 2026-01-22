@@ -9,16 +9,17 @@ class NetworkClient {
 
   Future<Response> get(
     String url, {
+    String? baseUrl,
     Map<String, dynamic>? queryParameters,
+    Object? data,
+    Options? options,
   }) async {
+    _dio.options.baseUrl = baseUrl ?? _dio.options.baseUrl;
     return await _dio.get(
       url,
       queryParameters: queryParameters,
-      onReceiveProgress: (received, total) {
-        if (total != -1) {
-          log("${(received / total * 100).toStringAsFixed(0)}%");
-        }
-      },
+      data: data,
+      options: options,
     );
   }
 
