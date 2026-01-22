@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:tazkar/core/classes/colorful_safe_area.dart';
 import 'package:tazkar/core/constants/app_colors.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/features/dhikr/data/datasource/dhikr_local_datasource.dart';
 import 'package:tazkar/features/dhikr/data/model/azkar_category_model.dart';
 import 'package:tazkar/features/dhikr/data/model/azkar_data_model.dart';
@@ -114,7 +114,7 @@ class _DhikrDetailsScreenState extends State<DhikrDetailsScreen> {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(AppImageAssets.starsIconsBackground),
+                image: AssetImage(AppAssets.starsIconsBackground),
                 fit: BoxFit.cover,
                 opacity: 0.5,
               ),
