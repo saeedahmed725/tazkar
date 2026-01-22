@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:geocoding/geocoding.dart';
@@ -115,7 +116,7 @@ class PrayerTimingsRepo {
       final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.medium,
-          timeLimit: Duration(seconds: 8),
+          timeLimit: Duration(seconds: 10),
         ),
       );
 
@@ -127,6 +128,10 @@ class PrayerTimingsRepo {
       final address = _formatAddress(placemarks.firstOrNull);
 
       return getPrayerQuery().copyWith(address: address);
+    } on TimeoutException catch (e) {
+      return getPrayerQuery().copyWith(
+        address: fallbackAddress.isNotEmpty ? fallbackAddress : 'Cairo, Egypt',
+      );
     } catch (e) {
       throw LocalException(
         'Failed to resolve location/address: $e',

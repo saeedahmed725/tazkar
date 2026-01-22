@@ -89,7 +89,7 @@ class PrayerSliverCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           SvgPicture.asset(
-                            AppAssets.getPrayerImage(index),
+                            prayer.prayer.icon,
                             width: 28,
                             height: 28,
                             colorFilter: ColorFilter.mode(

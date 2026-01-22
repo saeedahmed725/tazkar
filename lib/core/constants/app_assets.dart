@@ -53,6 +53,7 @@ class AppAssets {
       'assets/images/icons/setting-solid-icon.svg';
   static const String settingsOutlinedIcon =
       'assets/images/icons/setting-outlined-icon.svg';
+
   /*For now we will not use chatbot icons
   static const String chatbotOutlinedIcon =
       'assets/images/icons/chatbot-outlined-icon.svg';
@@ -92,27 +93,21 @@ class AppAssets {
   static const String lastReadingBackground =
       'assets/images/png/last-reading-background.png';
 
-  /// prayer times
-  static const String fajirImage = 'assets/images/prayer_time/icon/fajir.svg';
-  static const String sunRiseImage =
+  /// prayer times icons
+  static const String fajirIcon = 'assets/images/prayer_time/icon/fajir.svg';
+  static const String sunRiseIcon =
       'assets/images/prayer_time/icon/sunrise.svg';
-  static const String thohaerImage =
-      'assets/images/prayer_time/icon/thohaer.svg';
-  static const String asserImage = 'assets/images/prayer_time/icon/asser.svg';
-  static const String maghrabImage =
-      'assets/images/prayer_time/icon/sunset.svg';
-  static const String ashaaImage = 'assets/images/prayer_time/icon/moon.svg';
+  static const String dhuhrIcon = 'assets/images/prayer_time/icon/dhuhr.svg';
+  static const String asserIcon = 'assets/images/prayer_time/icon/asser.svg';
+  static const String maghrabIcon = 'assets/images/prayer_time/icon/sunset.svg';
+  static const String ashaaIcon = 'assets/images/prayer_time/icon/moon.svg';
 
-  static String getPrayerImage(int index) {
-    return [
-      fajirImage,
-      sunRiseImage,
-      thohaerImage,
-      asserImage,
-      maghrabImage,
-      ashaaImage,
-    ][index];
-  }
+  /// prayer times images
+  static const String fajirImage = 'assets/images/background/fajir.jpg';
+  static const String dhuhrImage = 'assets/images/background/dhuhr.jpg';
+  static const String asserImage = 'assets/images/background/asser.jpg';
+  static const String maghrabImage = 'assets/images/background/maghrab.jpg';
+  static const String ashaaImage = 'assets/images/background/ashaa.jpg';
 
   static String getSurahImage(int surahNumber) {
     return 'assets/images/surah/00$surahNumber.svg';
