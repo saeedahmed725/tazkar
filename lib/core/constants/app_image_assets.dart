@@ -4,9 +4,11 @@ class AppImageAssets {
   // global image
   static const String logoImage = 'assets/images/logo.png';
   static const String splashImage = 'assets/images/splash/splash.png';
+
   /// background
   static const String aqsaBackgroundImage = 'assets/images/background/aqsa.jpg';
-  static const String nakshBackgroundImage = 'assets/images/background/naksh.jpg';
+  static const String nakshBackgroundImage =
+      'assets/images/background/naksh.jpg';
   static const String bismalih = 'assets/images/icons/bismalih.png';
 
   // category
@@ -51,10 +53,12 @@ class AppImageAssets {
       'assets/images/icons/setting-solid-icon.svg';
   static const String settingsOutlinedIcon =
       'assets/images/icons/setting-outlined-icon.svg';
+  /*For now we will not use chatbot icons
   static const String chatbotOutlinedIcon =
       'assets/images/icons/chatbot-outlined-icon.svg';
   static const String chatbotSolidIcon =
-      'assets/images/icons/chatbot-solid-icon.svg';
+      'assets/images/icons/chatbot-solid-icon.svg';*/
+  static const String dhukiricon = 'assets/images/icons/dhukir_icon.svg';
   static const String statisticsOutlinedIcon =
       'assets/images/icons/statistics-outlined-icon.svg';
   static const String statisticsSolidIcon =
@@ -77,7 +81,8 @@ class AppImageAssets {
   static const String mandalaIcon = 'assets/images/icons/mandala.svg';
   static const String mosqueIcon = 'assets/images/icons/mosque-icon.svg';
   static const String micSolidIcon = 'assets/images/icons/mic-solid-icon.svg';
-  static const String micOutlinedIcon = 'assets/images/icons/mic-outlined-icon.svg';
+  static const String micOutlinedIcon =
+      'assets/images/icons/mic-outlined-icon.svg';
 
   /// png images
   static const String starsIconsBackground =

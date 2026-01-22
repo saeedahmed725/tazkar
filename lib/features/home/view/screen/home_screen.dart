@@ -69,98 +69,109 @@ class _HomeScreenState extends State<HomeScreen> {
                       SliverToBoxAdapter(child: SizedBox(height: 8)),
                       HomeSliverAppBar(),
                       SliverToBoxAdapter(child: SizedBox(height: 12)),
-                      SliverToBoxAdapter(child:  BlurBackground(
-                        width: MediaQuery.of(context).size.width - 32,
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        color: context.colorScheme.primaryContainer.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: context.colorScheme.secondary.withValues(alpha: 0.5),
-                          width: 1,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              AppImageAssets.basmalaSvg,
-                              colorFilter: ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                              height: 35,
+                      SliverToBoxAdapter(
+                        child: BlurBackground(
+                          width: MediaQuery.of(context).size.width - 32,
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          color: context.colorScheme.primaryContainer
+                              .withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: context.colorScheme.secondary.withValues(
+                              alpha: 0.5,
                             ),
-                            Divider(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              endIndent: 60,
-                              indent: 60,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "ﭑ",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: AppFonts.surahNamesFonts,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                    Text(
-                                      "الآية ٢٥٠",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: AppFonts.kSAFonts,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
+                            width: 1,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                AppImageAssets.basmalaSvg,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
                                 ),
-                                20.widthBox,
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: InkWell(
-                                    onTap: () {},
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Ink(
-                                      width: 140,
-                                      padding: EdgeInsets.all(7),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primary,
-                                        borderRadius: BorderRadius.circular(12),
+                                height: 35,
+                              ),
+                              Divider(
+                                color: AppColors.primary.withValues(alpha: 0.3),
+                                endIndent: 60,
+                                indent: 60,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "ﭑ",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: AppFonts.surahNamesFonts,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'continue_reading'.tr(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                            ),
+                                      Text(
+                                        "الآية ٢٥٠",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: AppFonts.kSAFonts,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  20.widthBox,
+                                  Material(
+                                    type: MaterialType.transparency,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Ink(
+                                        width: 140,
+                                        padding: EdgeInsets.all(7),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius: BorderRadius.circular(
+                                            12,
                                           ),
-                                          Spacer(),
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(12),
-                                            child: Image.asset(
-                                              AppImageAssets.lastReadingAvatar,
-                                              height: 45,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'continue_reading'.tr(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            Spacer(),
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Image.asset(
+                                                AppImageAssets
+                                                    .lastReadingAvatar,
+                                                height: 45,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      )),
+                      ),
                       SliverToBoxAdapter(child: SizedBox(height: 12)),
                       PrayerSliverCard(),
                       SliverToBoxAdapter(child: SizedBox(height: 12)),
@@ -231,11 +242,12 @@ class HomeTopLayoutSliverList extends StatelessWidget {
           ),
           SizedBox(width: 16),
           GestureDetector(
-            onTap: () {},
+            onTap: () =>
+                GoRouter.of(context).pushNamed(AppRoutes.dhikrCategories),
             child: _buildIconContainer(
               context: context,
-              imagePath: AppImageAssets.chatbotSolidIcon,
-              label: 'chatbot'.tr(),
+              imagePath: AppImageAssets.dhukiricon,
+              label: 'azkar'.tr(),
             ),
           ),
         ],

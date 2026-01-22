@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tazkar/features/dhikr/data/model/azkar_category_model.dart';
+import 'package:tazkar/features/dhikr/view/screen/dhikr_categories_screen.dart';
+import 'package:tazkar/features/dhikr/view/screen/dhikr_details_screen.dart';
 import 'package:tazkar/features/home/view/screen/home_screen.dart';
 import 'package:tazkar/features/home/view/screen/home_shell_view.dart';
 import 'package:tazkar/features/quran/views/bloc/juz_infos/juz_infos_bloc.dart';
@@ -29,10 +32,18 @@ class AppRoutes {
   static const String favorite = '/favorite';
   static const String prayer = '/prayer';
   static const String about = '/about';
+  static const String dhikrCategories = '/dhikrCategories';
+  static const String dhikrDetails = 'dhikrDetails';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
-    routes: [_splashRoute, _homeShellRoute, _quranRoute, _surahsListRoute],
+    routes: [
+      _splashRoute,
+      _homeShellRoute,
+      _quranRoute,
+      _surahsListRoute,
+      _dhikrCategoriesRoute,
+    ],
     errorBuilder: (context, state) => _errorRoute(),
   );
 
@@ -99,6 +110,22 @@ class AppRoutes {
       ],
       child: SurahsCatalogue(),
     ),
+  );
+
+  static final _dhikrCategoriesRoute = GoRoute(
+    path: '/$dhikrCategories',
+    name: dhikrCategories,
+    builder: (context, state) => const DhikrCategoriesScreen(),
+    routes: [
+      GoRoute(
+        path: dhikrDetails,
+        name: dhikrDetails,
+        builder: (context, state) {
+          final category = state.extra as AzkarCategoryModel;
+          return DhikrDetailsScreen(category: category);
+        },
+      ),
+    ],
   );
 
   // Error route if the route is not found
