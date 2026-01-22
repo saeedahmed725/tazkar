@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tazkar/core/utils/errors/failure.dart';
 import 'package:tazkar/features/prayer_timings/data/enums/timing_props.dart';
 import 'package:tazkar/features/prayer_timings/data/model/prayer_query.dart';
 import 'package:tazkar/features/prayer_timings/data/model/prayer_timings_model.dart';
@@ -30,7 +31,7 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
     final result = await _repo.getPrayerTimings();
     result.data.fold(
       (failure) => emit(
-        state.copyWith(status: PrayerStatus.failure, message: failure.message),
+        state.copyWith(status: PrayerStatus.failure, message: failure),
       ),
       (calendar) {
         final schedule = _buildSchedule(calendar, DateTime.now());
@@ -56,7 +57,16 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
     final schedule = _buildSchedule(state.calendar!, event.now);
     final newCountdown = _formatCountdown(schedule.countdown);
     final timesChanged = !listEquals(state.todayTimes, schedule.todayTimes);
-
+    final progress =
+        schedule.countdown != null &&
+            state.countdown != null &&
+            schedule.countdown!.inSeconds > 0
+        ? 1 -
+              (schedule.countdown!.inSeconds /
+                  (state.nextPrayerTime!
+                      .difference(event.now.subtract(schedule.countdown!))
+                      .inSeconds))
+        : 0.0;
     if (state.countdown != newCountdown ||
         state.currentPrayer != schedule.currentPrayer ||
         state.nextPrayer != schedule.nextPrayer ||
@@ -68,6 +78,7 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
           nextPrayer: schedule.nextPrayer,
           nextPrayerTime: schedule.nextPrayerTime,
           countdown: newCountdown,
+          progress: progress,
         ),
       );
     }
@@ -184,4 +195,3 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
     return super.close();
   }
 }
-

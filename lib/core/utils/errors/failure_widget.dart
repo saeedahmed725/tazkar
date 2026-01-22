@@ -6,9 +6,10 @@ import 'package:tazkar/core/utils/errors/remote_failure_view.dart';
 import 'failure.dart';
 
 class AppFailureWidget extends StatelessWidget {
-  const AppFailureWidget({super.key, required this.failure});
+  const AppFailureWidget({super.key, required this.failure, this.onRetry});
 
   final Failure failure;
+  final Function()? onRetry;
 
   @override
   Widget build(BuildContext context) {

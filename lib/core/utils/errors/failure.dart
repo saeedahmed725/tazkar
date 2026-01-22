@@ -154,9 +154,10 @@ class LocalFailure extends Failure {
   static const LOCATION_ERROR_CODE = 1;
   static const LOCATION_SETTINGS_ERROR_CODE = 2;
   static const LOCATION_PERMISSION_ERROR_CODE = 3;
-  static const STORAGE_PERMISSION_ERROR_CODE = 4;
-  static const DATABASE_ERROR_CODE = 5;
-  static const GENERIC_ERROR_CODE = 6;
+  static const LOCATION_TIMEOUT_ERROR_CODE = 4;
+  static const STORAGE_PERMISSION_ERROR_CODE = 5;
+  static const DATABASE_ERROR_CODE = 6;
+  static const GENERIC_ERROR_CODE = 7;
 
   factory LocalFailure.fromException(Exception exception) {
     if (exception is FileSystemException) {

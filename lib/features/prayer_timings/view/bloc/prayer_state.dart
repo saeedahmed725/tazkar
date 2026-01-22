@@ -6,19 +6,21 @@ class PrayerState extends Equatable {
   const PrayerState({
     required this.status,
     required this.todayTimes,
+    required this.progress,
     this.calendar,
     this.query,
     this.currentPrayer,
     this.nextPrayer,
     this.nextPrayerTime,
     this.countdown,
-    this.message,
+    this.failure,
   });
 
   factory PrayerState.initial() => const PrayerState(
-        status: PrayerStatus.initial,
-        todayTimes: <PrayerTimeView>[],
-      );
+    status: PrayerStatus.initial,
+    todayTimes: <PrayerTimeView>[],
+    progress: 0.0,
+  );
 
   final PrayerStatus status;
   final PrayerTimingsModel? calendar;
@@ -28,20 +30,24 @@ class PrayerState extends Equatable {
   final TimingProps? nextPrayer;
   final DateTime? nextPrayerTime;
   final String? countdown;
-  final String? message;
+  final Failure? failure;
+
+  final double progress;
 
   PrayerState copyWith({
     PrayerStatus? status,
     PrayerTimingsModel? calendar,
     PrayerQuery? query,
+    double? progress,
     List<PrayerTimeView>? todayTimes,
     TimingProps? currentPrayer,
     TimingProps? nextPrayer,
     DateTime? nextPrayerTime,
     String? countdown,
-    String? message,
+    Failure? message,
   }) {
     return PrayerState(
+      progress: progress ?? this.progress,
       status: status ?? this.status,
       calendar: calendar ?? this.calendar,
       query: query ?? this.query,
@@ -50,23 +56,24 @@ class PrayerState extends Equatable {
       nextPrayer: nextPrayer ?? this.nextPrayer,
       nextPrayerTime: nextPrayerTime ?? this.nextPrayerTime,
       countdown: countdown ?? this.countdown,
-      message: message ?? this.message,
+      failure: message ?? this.failure,
     );
   }
 
   @override
   List<Object?> get props => [
-        status,
-        calendar,
-        query,
-        todayTimes,
-        currentPrayer,
-        nextPrayer,
-        nextPrayerTime,
-        countdown,
-        message,
-      ];
+    status,
+    calendar,
+    query,
+    todayTimes,
+    currentPrayer,
+    nextPrayer,
+    nextPrayerTime,
+    countdown,
+    failure,
+  ];
 }
+
 class PrayerSchedule extends Equatable {
   const PrayerSchedule({
     required this.todayTimes,
