@@ -1,25 +1,37 @@
-// import 'package:drift/drift.dart';
-// import 'package:drift_flutter/drift_flutter.dart';
-// import 'package:path_provider/path_provider.dart';
-//
-//
-// part 'app_database.g.dart';
-//
-// @DriftDatabase(tables: [])
-// class AppDatabase extends _$AppDatabase {
-//   AppDatabase([QueryExecutor? executor])
-//       : super(executor ?? _openConnection());
-//
-//   @override
-//   int get schemaVersion => 1;
-//
-//   static QueryExecutor _openConnection() {
-//     return driftDatabase(
-//       name: 'tazakar_db',
-//       native: const DriftNativeOptions(
-//         databaseDirectory: getApplicationSupportDirectory,
-//       ),
-//     );
-//   }
-// }
-//
+import 'dart:io';
+
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
+import '../../features/prayer_timings/data/model/prayer_cache_entries.dart';
+
+part 'app_database.g.dart';
+
+/// Drift database used across the app.
+@DriftDatabase(tables: [PrayerCacheEntries])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase() : super(_openConnection());
+
+  @override
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.deleteTable('prayer_cache_entries');
+        await m.createAll();
+      }
+    },
+  );
+}
+
+/// Table that caches yearly prayer timings keyed by request parameters.
+
+LazyDatabase _openConnection() => LazyDatabase(() async {
+  final dir = await getApplicationSupportDirectory();
+  final file = File(p.join(dir.path, 'tazakar_db.sqlite'));
+  return NativeDatabase.createInBackground(file);
+});

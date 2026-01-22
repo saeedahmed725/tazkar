@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tazkar/config/routes/app_routes.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/quran/surah_names.dart';
 import 'package:tazkar/core/utils/functions/functions.dart';
 import 'package:tazkar/features/quran/data/model/juz_model.dart';
@@ -55,7 +55,7 @@ class JuzCardView extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     SvgPicture.asset(
-                      AppImageAssets.borderNoIcon,
+                      AppAssets.borderNoIcon,
                       height: 40,
                       colorFilter: ColorFilter.mode(
                         context.primaryColor,

@@ -2,7 +2,7 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/shared/arabic_responsive_text.dart';
 import 'package:tazkar/features/quran/data/model/ayah_glyph.dart';
 import 'package:tazkar/features/quran/views/controller/mushaf_controller.dart';
@@ -32,8 +32,8 @@ class MushafPageHeaderDetails extends StatelessWidget {
           Spacer(),
           SvgPicture.asset(
             MushafController.instance.isLeftPage(index)
-                ? AppImageAssets.icPageLeftSvg
-                : AppImageAssets.icRightLeftSvg,
+                ? AppAssets.icPageLeftSvg
+                : AppAssets.icRightLeftSvg,
             colorFilter: ColorFilter.mode(
               context.primaryColor,
               BlendMode.srcIn,

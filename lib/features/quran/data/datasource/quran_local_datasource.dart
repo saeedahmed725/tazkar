@@ -61,17 +61,23 @@ class QuranLocalDataSource {
     final total = archive.length;
     int done = 0;
 
-    for (final file in archive) {
-      if (file.isFile) {
-        await StorageService.save(
-          storage: StorageType.internal,
-          fileName: file.name,
-          bytes: file.content,
-        );
-      }
-      done++;
-      onProgress(done, total);
-    }
+   try{
+     for (final file in archive) {
+       if (file.isFile) {
+         log(file.name);
+         await StorageService.save(
+           storage: StorageType.internal,
+           fileName: file.name,
+           bytes: file.content,
+         );
+       }
+       done++;
+       onProgress(done, total);
+     }
+   }catch (e,s){
+      log("Error during unzip", error: e, stackTrace: s);
+      rethrow;
+   }
 
     await SharedPrefs.setString(AppSharedKeys.zipHash, currentHash);
   }

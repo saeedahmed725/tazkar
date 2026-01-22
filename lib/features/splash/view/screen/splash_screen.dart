@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tazkar/config/routes/app_routes.dart';
-import 'package:tazkar/core/constants/app_image_assets.dart';
+import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/utils/components/toast.dart';
 import 'package:tazkar/core/utils/errors/failure_widget.dart';
 
@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
             return Container(
               decoration: BoxDecoration(
                 image: const DecorationImage(
-                  image: AssetImage(AppImageAssets.aqsaBackgroundImage),
+                  image: AssetImage(AppAssets.aqsaBackgroundImage),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -83,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
           return Container(
             decoration: BoxDecoration(
               image: const DecorationImage(
-                image: AssetImage(AppImageAssets.aqsaBackgroundImage),
+                image: AssetImage(AppAssets.aqsaBackgroundImage),
                 fit: BoxFit.cover,
               ),
             ),
@@ -92,16 +92,16 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Container(),
                 Image.asset(
-                  AppImageAssets.starsIconsBackground,
+                  AppAssets.starsIconsBackground,
                   color: AppColors.kSecondaryColor.withValues(alpha: 0.4),
                 ),
                 SvgPicture.asset(
-                  AppImageAssets.basmalaSvg,
+                  AppAssets.basmalaSvg,
                 ).animate().fadeIn(duration: 1000.ms),
                 Positioned(
                   bottom: 500,
                   child: SvgPicture.asset(
-                    AppImageAssets.mandalaIcon,
+                    AppAssets.mandalaIcon,
                     height: 500,
                     colorFilter: ColorFilter.mode(
                       AppColors.kSecondaryColor.withValues(alpha: 0.2),

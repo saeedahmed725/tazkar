@@ -76,6 +76,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: any
   flutter_gen_runner: any
+  drift_dev: ^2.30.1
 
 flutter:
 
@@ -95,6 +96,7 @@ flutter:
     - assets/images/background/
     - assets/images/prayer_time/icon/
     - assets/translations/
+    - assets/images/hijri/
 
   fonts:
     - family: Numbers

@@ -5,8 +5,7 @@ import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_image_assets.dart';
+import '../../../../core/constants/app_assets.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({super.key, required this.child});
@@ -20,23 +19,23 @@ class CustomBottomNavBar extends StatefulWidget {
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   List get itemsSolidIcons => [
     FlutterIslamicIcons.solidCommunity,
-    AppImageAssets.statisticsSolidIcon,
-    AppImageAssets.bookmarkSolidIcon,
-    AppImageAssets.profileSolidIcon,
-    AppImageAssets.settingsSolidIcon,
+    FlutterIslamicIcons.solidKowtow,
+    AppAssets.bookmarkSolidIcon,
+    AppAssets.profileSolidIcon,
+    AppAssets.settingsSolidIcon,
   ];
 
   List get itemsOutlinedIcons => [
     FlutterIslamicIcons.community,
-    AppImageAssets.statisticsOutlinedIcon,
-    AppImageAssets.bookmarkOutlinedIcon,
-    AppImageAssets.profileOutlinedIcon,
-    AppImageAssets.settingsOutlinedIcon,
+    FlutterIslamicIcons.kowtow,
+    AppAssets.bookmarkOutlinedIcon,
+    AppAssets.profileOutlinedIcon,
+    AppAssets.settingsOutlinedIcon,
   ];
 
   List<String> get itemsNames => [
     'home'.tr(),
-    'statistics'.tr(),
+    'prayer'.tr(),
     'favorites'.tr(),
     'profile'.tr(),
     'settings'.tr(),
@@ -56,10 +55,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             offset: Offset(0.0, -10.0),
           ),
         ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
       ),
       child: Row(
         children: List.generate(5, (index) {
@@ -118,7 +113,6 @@ class CustomBottomNavButton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                15.heightBox,
                 if (image != null)
                   SvgPicture.asset(
                     image!,
@@ -142,19 +136,6 @@ class CustomBottomNavButton extends StatelessWidget {
                     color: isSelect ? context.primaryColor : Colors.grey,
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                (2).heightBox,
-                Container(
-                  height: 4,
-                  width: 50,
-                  margin: EdgeInsets.only(bottom: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: isSelect
-                        ? AppColors.kSecondaryColor
-                        : Colors.transparent,
-                    shape: BoxShape.rectangle,
                   ),
                 ),
               ],
