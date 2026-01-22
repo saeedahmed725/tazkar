@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tazkar/core/database/app_database.dart';
 import 'package:tazkar/features/quran/data/datasource/quran_local_datasource.dart';
 import 'package:tazkar/features/splash/view/bloc/quran_global_bloc.dart';
 
@@ -12,6 +13,10 @@ import '../../features/quran/data/repo/mushaf_repo_imp.dart';
 import '../../features/quran/views/bloc/juz_infos/juz_infos_bloc.dart';
 import '../../features/quran/views/bloc/surah_infos/surah_infos_bloc.dart';
 import '../../features/quran/views/controller/mushaf_controller.dart';
+import '../../features/prayer_timings/data/datasource/prayer_timings_datasource.dart';
+import '../../features/prayer_timings/data/datasource/prayer_timings_local_datasource.dart';
+import '../../features/prayer_timings/data/repo/prayer_timings_repo.dart';
+import '../../features/prayer_timings/view/bloc/prayer_bloc.dart';
 import '../network/connectivity.dart';
 import '../network/dio_factory.dart';
 import '../network/network_client.dart';
@@ -27,6 +32,7 @@ class ServiceLocator {
     _registerSingleton<NetworkController>(() => NetworkController.instance);
     _registerSingleton<Dio>(() => DioFactory.getDio());
     _registerSingleton<NetworkClient>(() => NetworkClient(DioFactory.getDio()));
+    _registerSingleton<AppDatabase>(() => AppDatabase());
     // _registerSingleton<DownloadService>(() => DownloadService(get<Dio>()));
     // _registerSingleton<AppDatabase>(() => AppDatabase());
     _registerSingleton<MushafController>(() => MushafController.instance);
@@ -46,6 +52,21 @@ class ServiceLocator {
     _registerFactory<QuranGlobalBloc>(() => QuranGlobalBloc(get<MushafRepoImp>()));
     _registerFactory<SurahInfosBloc>(() => SurahInfosBloc(get<MushafRepoImp>()));
     _registerFactory<JuzInfosBloc>(() => JuzInfosBloc(get<MushafRepoImp>()));
+
+    /// feat: prayer timings
+    _registerFactory<PrayerTimingsDatasource>(
+      () => PrayerTimingsDatasource(get<NetworkClient>()),
+    );
+    _registerFactory<PrayerTimingsLocalDatasource>(
+      () => PrayerTimingsLocalDatasource(get<AppDatabase>()),
+    );
+    _registerSingleton<PrayerTimingsRepo>(
+      () => PrayerTimingsRepo(
+        remote: get<PrayerTimingsDatasource>(),
+        local: get<PrayerTimingsLocalDatasource>(),
+      ),
+    );
+    _registerFactory<PrayerBloc>(() => PrayerBloc(get<PrayerTimingsRepo>()));
 
     log("Setup completed", name: "Service Locator");
   }

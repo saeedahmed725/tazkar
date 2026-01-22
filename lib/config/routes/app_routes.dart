@@ -6,6 +6,8 @@ import 'package:tazkar/features/dhikr/view/screen/dhikr_categories_screen.dart';
 import 'package:tazkar/features/dhikr/view/screen/dhikr_details_screen.dart';
 import 'package:tazkar/features/home/view/screen/home_screen.dart';
 import 'package:tazkar/features/home/view/screen/home_shell_view.dart';
+import 'package:tazkar/features/prayer_timings/view/bloc/prayer_bloc.dart';
+import 'package:tazkar/features/prayer_timings/view/screen/prayer_screen.dart';
 import 'package:tazkar/features/quran/views/bloc/juz_infos/juz_infos_bloc.dart';
 import 'package:tazkar/features/quran/views/bloc/surah_infos/surah_infos_bloc.dart';
 import 'package:tazkar/features/quran/views/screens/mushaf_screen.dart';
@@ -58,12 +60,17 @@ class AppRoutes {
 
   static final _homeShellRoute = StatefulShellRoute.indexedStack(
     builder: (context, state, child) {
-      return HomeShellView(child: child);
+      return BlocProvider(
+        create: (_) =>
+            ServiceLocator.get<PrayerBloc>()..add(const PrayerRequested()),
+        child: HomeShellView(child: child),
+      );
     },
     branches: [
       StatefulShellBranch(routes: [_homeRoute]),
       StatefulShellBranch(routes: [_prayerRoute]),
       StatefulShellBranch(routes: [_favoriteRoute]),
+      StatefulShellBranch(routes: [_profileRoute]),
       StatefulShellBranch(routes: [_settingsRoute]),
     ],
   );
@@ -82,7 +89,12 @@ class AppRoutes {
   static final _prayerRoute = GoRoute(
     path: "/$prayer",
     name: prayer,
-    builder: (context, state) => Scaffold(),
+    builder: (context, state) => const PrayerScreen(),
+  );
+  static final _profileRoute = GoRoute(
+    path: "/$profile",
+    name: profile,
+    builder: (context, state) => const Scaffold(),
   );
   static final _settingsRoute = GoRoute(
     path: "/$settings",

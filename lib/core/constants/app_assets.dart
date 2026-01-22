@@ -1,5 +1,5 @@
-class AppImageAssets {
-  AppImageAssets._();
+class AppAssets {
+  AppAssets._();
 
   // global image
   static const String logoImage = 'assets/images/logo.png';
@@ -120,5 +120,9 @@ class AppImageAssets {
 
   static String getJuzImage(int juzNumber) {
     return 'assets/images/juz/$juzNumber.svg';
+  }
+
+  static String getMonth(int month) {
+    return 'assets/images/hijri/$month.svg';
   }
 }

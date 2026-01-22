@@ -115,7 +115,7 @@ class StorageService {
     if (!(await requestAllStoragePermissions())) {
       throw LocalException(
         "Permission not granted",
-        code: LocalFailure.PERMISSION_ERROR_CODE,
+        code: LocalFailure.STORAGE_PERMISSION_ERROR_CODE,
       );
     }
 

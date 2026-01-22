@@ -152,9 +152,11 @@ class LocalFailure extends Failure {
 
   // ignore_for_file: constant_identifier_names
   static const LOCATION_ERROR_CODE = 1;
-  static const DATABASE_ERROR_CODE = 2;
-  static const PERMISSION_ERROR_CODE = 4;
-  static const GENERIC_ERROR_CODE = 3;
+  static const LOCATION_SETTINGS_ERROR_CODE = 2;
+  static const LOCATION_PERMISSION_ERROR_CODE = 3;
+  static const STORAGE_PERMISSION_ERROR_CODE = 4;
+  static const DATABASE_ERROR_CODE = 5;
+  static const GENERIC_ERROR_CODE = 6;
 
   factory LocalFailure.fromException(Exception exception) {
     if (exception is FileSystemException) {
