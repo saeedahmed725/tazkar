@@ -20,21 +20,21 @@ import '../../features/splash/view/bloc/quran_global_bloc.dart';
 class AppRoutes {
   AppRoutes._();
 
-  static const String download = '/download';
-  static const String splash = '/splash';
+  static const String download = 'download';
+  static const String splash = 'splash';
   static const String onBoarding = 'onboarding';
   static const String home = 'home';
-  static const String quran = '/quran';
-  static const String qibla = '/qibla';
-  static const String calendar = '/calendar';
-  static const String surahsList = '/surahsList';
-  static const String profile = '/profile';
-  static const String settings = '/settings';
-  static const String activities = '/activities';
-  static const String favorite = '/favorite';
-  static const String prayer = '/prayer';
-  static const String about = '/about';
-  static const String dhikrCategories = '/dhikrCategories';
+  static const String quran = 'quran';
+  static const String qibla = 'qibla';
+  static const String calendar = 'calendar';
+  static const String surahsList = 'surahsList';
+  static const String profile = 'profile';
+  static const String settings = 'settings';
+  static const String activities = 'activities';
+  static const String favorite = 'favorite';
+  static const String prayer = 'prayer';
+  static const String about = 'about';
+  static const String dhikrCategories = 'dhikrCategories';
   static const String dhikrDetails = 'dhikrDetails';
 
   static final GoRouter router = GoRouter(

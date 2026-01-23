@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -30,8 +29,9 @@ class PrayerScreen extends StatelessWidget {
         if (state.status == PrayerStatus.failure && state.failure != null) {
           return AppFailureWidget(
             failure: state.failure!,
-            onRetry: () =>
-                context.read<PrayerBloc>().add(const PrayerRequested()),
+            onRetry: () => context.read<PrayerBloc>().add(
+              const PrayerRequested(shouldRefresh: true),
+            ),
           );
         }
 
@@ -41,8 +41,9 @@ class PrayerScreen extends StatelessWidget {
 
         return Center(
           child: ElevatedButton(
-            onPressed: () =>
-                context.read<PrayerBloc>().add(const PrayerRequested()),
+            onPressed: () => context.read<PrayerBloc>().add(
+              const PrayerRequested(shouldRefresh: true),
+            ),
             child: const Text('Load Prayer Times'),
           ),
         );
@@ -119,8 +120,17 @@ class NextPrayerCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InkWell(
-                onTap: () =>
-                    context.read<PrayerBloc>().add(const PrayerRequested()),
+                onTap: () {
+                  // Sheets.showModel(
+                  //   context,
+                  //   isScrollControlled: true,
+                  //   child: PrayerSettingsView(),
+                  // );
+
+                  context.read<PrayerBloc>().add(
+                    const PrayerRequested(shouldRefresh: true),
+                  );
+                },
                 child: Row(
                   children: [
                     Icon(
@@ -129,11 +139,18 @@ class NextPrayerCard extends StatelessWidget {
                       size: 20,
                     ),
                     Text(
-                      ' Cairo, Egypt ',
+                      'Cairo, Egypt',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black38,
+                            offset: Offset(0, 1),
+                            blurRadius: 2,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -147,6 +164,7 @@ class NextPrayerCard extends StatelessWidget {
                     child: PrayerSettingsView(),
                   );
                 },
+                style: ButtonStyle(elevation: WidgetStateProperty.all(12)),
                 icon: SvgPicture.asset(
                   AppAssets.menuLineIcon,
                   colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
@@ -166,24 +184,26 @@ class NextPrayerCard extends StatelessWidget {
                 Positioned(
                   bottom: 12,
                   child: ClipOval(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.4),
-                            width: 2,
-                          ),
+                    child: BlurBackground(
+                      width: 48,
+                      height: 48,
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
                         ),
-                        child: const Icon(
-                          Icons.mosque_outlined,
-                          color: Colors.white,
-                          size: 24,
-                        ),
+                      ],
+                      child: const Icon(
+                        Icons.mosque_outlined,
+                        color: Colors.white,
+                        size: 24,
                       ),
                     ),
                   ),
@@ -200,6 +220,13 @@ class NextPrayerCard extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.25),
               width: 1.5,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
             child: Column(
               spacing: 14,
               children: [

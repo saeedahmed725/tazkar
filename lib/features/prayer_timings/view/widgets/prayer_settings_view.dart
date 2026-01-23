@@ -387,7 +387,7 @@ class _PrayerSettingsViewState extends State<PrayerSettingsView> {
                     Navigator.pop(context);
                   },
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),

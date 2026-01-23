@@ -3,27 +3,28 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class BlurBackground extends StatelessWidget {
-  const BlurBackground(
-      {super.key,
-      this.borderRadius = BorderRadius.zero,
-      this.sigmaX,
-      this.sigmaY,
-      this.child,
-      this.blendMode = BlendMode.srcOver,
-      this.color,
-      this.image,
-      this.border,
-      this.boxShadow,
-      this.gradient,
-      this.backgroundBlendMode,
-      this.shape = BoxShape.rectangle,
-      this.decoration,
-      this.width,
-      this.height,
-      this.padding,
-      this.margin});
+  const BlurBackground({
+    super.key,
+    this.borderRadius,
+    this.sigmaX,
+    this.sigmaY,
+    this.child,
+    this.blendMode = BlendMode.srcOver,
+    this.color,
+    this.image,
+    this.border,
+    this.boxShadow,
+    this.gradient,
+    this.backgroundBlendMode,
+    this.shape = BoxShape.rectangle,
+    this.decoration,
+    this.width,
+    this.height,
+    this.padding,
+    this.margin,
+  });
 
-  final BorderRadiusGeometry borderRadius;
+  final BorderRadiusGeometry? borderRadius;
   final double? sigmaX;
   final double? sigmaY;
   final Widget? child;
@@ -44,7 +45,7 @@ class BlurBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: borderRadius,
+      borderRadius: borderRadius?? BorderRadius.zero,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: sigmaX ?? 5.0, sigmaY: sigmaY ?? 5.0),
         blendMode: blendMode,
