@@ -111,6 +111,9 @@ class AppAssets {
   static const String maghrabImage = 'assets/images/background/maghrab.webp';
   static const String ashaaImage = 'assets/images/background/ashaa.webp';
 
+  /// category icons
+  static const String ayaOfDayImage = 'assets/images/icons/quran_alf_lam_mem.svg';
+
   static String getSurahImage(int surahNumber) {
     return 'assets/images/surah/00$surahNumber.svg';
   }

@@ -1,9 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/features/quran/views/widgets/surahs_catalogue_widgets/appbar_wiegets/flexible_space_background.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
@@ -42,16 +40,16 @@ class CustomSurahsCatalogueAppBar extends StatelessWidget {
         },
       ),
       actions: [
-        Padding(
-          padding: EdgeInsetsDirectional.only(end: 10.0),
-          child: IconButton(
-            icon: SvgPicture.asset(
-              AppAssets.searchIcon,
-              colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-            ),
-            onPressed: () {},
-          ),
-        )
+        // Padding(
+        //   padding: EdgeInsetsDirectional.only(end: 10.0),
+        //   child: IconButton(
+        //     icon: SvgPicture.asset(
+        //       AppAssets.searchIcon,
+        //       colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+        //     ),
+        //     onPressed: () {},
+        //   ),
+        // )
       ],
       backgroundColor: AppColors.primary,
       surfaceTintColor: AppColors.primary,

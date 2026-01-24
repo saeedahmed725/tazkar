@@ -44,7 +44,8 @@ class CustomBottomNavBar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: List.generate(4, (index) {
-                        final isSelected = index == navigationShell.currentIndex;
+                        final isSelected =
+                            index == navigationShell.currentIndex;
                         return InkWell(
                           onTap: !isSelected
                               ? () => navigationShell.goBranch(index)
@@ -55,7 +56,7 @@ class CustomBottomNavBar extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? context.primaryColor
-                                  : context.surface.withValues(alpha: 0.7),
+                                  : context.surface,
                               borderRadius: BorderRadius.circular(300),
                             ),
                             child: Icon(

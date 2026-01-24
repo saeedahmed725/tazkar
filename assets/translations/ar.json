@@ -83,9 +83,15 @@
   "isha": "العشاء",
   "qiblah": "القبلة",
   "qiblah_direction_title": "اتجاه القبلة",
+  "qiblah_aligned": "تمت المحاذاة مع القبلة",
+  "qiblah_not_aligned": "غير مضبوط بعد",
   "qiblah_instruction_1": "أبقِ الهاتف مستويًا وبعيدًا عن المعادن.",
   "qiblah_instruction_2": "دوّر الهاتف حتى تشير الكعبة للأعلى.",
   "qiblah_instruction_3": "انتقل إلى مكان مفتوح عند الحاجة.",
   "ayah_of_the_day": "آية اليوم",
-  "prayer_tracker": "متتبع الصلاة"
+  "prayer_tracker": "متتبع الصلاة",
+  "load_prayer_times": "تحميل مواقيت الصلاة",
+  "unknown_location": "موقع غير معروف",
+  "remaining_time_to_prayer": "الوقت المتبقي لصلاة {prayer_name}",
+  "hadith": "الحديث"
 }

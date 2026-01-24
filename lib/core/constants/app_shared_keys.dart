@@ -27,4 +27,7 @@ class AppSharedKeys {
   static const String prayerMidnightMode = 'prayer_midnight_mode';
 
   static const String prayerShafaq = 'prayer_shafaq';
+
+  ///========================= Quran Keys ==============================
+  static const String ayahOfDay = 'ayah_of_day';
 }

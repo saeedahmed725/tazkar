@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:tazkar/features/dhikr/data/model/azkar_category_model.dart';
 import 'package:tazkar/features/dhikr/view/screen/dhikr_categories_screen.dart';
 import 'package:tazkar/features/dhikr/view/screen/dhikr_details_screen.dart';
+import 'package:tazkar/features/home/view/bloc/aya_of_day_bloc.dart';
 import 'package:tazkar/features/home/view/screen/home_screen.dart';
 import 'package:tazkar/features/home/view/screen/home_shell_view.dart';
 import 'package:tazkar/features/prayer_timings/view/bloc/prayer_bloc.dart';
 import 'package:tazkar/features/prayer_timings/view/screen/prayer_screen.dart';
+import 'package:tazkar/features/settings/view/screen/settings_screen.dart';
 import 'package:tazkar/features/qiblah/view/bloc/qiblah_bloc.dart';
 import 'package:tazkar/features/quran/views/bloc/juz_infos/juz_infos_bloc.dart';
 import 'package:tazkar/features/quran/views/bloc/surah_infos/surah_infos_bloc.dart';
@@ -61,9 +63,18 @@ class AppRoutes {
   );
 
   static final _homeShellRoute = StatefulShellRoute.indexedStack(
-    builder: (context, state, child) => BlocProvider(
-      create: (_) =>
-          ServiceLocator.get<PrayerBloc>()..add(const PrayerRequested()),
+    builder: (context, state, child) => MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              ServiceLocator.get<PrayerBloc>()..add(const PrayerRequested()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              ServiceLocator.get<AyaOfDayBloc>()
+                ..add(const AyaOfDayRequested()),
+        ),
+      ],
       child: HomeShellView(child: child),
     ),
     branches: [
@@ -97,7 +108,7 @@ class AppRoutes {
   static final _settingsRoute = GoRoute(
     path: "/$settings",
     name: settings,
-    builder: (context, state) => Scaffold(),
+    builder: (context, state) => SettingsScreen(),
   );
 
   static final _quranRoute = GoRoute(

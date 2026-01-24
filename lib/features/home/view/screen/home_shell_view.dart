@@ -14,7 +14,7 @@ class HomeShellView extends StatelessWidget {
     return Scaffold(
       body: child,
       extendBody: true,
-      appBar: child.currentIndex == 0 || child.currentIndex == 1
+      appBar: child.currentIndex == 1 || child.currentIndex == 1
           ? null
           : CustomAppBar(
               title: switch (child.currentIndex) {

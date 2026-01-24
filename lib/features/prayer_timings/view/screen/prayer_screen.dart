@@ -46,7 +46,7 @@ class PrayerScreen extends StatelessWidget {
             onPressed: () => context.read<PrayerBloc>().add(
               const PrayerRequested(shouldRefresh: true),
             ),
-            child: const Text('Load Prayer Times'),
+            child: Text('load_prayer_times'.tr()),
           ),
         );
       },
@@ -112,7 +112,7 @@ class LocationNameWidget extends StatelessWidget {
         children: [
           Icon(Icons.location_on_rounded, color: Colors.white, size: 20),
           Text(
-            location.isNotEmpty ? location : 'Unknown Location',
+            location.isNotEmpty ? location : 'unknown_location'.tr(),
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -233,7 +233,9 @@ class NextPrayerCard extends StatelessWidget {
               spacing: 14,
               children: [
                 Text(
-                  'Remaining time to $nextPrayer Pray',
+                  'remaining_time_to_prayer'.tr(
+                    namedArgs: {'prayer_name': nextPrayer},
+                  ),
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,

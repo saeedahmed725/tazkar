@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
-import 'package:tazkar/core/locator/locator.dart';
-
-import '../../../../core/quran/global_quran_data.dart';
+import 'package:tazkar/features/home/view/bloc/aya_of_day_bloc.dart';
 import 'home_app_card.dart';
 
 class AyaDayCard extends StatelessWidget {
@@ -14,27 +13,35 @@ class AyaDayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeAppCard(
       title: 'ayah_of_the_day'.tr(),
-      icon: AppAssets.icAyahNoSvg,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            ServiceLocator.get<GlobalQuranData>().quranText.first.ayaDiac,
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-              color: Colors.white,
-              fontFamily: AppFonts.hafsQuranFonts,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            '${ServiceLocator.get<GlobalQuranData>().quranText.first.soraName} : الاية${ServiceLocator.get<GlobalQuranData>().quranText.first.ayaNum}',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+      icon: AppAssets.ayaOfDayImage,
+      child: BlocBuilder<AyaOfDayBloc, AyaOfDayState>(
+        builder: (context, state) {
+          final aya = state.aya;
+          final text = aya?.subTitle ?? '--';
+          final ref = aya?.ref ?? '--';
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                text,
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  color: Colors.white,
+                  fontFamily: AppFonts.hafsQuranFonts,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                ref,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

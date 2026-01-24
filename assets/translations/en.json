@@ -3,8 +3,8 @@
   "welcomeMessage": "Welcome to the Quran App\n",
   "startMessage": "Write your message to get started",
   "placeholderMessage": "Write your message here...",
-  "greetings" : "As-salamu alaykum, {name} 👋",
-  "greeting" : "As-salamu alaykum 👋",
+  "greetings": "As-salamu alaykum, {name} 👋",
+  "greeting": "As-salamu alaykum 👋",
   "next_prayer_time": "Next prayer {prayer_name} after {time}",
   "quranChatbot": "Quran Chatbot",
   "surahs": "Surahs",
@@ -83,9 +83,15 @@
   "isha": "Isha",
   "qiblah": "Qiblah",
   "qiblah_direction_title": "Qiblah Direction",
+  "qiblah_aligned": "Aligned with Qiblah",
+  "qiblah_not_aligned": "Not aligned yet",
   "qiblah_instruction_1": "Keep the phone flat, away from metal.",
   "qiblah_instruction_2": "Rotate until the Kaaba points up.",
   "qiblah_instruction_3": "Move to an open area if needed.",
   "ayah_of_the_day": "Ayah of the Day",
-  "prayer_tracker": "Prayer Tracker"
+  "prayer_tracker": "Prayer Tracker",
+  "load_prayer_times": "Load Prayer Times",
+  "unknown_location": "Unknown Location",
+  "remaining_time_to_prayer": "Remaining time to {prayer_name} prayer",
+  "hadith": "Hadith"
 }

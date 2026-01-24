@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tazkar/core/database/app_database.dart';
+import 'package:tazkar/features/home/view/bloc/aya_of_day_bloc.dart';
 import 'package:tazkar/features/qiblah/data/repo/qiblah_repo_impl.dart';
 import 'package:tazkar/features/qiblah/data/source/qiblah_location_source.dart';
 import 'package:tazkar/features/qiblah/domain/usecase/watch_qiblah_status.dart';
@@ -12,19 +13,20 @@ import 'package:tazkar/features/qiblah/view/bloc/qiblah_bloc.dart';
 import 'package:tazkar/features/quran/data/datasource/quran_local_datasource.dart';
 import 'package:tazkar/features/splash/view/bloc/quran_global_bloc.dart';
 
+import '../../features/prayer_timings/data/datasource/prayer_timings_datasource.dart';
+import '../../features/prayer_timings/data/datasource/prayer_timings_local_datasource.dart';
+import '../../features/prayer_timings/data/repo/prayer_timings_repo.dart';
+import '../../features/prayer_timings/view/bloc/prayer_bloc.dart';
 import '../../features/quran/data/datasource/quran_remote_datasource.dart';
 import '../../features/quran/data/repo/mushaf_repo_imp.dart';
 import '../../features/quran/views/bloc/juz_infos/juz_infos_bloc.dart';
 import '../../features/quran/views/bloc/surah_infos/surah_infos_bloc.dart';
 import '../../features/quran/views/controller/mushaf_controller.dart';
-import '../../features/prayer_timings/data/datasource/prayer_timings_datasource.dart';
-import '../../features/prayer_timings/data/datasource/prayer_timings_local_datasource.dart';
-import '../../features/prayer_timings/data/repo/prayer_timings_repo.dart';
-import '../../features/prayer_timings/view/bloc/prayer_bloc.dart';
 import '../network/connectivity.dart';
 import '../network/dio_factory.dart';
 import '../network/network_client.dart';
 import '../quran/global_quran_data.dart';
+import '../utils/bloc/theme_bloc/theme_cubit.dart';
 
 class ServiceLocator {
   static final GetIt _getIt = GetIt.instance;
@@ -37,8 +39,8 @@ class ServiceLocator {
     _registerSingleton<Dio>(() => DioFactory.getDio());
     _registerSingleton<NetworkClient>(() => NetworkClient(DioFactory.getDio()));
     _registerSingleton<AppDatabase>(() => AppDatabase());
+    _registerFactory<ThemeCubit>(() => ThemeCubit());
     // _registerSingleton<DownloadService>(() => DownloadService(get<Dio>()));
-    // _registerSingleton<AppDatabase>(() => AppDatabase());
     _registerSingleton<MushafController>(() => MushafController.instance);
     _registerSingleton<GlobalQuranData>(() => GlobalQuranData.instance);
 
@@ -53,8 +55,12 @@ class ServiceLocator {
         remote: get<QuranRemoteDatasource>(),
       ),
     );
-    _registerFactory<QuranGlobalBloc>(() => QuranGlobalBloc(get<MushafRepoImp>()));
-    _registerFactory<SurahInfosBloc>(() => SurahInfosBloc(get<MushafRepoImp>()));
+    _registerFactory<QuranGlobalBloc>(
+      () => QuranGlobalBloc(get<MushafRepoImp>()),
+    );
+    _registerFactory<SurahInfosBloc>(
+      () => SurahInfosBloc(get<MushafRepoImp>()),
+    );
     _registerFactory<JuzInfosBloc>(() => JuzInfosBloc(get<MushafRepoImp>()));
 
     /// feat: prayer timings
@@ -71,6 +77,9 @@ class ServiceLocator {
       ),
     );
     _registerFactory<PrayerBloc>(() => PrayerBloc(get<PrayerTimingsRepo>()));
+
+    /// feat: home
+    _registerFactory<AyaOfDayBloc>(() => AyaOfDayBloc());
 
     /// feat: qiblah
     _registerFactory<QiblahLocationSource>(() => QiblahLocationSource());

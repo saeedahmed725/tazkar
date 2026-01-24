@@ -34,7 +34,15 @@ class HomeAppCard extends StatelessWidget {
                     spacing: 6,
                     children: [
                       if (icon != null)
-                        SvgPicture.asset(icon!, width: 24, height: 24),
+                        SvgPicture.asset(
+                          icon!,
+                          width: 24,
+                          height: 24,
+                          colorFilter: ColorFilter.mode(
+                            context.secondary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
                       if (title != null)
                         Text(
                           title!,

@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -71,7 +71,9 @@ class _QiblahCompassState extends State<QiblahCompass> {
                 }
 
                 final qiblahDirection = snapshot.data!;
-                final isAligned = qiblahDirection.offset.abs() <= 5;
+                final isAligned =
+                    qiblahDirection.direction.toInt() > 125 &&
+                    qiblahDirection.direction.toInt() < 145;
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +124,50 @@ class _QiblahCompassState extends State<QiblahCompass> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isAligned
+                            ? Colors.green.withValues(alpha: 0.15)
+                            : Theme.of(
+                                context,
+                              ).colorScheme.surface.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: isAligned
+                              ? Colors.green
+                              : Theme.of(
+                                  context,
+                                ).colorScheme.primary.withValues(alpha: 0.15),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isAligned ? Icons.check_circle : Icons.explore,
+                            size: 18,
+                            color: isAligned
+                                ? Colors.green
+                                : Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            isAligned
+                                ? 'qiblah_aligned'.tr()
+                                : 'qiblah_not_aligned'.tr(),
+                            style: Theme.of(context).textTheme.labelLarge
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
                     Container(
+                      margin: const EdgeInsets.only(top: 24),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 10,
@@ -139,7 +184,7 @@ class _QiblahCompassState extends State<QiblahCompass> {
                         ),
                       ),
                       child: Text(
-                        "${qiblahDirection.offset.toStringAsFixed(1)}°",
+                        "${qiblahDirection.direction.toStringAsFixed(1)}°",
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),

@@ -22,6 +22,8 @@ class LastReadingSurahCard extends StatefulWidget {
 class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
   double _opacity = 1.0;
 
+
+
   @override
   void initState() {
     super.initState();
