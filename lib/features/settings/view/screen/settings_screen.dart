@@ -68,10 +68,6 @@ class SettingsScreen extends StatelessWidget {
             title: AppStatic.kAboutSecurity,
             items: [
               PreferencesItem(
-                title: AppStatic.kLoggedInSessions,
-                icon: SuperIcons.bx_devices_solid,
-              ),
-              PreferencesItem(
                 title: AppStatic.kPrivacyPolicy,
                 icon: SuperIcons.bs_phone_fill,
               ),
