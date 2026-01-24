@@ -61,7 +61,7 @@ class _QiblahCompassState extends State<QiblahCompass> {
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 5,
             child: StreamBuilder(
               stream: FlutterQiblah.qiblahStream,
               builder: (_, AsyncSnapshot<QiblahDirection> snapshot) {

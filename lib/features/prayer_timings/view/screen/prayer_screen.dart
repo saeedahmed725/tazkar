@@ -64,7 +64,7 @@ class PrayerView extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: -160,
+          top: -170,
           left: 0,
           right: 0,
           child: Image.asset(
@@ -154,25 +154,28 @@ class NextPrayerCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              LocationNameWidget(),
-              IconButton(
-                onPressed: () {
-                  Sheets.showModel(
-                    context,
-                    isScrollControlled: true,
-                    child: PrayerSettingsView(),
-                  );
-                },
-                style: ButtonStyle(elevation: WidgetStateProperty.all(12)),
-                icon: SvgPicture.asset(
-                  AppAssets.menuLineIcon,
-                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                ),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                LocationNameWidget(),
+                // IconButton(
+                //   onPressed: () {
+                //     Sheets.showModel(
+                //       context,
+                //       isScrollControlled: true,
+                //       child: PrayerSettingsView(),
+                //     );
+                //   },
+                //   style: ButtonStyle(elevation: WidgetStateProperty.all(12)),
+                //   icon: SvgPicture.asset(
+                //     AppAssets.menuLineIcon,
+                //     colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                //   ),
+                // ),
+              ],
+            ),
           ),
           SizedBox(
             height: 120,
@@ -374,7 +377,6 @@ class PrayerTimesList extends StatelessWidget {
               isNext: nextPrayer == times[index].prayer,
             ),
           ),
-          kToolbarHeight.heightBox,
         ],
       ),
     );
@@ -407,24 +409,24 @@ class PrayerTimeItem extends StatelessWidget {
       child: Row(
         children: [
           /// CIRCULAR ICON
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-              color: time.prayer.color,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                time.prayer.icon,
-                height: 20,
-                width: 20,
-                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              ),
-            ),
-          ),
+          // Container(
+          //   height: 40,
+          //   width: 40,
+          //   decoration: BoxDecoration(
+          //     color: time.prayer.color,
+          //     shape: BoxShape.circle,
+          //   ),
+          //   child: Center(
+          //     child: SvgPicture.asset(
+          //       time.prayer.icon,
+          //       height: 20,
+          //       width: 20,
+          //       colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          //     ),
+          //   ),
+          // ),
 
-          12.widthBox,
+          // 12.widthBox,
 
           /// NAME AND TIME
           Expanded(
@@ -453,12 +455,31 @@ class PrayerTimeItem extends StatelessWidget {
             ),
           ),
 
-          /// MUTE/BELL ICON
-          Icon(
-            Icons.notifications_off_outlined,
-            size: 20,
-            color: Colors.grey.shade400,
+
+          Container(
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              color: time.prayer.color,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: SvgPicture.asset(
+                time.prayer.icon,
+                height: 20,
+                width: 20,
+                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              ),
+            ),
           ),
+
+
+          /// MUTE/BELL ICON
+          // Icon(
+          //   Icons.notifications_off_outlined,
+          //   size: 20,
+          //   color: Colors.grey.shade400,
+          // ),
         ],
       ),
     );

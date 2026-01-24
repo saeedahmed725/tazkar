@@ -8,7 +8,7 @@ class AppTheme {
   static ThemeData light(Color primaryColor) => ThemeData(
     primaryColor: primaryColor,
     brightness: Brightness.light,
-    fontFamily: AppFonts.kSAFonts,
+    fontFamily: AppFonts.thmanyahSansFonts,
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: GoTransitions.cupertino,
@@ -21,10 +21,10 @@ class AppTheme {
     tabBarTheme: TabBarThemeData(
       labelColor: Color(0xffcb9a34),
       unselectedLabelColor: Colors.white,
-      labelStyle: TextStyle(fontSize: 16, fontFamily: AppFonts.kSAFonts),
+      labelStyle: TextStyle(fontSize: 16, fontFamily: AppFonts.thmanyahSansFonts),
       unselectedLabelStyle: TextStyle(
         fontSize: 16,
-        fontFamily: AppFonts.kSAFonts,
+        fontFamily: AppFonts.thmanyahSansFonts,
       ),
       indicator: UnderlineTabIndicator(
         insets: EdgeInsets.symmetric(horizontal: 16.0),
@@ -44,7 +44,7 @@ class AppTheme {
   static ThemeData dark(Color primaryColor) => ThemeData(
     primaryColor: primaryColor,
     brightness: Brightness.dark,
-    fontFamily: AppFonts.kSAFonts,
+    fontFamily: AppFonts.thmanyahSansFonts,
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: GoTransitions.cupertino,
@@ -57,10 +57,10 @@ class AppTheme {
     tabBarTheme: TabBarThemeData(
       labelColor: Color(0xffcb9a34),
       unselectedLabelColor: Colors.white,
-      labelStyle: TextStyle(fontSize: 16, fontFamily: AppFonts.kSAFonts),
+      labelStyle: TextStyle(fontSize: 16, fontFamily: AppFonts.thmanyahSansFonts),
       unselectedLabelStyle: TextStyle(
         fontSize: 16,
-        fontFamily: AppFonts.kSAFonts,
+        fontFamily: AppFonts.thmanyahSansFonts,
       ),
       indicator: UnderlineTabIndicator(
         insets: EdgeInsets.symmetric(horizontal: 16.0),

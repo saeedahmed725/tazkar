@@ -10,7 +10,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 5,
       foregroundColor: Colors.white,
       backgroundColor: context.primaryColor,
       shape: const RoundedRectangleBorder(

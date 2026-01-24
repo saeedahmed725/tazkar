@@ -6,16 +6,17 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../../features/prayer_timings/data/model/prayer_cache_entries.dart';
+import '../../features/prayer_tracker/data/model/prayer_tracker_entries.dart';
 
 part 'app_database.g.dart';
 
 /// Drift database used across the app.
-@DriftDatabase(tables: [PrayerCacheEntries])
+@DriftDatabase(tables: [PrayerCacheEntries, PrayerTrackerEntries])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -23,6 +24,9 @@ class AppDatabase extends _$AppDatabase {
       if (from < 2) {
         await m.deleteTable('prayer_cache_entries');
         await m.createAll();
+      }
+      if (from < 3) {
+        await m.createTable(prayerTrackerEntries);
       }
     },
   );

@@ -108,7 +108,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
                         "الآية ٢٥٠",
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: AppFonts.kSAFonts,
+                          fontFamily: AppFonts.thmanyahSansFonts,
                           fontSize: 16,
                         ),
                       ),

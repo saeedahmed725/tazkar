@@ -22,6 +22,7 @@ class BlurBackground extends StatelessWidget {
     this.height,
     this.padding,
     this.margin,
+    this.clipBehavior = Clip.antiAlias,
   });
 
   final BorderRadiusGeometry? borderRadius;
@@ -41,11 +42,12 @@ class BlurBackground extends StatelessWidget {
   final double? height;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
+  final Clip clipBehavior;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: borderRadius?? BorderRadius.zero,
+      borderRadius: borderRadius ?? BorderRadius.zero,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: sigmaX ?? 5.0, sigmaY: sigmaY ?? 5.0),
         blendMode: blendMode,

@@ -11,25 +11,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        scrollBehavior: ScrollBehavior(),
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        physics: BouncingScrollPhysics(),
-        slivers: [
-          // HomeSliverAppBar(),
-          // SliverToBoxAdapter(child: SizedBox(height: 12)),
-          PrayerSliverCard(),
-          HomeTopLayoutSliverList(),
-          SliverToBoxAdapter(child: SizedBox(height: 10)),
-          HomeBottomLayoutSliverList(),
-          SliverToBoxAdapter(child: SizedBox(height: 12)),
-          PrayerTracker(),
-          SliverToBoxAdapter(child: SizedBox(height: 12)),
-          AyaDayCard(),
-          SliverToBoxAdapter(child: SizedBox(height: 65)),
-        ],
-      ),
+    return CustomScrollView(
+      scrollBehavior: ScrollBehavior(),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      physics: BouncingScrollPhysics(),
+      slivers: [
+        // HomeSliverAppBar(),
+        // SliverToBoxAdapter(child: SizedBox(height: 12)),
+        PrayerSliverCard(),
+        HomeTopLayoutSliverList(),
+        SliverToBoxAdapter(child: SizedBox(height: 10)),
+        HomeBottomLayoutSliverList(),
+        SliverToBoxAdapter(child: SizedBox(height: 12)),
+        PrayerTracker(),
+        SliverToBoxAdapter(child: SizedBox(height: 12)),
+        AyaDayCard(),
+        SliverToBoxAdapter(child: SizedBox(height: 12)),
+      ],
     );
   }
 }

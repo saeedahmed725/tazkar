@@ -103,7 +103,7 @@ class HomeBottomLayoutSliverList extends StatelessWidget {
           style: TextStyle(
             color: context.onSurface.withValues(alpha: 0.8),
             fontSize: 14,
-            fontFamily: AppFonts.kSAFonts,
+            fontFamily: AppFonts.thmanyahSansFonts,
             fontWeight: FontWeight.bold,
           ),
         ),

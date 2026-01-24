@@ -7,7 +7,8 @@ class AppFonts {
   static const String noorFontFonts = 'Noor';
   static const String surahNamesFonts = 'SurahNames';
   static const String juzNamesFonts = 'JuzNames';
-  static const String kSAFonts = 'KSAFont';
+  static const String thmanyahSansFonts = 'ThmanyahSans';
+  static const String thmanyahSansDisplayFonts = 'ThmanyahSerifDisplay';
   static const String neiriziQuranFonts = 'Neirizi';
   static const String arabicNumbers = 'Numbers';
 }

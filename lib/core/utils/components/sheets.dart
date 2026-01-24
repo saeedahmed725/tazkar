@@ -69,6 +69,7 @@ class Sheets extends StatefulWidget {
     bool isScrollControlled = false,
     bool showCupertino = false,
     bool useNestedNavigation = false,
+    bool useRootNavigator = true,
   }) {
     isBottomSheetOpen.value = true;
     return _SheetsState()
@@ -88,6 +89,7 @@ class Sheets extends StatefulWidget {
           isScrollControlled: isScrollControlled,
           showCupertino: showCupertino,
           useNestedNavigation: useNestedNavigation,
+          useRootNavigator: useRootNavigator,
         )
         .whenComplete(() => isBottomSheetOpen.value = false);
   }
@@ -190,6 +192,7 @@ class _SheetsState extends State<Sheets> {
     bool isScrollControlled = false,
     bool showCupertino = false,
     bool useNestedNavigation = false,
+    bool useRootNavigator = true,
   }) {
     if (showCupertino) {
       return showCupertinoSheet<T>(
@@ -204,6 +207,7 @@ class _SheetsState extends State<Sheets> {
 
     return showModalBottomSheet<T>(
       context: context,
+      useRootNavigator: useRootNavigator,
       shape: shape,
       constraints: constraints,
       barrierColor: barrierColor,

@@ -1,6 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tazkar/config/language/app_language.dart';
 
 import '../../../../core/constants/app_static.dart';
@@ -56,6 +57,7 @@ class ChooseLanguage extends StatelessWidget {
       onChanged: (local) async {
         if (local != null) {
           context.setLocale(local);
+          GoRouter.of(context).pop();
         }
       },
     );

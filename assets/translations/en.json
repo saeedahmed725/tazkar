@@ -24,6 +24,14 @@
   "privacy_policy": "Privacy Policy",
   "about_app": "About App",
   "edit_profile": "Edit Profile",
+  "charcoal_blue": "Charcoal Blue",
+  "forest_green": "Forest Green",
+  "gold": "Gold",
+  "red": "Red",
+  "blue": "Blue",
+  "purple": "Purple",
+  "orange": "Orange",
+  "teal": "Teal",
   "language": "Language",
   "theme": "Theme",
   "light": "Light",
@@ -106,5 +114,7 @@
   "load_prayer_times": "Load Prayer Times",
   "unknown_location": "Unknown Location",
   "remaining_time_to_prayer": "Remaining time to {prayer_name} prayer",
-  "hadith": "Hadith"
+  "hadith": "Hadith",
+  "ar": "Arabic",
+  "en": "English"
 }

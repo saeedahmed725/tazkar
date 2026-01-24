@@ -38,118 +38,123 @@ class PrayerSliverCard extends StatelessWidget {
 
           PrayersBackgroundView(),
 
-          Padding(
-            padding: const EdgeInsets.all(10),
+          Container(
+            margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+
+            ),
             child: BlurBackground(
               sigmaX: 3,
               sigmaY: 3,
-              padding: const EdgeInsets.all(12),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: context.colorScheme.secondary.withValues(alpha: 0.5),
-                width: 1,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    AppAssets.getMonth(HijriCalendar.now().hMonth),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: BlocBuilder<PrayerBloc, PrayerState>(
-                      buildWhen: (previous, current) =>
-                          previous.nextPrayer != current.nextPrayer ||
-                          previous.countdown != current.countdown,
-                      builder: (context, state) {
-                        final nextPrayer =
-                            state.nextPrayer?.name.tr() ?? '--';
-
-                        return Text(
-                          'next_prayer_time'.tr(
-                            namedArgs: {
-                              'time': state.countdown ?? '--:--:--',
-                              'prayer_name': nextPrayer,
-                            },
-                          ),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AppFonts.robotoFonts,
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(color: Colors.black26, blurRadius: 10),
-                            ],
-                          ),
-                        );
-                      },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: context.secondary, width: 1),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      AppAssets.getMonth(HijriCalendar.now().hMonth),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: BlocBuilder<PrayerBloc, PrayerState>(
+                        buildWhen: (previous, current) =>
+                            previous.nextPrayer != current.nextPrayer ||
+                            previous.countdown != current.countdown,
+                        builder: (context, state) {
+                          final nextPrayer = state.nextPrayer?.name.tr() ?? '--';
 
-                  const SizedBox(height: 8),
-
-                  BlocBuilder<PrayerBloc, PrayerState>(
-                    buildWhen: (previous, current) =>
-                        !listEquals(previous.todayTimes, current.todayTimes),
-                    builder: (context, state) {
-                      return Row(
-                        children: List.generate(state.todayTimes.length, (
-                          index,
-                        ) {
-                          final prayer = state.todayTimes[index];
-                          return Expanded(
-                            child: Column(
-                              children: [
-                                Text(
-                                  prayer.prayer.name.tr(),
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                    fontFamily: AppFonts.robotoFonts,
-                                    fontWeight: FontWeight.bold,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.black26,
-                                        blurRadius: 10,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                SvgPicture.asset(
-                                  prayer.prayer.icon,
-                                  width: 28,
-                                  height: 28,
-                                  colorFilter: ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  formatTime(prayer.time),
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                    fontFamily: AppFonts.robotoFonts,
-                                    fontWeight: FontWeight.bold,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.black26,
-                                        blurRadius: 10,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                          return Text(
+                            'next_prayer_time'.tr(
+                              namedArgs: {
+                                'time': state.countdown ?? '--:--:--',
+                                'prayer_name': nextPrayer,
+                              },
+                            ),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: AppFonts.robotoFonts,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(color: Colors.black26, blurRadius: 10),
                               ],
                             ),
                           );
-                        }),
-                      );
-                    },
-                  ),
-                ],
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    BlocBuilder<PrayerBloc, PrayerState>(
+                      buildWhen: (previous, current) =>
+                          !listEquals(previous.todayTimes, current.todayTimes),
+                      builder: (context, state) {
+                        return Row(
+                          children: List.generate(state.todayTimes.length, (
+                            index,
+                          ) {
+                            final prayer = state.todayTimes[index];
+                            return Expanded(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    prayer.prayer.name.tr(),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                      fontFamily: AppFonts.robotoFonts,
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black26,
+                                          blurRadius: 10,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  SvgPicture.asset(
+                                    prayer.prayer.icon,
+                                    width: 28,
+                                    height: 28,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    formatTime(prayer.time),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                      fontFamily: AppFonts.robotoFonts,
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black26,
+                                          blurRadius: 10,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

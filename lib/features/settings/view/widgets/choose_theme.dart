@@ -1,7 +1,10 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_static.dart';
 import '../../../../core/utils/bloc/theme_bloc/theme_cubit.dart';
 
 class ChooseTheme extends StatelessWidget {
@@ -18,27 +21,30 @@ class ChooseTheme extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                'Change Theme',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                AppStatic.kChooseTheme,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 12),
 
               _themeRadioTile(
                 context: context,
-                title: 'Light',
+                title: 'light'.tr(),
                 value: ThemeMode.light,
                 groupValue: themeMode.mode,
               ),
               _themeRadioTile(
                 context: context,
-                title: 'Dark',
+                title: 'dark'.tr(),
                 value: ThemeMode.dark,
                 groupValue: themeMode.mode,
               ),
               _themeRadioTile(
                 context: context,
-                title: 'System',
+                title: 'system'.tr(),
                 value: ThemeMode.system,
                 groupValue: themeMode.mode,
               ),
@@ -64,6 +70,7 @@ class ChooseTheme extends StatelessWidget {
       onChanged: (mode) {
         if (mode != null) {
           context.read<ThemeCubit>().setTheme(mode);
+          GoRouter.of(context).pop();
         }
       },
     );

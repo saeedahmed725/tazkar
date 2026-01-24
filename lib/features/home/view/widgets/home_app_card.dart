@@ -18,11 +18,15 @@ class HomeAppCard extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(
-            color: context.secondary.withValues(alpha: 0.5),
-            width: 1,
-          ),
+          border: Border.all(color: context.secondary, width: 1),
           color: context.primaryColor,
+          boxShadow: [
+            BoxShadow(
+              color: context.primaryColor.withValues(alpha: 0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: (title == null && icon == null)
             ? child

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tazkar/core/constants/app_assets.dart';
 import 'package:tazkar/core/constants/app_fonts.dart';
+import 'package:tazkar/core/utils/functions/functions.dart';
 import 'package:tazkar/features/home/view/bloc/aya_of_day_bloc.dart';
+
 import 'home_app_card.dart';
 
 class AyaDayCard extends StatelessWidget {
@@ -21,21 +23,23 @@ class AyaDayCard extends StatelessWidget {
           final ref = aya?.ref ?? '--';
 
           return Column(
+            spacing: 8,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 text,
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: Colors.white,
                   fontFamily: AppFonts.hafsQuranFonts,
                 ),
                 textAlign: TextAlign.center,
               ),
               Text(
-                ref,
+                ref.toArabicNumbers,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Colors.white,
+                  fontFamily: AppFonts.arabicNumbers,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -24,6 +24,14 @@
   "privacy_policy": "سياسة الخصوصية",
   "about_app": "حول التطبيق",
   "edit_profile": "تعديل الملف الشخصي",
+  "charcoal_blue": "أزرق فحمي",
+  "forest_green": "أخضر غابة",
+  "gold": "ذهبي",
+  "red": "أحمر",
+  "blue": "أزرق",
+  "purple": "بنفسجي",
+  "orange": "برتقالي",
+  "teal": "تركواز",
   "language": "اللغة",
   "theme": "السمة",
   "light": "فاتح",
@@ -106,5 +114,7 @@
   "load_prayer_times": "تحميل مواقيت الصلاة",
   "unknown_location": "موقع غير معروف",
   "remaining_time_to_prayer": "الوقت المتبقي لصلاة {prayer_name}",
-  "hadith": "الحديث"
+  "hadith": "الحديث",
+  "ar" : "العربية",
+  "en" : "الإنجليزية"
 }

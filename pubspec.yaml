@@ -140,6 +140,32 @@ flutter:
         - asset: assets/fonts/KSARegular_B.ttf
           weight: 700
 
+    - family: ThmanyahSans
+      fonts:
+        - asset: assets/fonts/thmanyahsans/thmanyahsans12_light.otf
+          weight: 300
+        - asset: assets/fonts/thmanyahsans/thmanyahsans12_regular.otf
+          weight: 400
+        - asset: assets/fonts/thmanyahsans/thmanyahsans12_medium.otf
+          weight: 500
+        - asset: assets/fonts/thmanyahsans/thmanyahsans12_bold.otf
+          weight: 700
+        - asset: assets/fonts/thmanyahsans/thmanyahsans12_black.otf
+          weight: 900
+
+    - family: ThmanyahSerifDisplay
+      fonts:
+        - asset: assets/fonts/thmanyahsans/thmanyahserifdisplay12_light.otf
+          weight: 300
+        - asset: assets/fonts/thmanyahsans/thmanyahserifdisplay12_regular.otf
+          weight: 400
+        - asset: assets/fonts/thmanyahsans/thmanyahserifdisplay12_medium.otf
+          weight: 500
+        - asset: assets/fonts/thmanyahsans/thmanyahserifdisplay12_bold.otf
+          weight: 700
+        - asset: assets/fonts/thmanyahsans/thmanyahserifdisplay12_black.otf
+          weight: 900
+
 
 
     - family: Roboto
