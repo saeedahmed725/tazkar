@@ -8,6 +8,7 @@ import 'package:tazkar/features/home/view/screen/home_screen.dart';
 import 'package:tazkar/features/home/view/screen/home_shell_view.dart';
 import 'package:tazkar/features/prayer_timings/view/bloc/prayer_bloc.dart';
 import 'package:tazkar/features/prayer_timings/view/screen/prayer_screen.dart';
+import 'package:tazkar/features/qiblah/view/bloc/qiblah_bloc.dart';
 import 'package:tazkar/features/quran/views/bloc/juz_infos/juz_infos_bloc.dart';
 import 'package:tazkar/features/quran/views/bloc/surah_infos/surah_infos_bloc.dart';
 import 'package:tazkar/features/quran/views/screens/mushaf_screen.dart';
@@ -15,6 +16,7 @@ import 'package:tazkar/features/quran/views/screens/surahs_catalogue.dart';
 import 'package:tazkar/features/splash/view/screen/splash_screen.dart';
 
 import '../../core/locator/locator.dart';
+import '../../features/qiblah/view/screen/qiblah_screen.dart';
 import '../../features/splash/view/bloc/quran_global_bloc.dart';
 
 class AppRoutes {
@@ -25,7 +27,7 @@ class AppRoutes {
   static const String onBoarding = 'onboarding';
   static const String home = 'home';
   static const String quran = 'quran';
-  static const String qibla = 'qibla';
+  static const String qiblah = 'qibla';
   static const String calendar = 'calendar';
   static const String surahsList = 'surahsList';
   static const String profile = 'profile';
@@ -38,7 +40,7 @@ class AppRoutes {
   static const String dhikrDetails = 'dhikrDetails';
 
   static final GoRouter router = GoRouter(
-    initialLocation: splash,
+    initialLocation: "/$splash",
     routes: [
       _splashRoute,
       _homeShellRoute,
@@ -59,18 +61,15 @@ class AppRoutes {
   );
 
   static final _homeShellRoute = StatefulShellRoute.indexedStack(
-    builder: (context, state, child) {
-      return BlocProvider(
-        create: (_) =>
-            ServiceLocator.get<PrayerBloc>()..add(const PrayerRequested()),
-        child: HomeShellView(child: child),
-      );
-    },
+    builder: (context, state, child) => BlocProvider(
+      create: (_) =>
+          ServiceLocator.get<PrayerBloc>()..add(const PrayerRequested()),
+      child: HomeShellView(child: child),
+    ),
     branches: [
       StatefulShellBranch(routes: [_homeRoute]),
       StatefulShellBranch(routes: [_prayerRoute]),
-      StatefulShellBranch(routes: [_favoriteRoute]),
-      StatefulShellBranch(routes: [_profileRoute]),
+      StatefulShellBranch(routes: [_qiblahRoute]),
       StatefulShellBranch(routes: [_settingsRoute]),
     ],
   );
@@ -81,20 +80,19 @@ class AppRoutes {
     builder: (context, state) => HomeScreen(),
   );
 
-  static final _favoriteRoute = GoRoute(
-    path: "/$favorite",
-    name: favorite,
-    builder: (context, state) => Scaffold(),
-  );
   static final _prayerRoute = GoRoute(
     path: "/$prayer",
     name: prayer,
     builder: (context, state) => const PrayerScreen(),
   );
-  static final _profileRoute = GoRoute(
-    path: "/$profile",
-    name: profile,
-    builder: (context, state) => const Scaffold(),
+  static final _qiblahRoute = GoRoute(
+    path: "/$qiblah",
+    name: qiblah,
+    builder: (context, state) => BlocProvider(
+      create: (_) =>
+          ServiceLocator.get<QiblahBloc>()..add(const QiblahRequested()),
+      child: const QiblahScreen(),
+    ),
   );
   static final _settingsRoute = GoRoute(
     path: "/$settings",

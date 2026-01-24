@@ -115,7 +115,7 @@ class PrayerTimingsRepo {
         }
         throw LocalException(
           'Location permission denied',
-          code: LocalFailure.LOCATION_ERROR_CODE,
+          code: LocalFailure.LOCATION_PERMISSION_ERROR_CODE,
         );
       }
 
@@ -137,7 +137,7 @@ class PrayerTimingsRepo {
       }
 
       return getPrayerQuery().copyWith(address: address);
-    } on TimeoutException catch (e) {
+    } on TimeoutException catch (_) {
       setFallbackAddress(address);
       return getPrayerQuery().copyWith(
         address: fallbackAddress.isNotEmpty ? fallbackAddress : address,

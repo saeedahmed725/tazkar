@@ -7,9 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:tazkar/core/constants/app_assets.dart';
+import 'package:tazkar/core/constants/app_shared_keys.dart';
 import 'package:tazkar/core/utils/components/blur_background.dart';
 import 'package:tazkar/core/utils/components/sheets.dart';
 import 'package:tazkar/core/utils/errors/failure_widget.dart';
+import 'package:tazkar/core/utils/helpers/shared_pref.dart';
 import 'package:tazkar/features/prayer_timings/data/enums/timing_props.dart';
 import 'package:tazkar/features/prayer_timings/view/bloc/prayer_bloc.dart';
 
@@ -62,7 +64,7 @@ class PrayerView extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: -180,
+          top: -160,
           left: 0,
           right: 0,
           child: Image.asset(
@@ -94,6 +96,42 @@ class PrayerView extends StatelessWidget {
   }
 }
 
+class LocationNameWidget extends StatelessWidget {
+  const LocationNameWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final location = SharedPrefs.getString(AppSharedKeys.fallbackAddress);
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () => context.read<PrayerBloc>().add(
+        const PrayerRequested(shouldRefresh: true),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.location_on_rounded, color: Colors.white, size: 20),
+          Text(
+            location.isNotEmpty ? location : 'Unknown Location',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.black38,
+                  offset: Offset(0, 1),
+                  blurRadius: 2,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class NextPrayerCard extends StatelessWidget {
   const NextPrayerCard({
     super.key,
@@ -119,43 +157,7 @@ class NextPrayerCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                onTap: () {
-                  // Sheets.showModel(
-                  //   context,
-                  //   isScrollControlled: true,
-                  //   child: PrayerSettingsView(),
-                  // );
-
-                  context.read<PrayerBloc>().add(
-                    const PrayerRequested(shouldRefresh: true),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    Text(
-                      'Cairo, Egypt',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black38,
-                            offset: Offset(0, 1),
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              LocationNameWidget(),
               IconButton(
                 onPressed: () {
                   Sheets.showModel(
@@ -370,6 +372,7 @@ class PrayerTimesList extends StatelessWidget {
               isNext: nextPrayer == times[index].prayer,
             ),
           ),
+          kToolbarHeight.heightBox,
         ],
       ),
     );

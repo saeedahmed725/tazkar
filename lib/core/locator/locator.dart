@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tazkar/core/database/app_database.dart';
+import 'package:tazkar/features/qiblah/data/repo/qiblah_repo_impl.dart';
+import 'package:tazkar/features/qiblah/data/source/qiblah_location_source.dart';
+import 'package:tazkar/features/qiblah/domain/usecase/watch_qiblah_status.dart';
+import 'package:tazkar/features/qiblah/view/bloc/qiblah_bloc.dart';
 import 'package:tazkar/features/quran/data/datasource/quran_local_datasource.dart';
 import 'package:tazkar/features/splash/view/bloc/quran_global_bloc.dart';
 
@@ -67,6 +71,16 @@ class ServiceLocator {
       ),
     );
     _registerFactory<PrayerBloc>(() => PrayerBloc(get<PrayerTimingsRepo>()));
+
+    /// feat: qiblah
+    _registerFactory<QiblahLocationSource>(() => QiblahLocationSource());
+    _registerSingleton<QiblahRepoImpl>(
+      () => QiblahRepoImpl(get<QiblahLocationSource>()),
+    );
+    _registerFactory<WatchQiblahStatus>(
+      () => WatchQiblahStatus(get<QiblahRepoImpl>()),
+    );
+    _registerFactory<QiblahBloc>(() => QiblahBloc(get<WatchQiblahStatus>()));
 
     log("Setup completed", name: "Service Locator");
   }
