@@ -6,8 +6,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tazkar/core/classes/colorful_safe_area.dart';
-import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_assets.dart';
+import 'package:tazkar/core/constants/app_fonts.dart';
 import 'package:tazkar/core/constants/app_static.dart';
 import 'package:tazkar/core/utils/functions/functions.dart';
 import 'package:tazkar/features/quran/data/model/ayah_glyph.dart';
@@ -49,17 +49,17 @@ class _MushafScreenState extends State<MushafScreen> {
       body: ColorfulSafeArea(
         color: context.primaryColor,
         child: InkWell(
-          onTap: () {
-            setState(() {
-              isVisible = !isVisible;
-            });
-          },
+          // onTap: () {
+          //   setState(() {
+          //     isVisible = !isVisible;
+          //   });
+          // },
           splashColor: context.primaryColor.withValues(alpha: 0.06),
           highlightColor: context.primaryColor.withValues(alpha: 0.06),
           child: Stack(
             children: [
               MushafBuilder(),
-              OverlayWidgets(isVisible: isVisible),
+              // OverlayWidgets(isVisible: isVisible),
             ],
           ),
         ),
@@ -335,9 +335,7 @@ class Basmala extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: SvgPicture.asset(
-        isSecondTypeBasmala
-            ? AppAssets.basmala3Svg
-            : AppAssets.basmala2Svg,
+        isSecondTypeBasmala ? AppAssets.basmala3Svg : AppAssets.basmala2Svg,
         colorFilter: ColorFilter.mode(
           context.theme.colorScheme.onSurface,
           BlendMode.srcIn,

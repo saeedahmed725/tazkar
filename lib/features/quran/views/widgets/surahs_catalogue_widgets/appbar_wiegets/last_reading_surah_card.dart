@@ -22,6 +22,8 @@ class LastReadingSurahCard extends StatefulWidget {
 class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
   double _opacity = 1.0;
 
+
+
   @override
   void initState() {
     super.initState();
@@ -106,7 +108,7 @@ class _LastReadingSurahCardState extends State<LastReadingSurahCard> {
                         "الآية ٢٥٠",
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: AppFonts.kSAFonts,
+                          fontFamily: AppFonts.thmanyahSansFonts,
                           fontSize: 16,
                         ),
                       ),

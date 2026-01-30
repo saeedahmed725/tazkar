@@ -29,6 +29,8 @@ class PrayerTimingsRepo {
   }) : _remote = remote,
        _local = local;
 
+  String address = 'Cairo, Egypt';
+
   String get fallbackAddress =>
       SharedPrefs.getString(AppSharedKeys.fallbackAddress);
 
@@ -85,8 +87,12 @@ class PrayerTimingsRepo {
     return parts.join(', ');
   }
 
-  Future<PrayerQuery> _resolveLocation() async {
+  Future<PrayerQuery> _resolveLocation({bool shouldRefresh = false}) async {
     try {
+      if (!shouldRefresh && fallbackAddress.isNotEmpty) {
+        return getPrayerQuery();
+      }
+
       var permission = await Geolocator.checkPermission();
       if (!await Geolocator.isLocationServiceEnabled()) {
         if (fallbackAddress.isNotEmpty) {
@@ -109,14 +115,14 @@ class PrayerTimingsRepo {
         }
         throw LocalException(
           'Location permission denied',
-          code: LocalFailure.LOCATION_ERROR_CODE,
+          code: LocalFailure.LOCATION_PERMISSION_ERROR_CODE,
         );
       }
 
       final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.medium,
-          timeLimit: Duration(seconds: 10),
+          timeLimit: Duration(seconds: 6),
         ),
       );
 
@@ -126,11 +132,15 @@ class PrayerTimingsRepo {
       );
 
       final address = _formatAddress(placemarks.firstOrNull);
+      if (address != null && address.isNotEmpty) {
+        setFallbackAddress(address);
+      }
 
       return getPrayerQuery().copyWith(address: address);
-    } on TimeoutException catch (e) {
+    } on TimeoutException catch (_) {
+      setFallbackAddress(address);
       return getPrayerQuery().copyWith(
-        address: fallbackAddress.isNotEmpty ? fallbackAddress : 'Cairo, Egypt',
+        address: fallbackAddress.isNotEmpty ? fallbackAddress : address,
       );
     } catch (e) {
       throw LocalException(
@@ -140,10 +150,14 @@ class PrayerTimingsRepo {
     }
   }
 
-  Future<Result<PrayerTimingsModel>> getPrayerTimings() {
+  Future<Result<PrayerTimingsModel>> getPrayerTimings({
+    bool shouldRefresh = false,
+  }) {
     return Failure.handleOperation(
       operation: () async {
-        PrayerQuery query = await _resolveLocation();
+        PrayerQuery query = await _resolveLocation(
+          shouldRefresh: shouldRefresh,
+        );
 
         log('Using provided address: ${query.address}');
         final cached = await _local.getCachedCalendar(query);
