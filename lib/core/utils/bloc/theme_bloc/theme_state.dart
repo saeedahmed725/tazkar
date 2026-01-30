@@ -16,12 +16,3 @@ class ThemeState extends Equatable {
   @override
   List<Object?> get props => [mode, accentColor];
 }
-class AccentColorEntity extends Equatable {
-  final String title;
-  final Color color;
-
-  const AccentColorEntity({required this.title, required this.color});
-
-  @override
-  List<Object?> get props => [title, color];
-}

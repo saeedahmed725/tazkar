@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../features/settings/view/domain/entity/accent_color_entity.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_shared_keys.dart';
 import '../../helpers/shared_pref.dart';

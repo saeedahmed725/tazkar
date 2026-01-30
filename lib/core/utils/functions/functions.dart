@@ -58,7 +58,9 @@ class AppFunctions {
   }
 
   static String? validateConfirmPassword(
-      String? password, String? confirmPassword) {
+    String? password,
+    String? confirmPassword,
+  ) {
     if (password != confirmPassword) {
       return 'Password doesn\'t match';
     } else if (confirmPassword?.isEmpty ?? true) {
@@ -67,4 +69,8 @@ class AppFunctions {
       return null;
     }
   }
+}
+
+extension StringExtensions on String {
+  String get toArabicNumbers => AppFunctions.toArabicNumbers(this);
 }

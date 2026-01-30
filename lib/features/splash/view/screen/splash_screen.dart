@@ -117,3 +117,23 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+// Text.rich(
+//   TextSpan(
+//     text: 'اقْرَأْ بِاسْمِ رَبِّكَ',
+//     children: [
+//       TextSpan(
+//         text: '\nالَّذِي خَلَقَ',
+//         style: const TextStyle(fontSize: 23),
+//       ),
+//     ],
+//   ),
+//   textAlign: TextAlign.center,
+//   style: const TextStyle(
+//     fontSize: 30,
+//     height: 1.7,
+//     color: Colors.white,
+//     fontFamily: AppFonts.neiriziQuranFonts,
+//     shadows: [Shadow(color: Colors.black26, blurRadius: 10)],
+//   ),
+// ),

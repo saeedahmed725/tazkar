@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tazkar/core/constants/app_shared_keys.dart';
 import 'package:tazkar/core/utils/errors/failure.dart';
+import 'package:tazkar/core/utils/helpers/shared_pref.dart';
 import 'package:tazkar/features/prayer_timings/data/enums/timing_props.dart';
 import 'package:tazkar/features/prayer_timings/data/model/prayer_query.dart';
 import 'package:tazkar/features/prayer_timings/data/model/prayer_timings_model.dart';
@@ -15,6 +17,7 @@ part 'prayer_state.dart';
 class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
   PrayerBloc(this._repo) : super(PrayerState.initial()) {
     on<PrayerRequested>(_onRequested);
+    on<PrayerLocationChanged>(_onPrayerLocationChanged);
     on<PrayerTicked>(_onTicked);
   }
 
@@ -28,11 +31,12 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
     _ticker?.cancel();
     emit(state.copyWith(status: PrayerStatus.loading, message: null));
 
-    final result = await _repo.getPrayerTimings();
+    final result = await _repo.getPrayerTimings(
+      shouldRefresh: event.shouldRefresh,
+    );
     result.data.fold(
-      (failure) => emit(
-        state.copyWith(status: PrayerStatus.failure, message: failure),
-      ),
+      (failure) =>
+          emit(state.copyWith(status: PrayerStatus.failure, message: failure)),
       (calendar) {
         final schedule = _buildSchedule(calendar, DateTime.now());
         _startTicker();
@@ -193,5 +197,16 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
   Future<void> close() {
     _ticker?.cancel();
     return super.close();
+  }
+
+  Future<void> _onPrayerLocationChanged(
+    PrayerLocationChanged event,
+    Emitter<PrayerState> emit,
+  ) async {
+    await SharedPrefs.setString(
+      AppSharedKeys.fallbackAddress,
+      event.locationName,
+    );
+    add(const PrayerRequested());
   }
 }

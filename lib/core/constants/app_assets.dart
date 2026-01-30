@@ -15,6 +15,8 @@ class AppAssets {
 
   // icons
   static const String qaabahIcon = 'assets/images/icons/qaabah.svg';
+  static const String kaabaIcon = 'assets/images/icons/kaaba.svg';
+  static const String compassIcon = 'assets/images/icons/compass.svg';
   static const String bookmarkSvg = 'assets/images/icons/bookmark.svg';
   static const String bookLastReadingSvg =
       'assets/images/icons/book_last_reading.svg';
@@ -103,11 +105,14 @@ class AppAssets {
   static const String ashaaIcon = 'assets/images/prayer_time/icon/moon.svg';
 
   /// prayer times images
-  static const String fajirImage = 'assets/images/background/fajir.jpg';
-  static const String dhuhrImage = 'assets/images/background/dhuhr.jpg';
-  static const String asserImage = 'assets/images/background/asser.jpg';
-  static const String maghrabImage = 'assets/images/background/maghrab.jpg';
-  static const String ashaaImage = 'assets/images/background/ashaa.jpg';
+  static const String fajirImage = 'assets/images/background/fajir.webp';
+  static const String dhuhrImage = 'assets/images/background/dhuhr.webp';
+  static const String asserImage = 'assets/images/background/asser.webp';
+  static const String maghrabImage = 'assets/images/background/maghrab.webp';
+  static const String ashaaImage = 'assets/images/background/ashaa.webp';
+
+  /// category icons
+  static const String ayaOfDayImage = 'assets/images/icons/quran_alf_lam_mem.svg';
 
   static String getSurahImage(int surahNumber) {
     return 'assets/images/surah/00$surahNumber.svg';

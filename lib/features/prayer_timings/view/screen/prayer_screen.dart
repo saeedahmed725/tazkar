@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,9 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:tazkar/core/constants/app_assets.dart';
+import 'package:tazkar/core/constants/app_shared_keys.dart';
 import 'package:tazkar/core/utils/components/blur_background.dart';
 import 'package:tazkar/core/utils/components/sheets.dart';
 import 'package:tazkar/core/utils/errors/failure_widget.dart';
+import 'package:tazkar/core/utils/helpers/shared_pref.dart';
 import 'package:tazkar/features/prayer_timings/data/enums/timing_props.dart';
 import 'package:tazkar/features/prayer_timings/view/bloc/prayer_bloc.dart';
 
@@ -30,8 +31,9 @@ class PrayerScreen extends StatelessWidget {
         if (state.status == PrayerStatus.failure && state.failure != null) {
           return AppFailureWidget(
             failure: state.failure!,
-            onRetry: () =>
-                context.read<PrayerBloc>().add(const PrayerRequested()),
+            onRetry: () => context.read<PrayerBloc>().add(
+              const PrayerRequested(shouldRefresh: true),
+            ),
           );
         }
 
@@ -41,9 +43,10 @@ class PrayerScreen extends StatelessWidget {
 
         return Center(
           child: ElevatedButton(
-            onPressed: () =>
-                context.read<PrayerBloc>().add(const PrayerRequested()),
-            child: const Text('Load Prayer Times'),
+            onPressed: () => context.read<PrayerBloc>().add(
+              const PrayerRequested(shouldRefresh: true),
+            ),
+            child: Text('load_prayer_times'.tr()),
           ),
         );
       },
@@ -61,7 +64,7 @@ class PrayerView extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: -180,
+          top: -170,
           left: 0,
           right: 0,
           child: Image.asset(
@@ -93,6 +96,42 @@ class PrayerView extends StatelessWidget {
   }
 }
 
+class LocationNameWidget extends StatelessWidget {
+  const LocationNameWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final location = SharedPrefs.getString(AppSharedKeys.fallbackAddress);
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () => context.read<PrayerBloc>().add(
+        const PrayerRequested(shouldRefresh: true),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.location_on_rounded, color: Colors.white, size: 20),
+          Text(
+            location.isNotEmpty ? location : 'unknown_location'.tr(),
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.black38,
+                  offset: Offset(0, 1),
+                  blurRadius: 2,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class NextPrayerCard extends StatelessWidget {
   const NextPrayerCard({
     super.key,
@@ -115,44 +154,28 @@ class NextPrayerCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: () =>
-                    context.read<PrayerBloc>().add(const PrayerRequested()),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    Text(
-                      ' Cairo, Egypt ',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Sheets.showModel(
-                    context,
-                    isScrollControlled: true,
-                    child: PrayerSettingsView(),
-                  );
-                },
-                icon: SvgPicture.asset(
-                  AppAssets.menuLineIcon,
-                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                ),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                LocationNameWidget(),
+                // IconButton(
+                //   onPressed: () {
+                //     Sheets.showModel(
+                //       context,
+                //       isScrollControlled: true,
+                //       child: PrayerSettingsView(),
+                //     );
+                //   },
+                //   style: ButtonStyle(elevation: WidgetStateProperty.all(12)),
+                //   icon: SvgPicture.asset(
+                //     AppAssets.menuLineIcon,
+                //     colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                //   ),
+                // ),
+              ],
+            ),
           ),
           SizedBox(
             height: 120,
@@ -166,24 +189,26 @@ class NextPrayerCard extends StatelessWidget {
                 Positioned(
                   bottom: 12,
                   child: ClipOval(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.4),
-                            width: 2,
-                          ),
+                    child: BlurBackground(
+                      width: 48,
+                      height: 48,
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
                         ),
-                        child: const Icon(
-                          Icons.mosque_outlined,
-                          color: Colors.white,
-                          size: 24,
-                        ),
+                      ],
+                      child: const Icon(
+                        Icons.mosque_outlined,
+                        color: Colors.white,
+                        size: 24,
                       ),
                     ),
                   ),
@@ -200,11 +225,20 @@ class NextPrayerCard extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.25),
               width: 1.5,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
             child: Column(
               spacing: 14,
               children: [
                 Text(
-                  'Remaining time to $nextPrayer Pray',
+                  'remaining_time_to_prayer'.tr(
+                    namedArgs: {'prayer_name': nextPrayer},
+                  ),
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -375,24 +409,24 @@ class PrayerTimeItem extends StatelessWidget {
       child: Row(
         children: [
           /// CIRCULAR ICON
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-              color: time.prayer.color,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                time.prayer.icon,
-                height: 20,
-                width: 20,
-                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              ),
-            ),
-          ),
+          // Container(
+          //   height: 40,
+          //   width: 40,
+          //   decoration: BoxDecoration(
+          //     color: time.prayer.color,
+          //     shape: BoxShape.circle,
+          //   ),
+          //   child: Center(
+          //     child: SvgPicture.asset(
+          //       time.prayer.icon,
+          //       height: 20,
+          //       width: 20,
+          //       colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          //     ),
+          //   ),
+          // ),
 
-          12.widthBox,
+          // 12.widthBox,
 
           /// NAME AND TIME
           Expanded(
@@ -421,12 +455,31 @@ class PrayerTimeItem extends StatelessWidget {
             ),
           ),
 
-          /// MUTE/BELL ICON
-          Icon(
-            Icons.notifications_off_outlined,
-            size: 20,
-            color: Colors.grey.shade400,
+
+          Container(
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              color: time.prayer.color,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: SvgPicture.asset(
+                time.prayer.icon,
+                height: 20,
+                width: 20,
+                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              ),
+            ),
           ),
+
+
+          /// MUTE/BELL ICON
+          // Icon(
+          //   Icons.notifications_off_outlined,
+          //   size: 20,
+          //   color: Colors.grey.shade400,
+          // ),
         ],
       ),
     );

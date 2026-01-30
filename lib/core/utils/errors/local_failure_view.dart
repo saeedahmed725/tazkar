@@ -11,7 +11,8 @@ class LocalFailureContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (failure.errorCode == LocalFailure.LOCATION_ERROR_CODE) {
+    if (failure.errorCode == LocalFailure.LOCATION_SETTINGS_ERROR_CODE ||
+        failure.errorCode == LocalFailure.LOCATION_PERMISSION_ERROR_CODE) {
       return Center(
         child: Container(
           color: Colors.white,
@@ -30,8 +31,24 @@ class LocalFailureContent extends StatelessWidget {
               ),
               SizedBox(height: 8),
               GestureDetector(
-                onTap: () async => await Geolocator.openLocationSettings(),
-                child: Text('To App Setting'),
+                onTap: () async {
+                  if (failure.errorCode ==
+                      LocalFailure.LOCATION_PERMISSION_ERROR_CODE) {
+                    await Geolocator.openAppSettings();
+                    return;
+                  }
+                  await Geolocator.openLocationSettings();
+                },
+                child: Text(
+                  failure.errorCode ==
+                          LocalFailure.LOCATION_PERMISSION_ERROR_CODE
+                      ? 'Open App Settings'
+                      : 'Open Location Settings',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: context.primaryColor,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
               ),
             ],
           ),

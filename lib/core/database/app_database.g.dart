@@ -335,6 +335,239 @@ class $PrayerCacheEntriesTable extends PrayerCacheEntries
   }
 }
 
+class $PrayerTrackerEntriesTable extends PrayerTrackerEntries
+    with TableInfo<$PrayerTrackerEntriesTable, PrayerTrackerEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PrayerTrackerEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fajrMeta = const VerificationMeta('fajr');
+  @override
+  late final GeneratedColumn<bool> fajr = GeneratedColumn<bool>(
+    'fajr',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK (fajr IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _dhuhrMeta = const VerificationMeta('dhuhr');
+  @override
+  late final GeneratedColumn<bool> dhuhr = GeneratedColumn<bool>(
+    'dhuhr',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK (dhuhr IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _asrMeta = const VerificationMeta('asr');
+  @override
+  late final GeneratedColumn<bool> asr = GeneratedColumn<bool>(
+    'asr',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK (asr IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _maghribMeta = const VerificationMeta(
+    'maghrib',
+  );
+  @override
+  late final GeneratedColumn<bool> maghrib = GeneratedColumn<bool>(
+    'maghrib',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK (maghrib IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _ishaMeta = const VerificationMeta('isha');
+  @override
+  late final GeneratedColumn<bool> isha = GeneratedColumn<bool>(
+    'isha',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK (isha IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        date,
+        fajr,
+        dhuhr,
+        asr,
+        maghrib,
+        isha,
+        updatedAt,
+      ];
+  @override
+  String get aliasedName => _alias ?? 'prayer_tracker_entries';
+  @override
+  String get actualTableName => 'prayer_tracker_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PrayerTrackerEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(
+        _idMeta,
+        id.isAcceptableOrUnknown(data['id']!, _idMeta),
+      );
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('fajr')) {
+      context.handle(
+        _fajrMeta,
+        fajr.isAcceptableOrUnknown(data['fajr']!, _fajrMeta),
+      );
+    }
+    if (data.containsKey('dhuhr')) {
+      context.handle(
+        _dhuhrMeta,
+        dhuhr.isAcceptableOrUnknown(data['dhuhr']!, _dhuhrMeta),
+      );
+    }
+    if (data.containsKey('asr')) {
+      context.handle(
+        _asrMeta,
+        asr.isAcceptableOrUnknown(data['asr']!, _asrMeta),
+      );
+    }
+    if (data.containsKey('maghrib')) {
+      context.handle(
+        _maghribMeta,
+        maghrib.isAcceptableOrUnknown(data['maghrib']!, _maghribMeta),
+      );
+    }
+    if (data.containsKey('isha')) {
+      context.handle(
+        _ishaMeta,
+        isha.isAcceptableOrUnknown(data['isha']!, _ishaMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {date},
+      ];
+  @override
+  PrayerTrackerEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PrayerTrackerEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      fajr: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}fajr'],
+      )!,
+      dhuhr: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dhuhr'],
+      )!,
+      asr: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}asr'],
+      )!,
+      maghrib: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}maghrib'],
+      )!,
+      isha: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}isha'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $PrayerTrackerEntriesTable createAlias(String alias) {
+    return $PrayerTrackerEntriesTable(attachedDatabase, alias);
+  }
+}
+
 class PrayerCacheEntry extends DataClass
     implements Insertable<PrayerCacheEntry> {
   final int id;
@@ -729,16 +962,292 @@ class PrayerCacheEntriesCompanion extends UpdateCompanion<PrayerCacheEntry> {
   }
 }
 
+class PrayerTrackerEntry extends DataClass
+    implements Insertable<PrayerTrackerEntry> {
+  final int id;
+  final DateTime date;
+  final bool fajr;
+  final bool dhuhr;
+  final bool asr;
+  final bool maghrib;
+  final bool isha;
+  final DateTime updatedAt;
+  const PrayerTrackerEntry({
+    required this.id,
+    required this.date,
+    required this.fajr,
+    required this.dhuhr,
+    required this.asr,
+    required this.maghrib,
+    required this.isha,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['date'] = Variable<DateTime>(date);
+    map['fajr'] = Variable<bool>(fajr);
+    map['dhuhr'] = Variable<bool>(dhuhr);
+    map['asr'] = Variable<bool>(asr);
+    map['maghrib'] = Variable<bool>(maghrib);
+    map['isha'] = Variable<bool>(isha);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  PrayerTrackerEntriesCompanion toCompanion(bool nullToAbsent) {
+    return PrayerTrackerEntriesCompanion(
+      id: Value(id),
+      date: Value(date),
+      fajr: Value(fajr),
+      dhuhr: Value(dhuhr),
+      asr: Value(asr),
+      maghrib: Value(maghrib),
+      isha: Value(isha),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory PrayerTrackerEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PrayerTrackerEntry(
+      id: serializer.fromJson<int>(json['id']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      fajr: serializer.fromJson<bool>(json['fajr']),
+      dhuhr: serializer.fromJson<bool>(json['dhuhr']),
+      asr: serializer.fromJson<bool>(json['asr']),
+      maghrib: serializer.fromJson<bool>(json['maghrib']),
+      isha: serializer.fromJson<bool>(json['isha']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'date': serializer.toJson<DateTime>(date),
+      'fajr': serializer.toJson<bool>(fajr),
+      'dhuhr': serializer.toJson<bool>(dhuhr),
+      'asr': serializer.toJson<bool>(asr),
+      'maghrib': serializer.toJson<bool>(maghrib),
+      'isha': serializer.toJson<bool>(isha),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  PrayerTrackerEntry copyWith({
+    int? id,
+    DateTime? date,
+    bool? fajr,
+    bool? dhuhr,
+    bool? asr,
+    bool? maghrib,
+    bool? isha,
+    DateTime? updatedAt,
+  }) =>
+      PrayerTrackerEntry(
+        id: id ?? this.id,
+        date: date ?? this.date,
+        fajr: fajr ?? this.fajr,
+        dhuhr: dhuhr ?? this.dhuhr,
+        asr: asr ?? this.asr,
+        maghrib: maghrib ?? this.maghrib,
+        isha: isha ?? this.isha,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+  PrayerTrackerEntry copyWithCompanion(PrayerTrackerEntriesCompanion data) {
+    return PrayerTrackerEntry(
+      id: data.id.present ? data.id.value : this.id,
+      date: data.date.present ? data.date.value : this.date,
+      fajr: data.fajr.present ? data.fajr.value : this.fajr,
+      dhuhr: data.dhuhr.present ? data.dhuhr.value : this.dhuhr,
+      asr: data.asr.present ? data.asr.value : this.asr,
+      maghrib: data.maghrib.present ? data.maghrib.value : this.maghrib,
+      isha: data.isha.present ? data.isha.value : this.isha,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PrayerTrackerEntry(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
+          ..write('fajr: $fajr, ')
+          ..write('dhuhr: $dhuhr, ')
+          ..write('asr: $asr, ')
+          ..write('maghrib: $maghrib, ')
+          ..write('isha: $isha, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        date,
+        fajr,
+        dhuhr,
+        asr,
+        maghrib,
+        isha,
+        updatedAt,
+      );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PrayerTrackerEntry &&
+          other.id == this.id &&
+          other.date == this.date &&
+          other.fajr == this.fajr &&
+          other.dhuhr == this.dhuhr &&
+          other.asr == this.asr &&
+          other.maghrib == this.maghrib &&
+          other.isha == this.isha &&
+          other.updatedAt == this.updatedAt);
+}
+
+class PrayerTrackerEntriesCompanion
+    extends UpdateCompanion<PrayerTrackerEntry> {
+  final Value<int> id;
+  final Value<DateTime> date;
+  final Value<bool> fajr;
+  final Value<bool> dhuhr;
+  final Value<bool> asr;
+  final Value<bool> maghrib;
+  final Value<bool> isha;
+  final Value<DateTime> updatedAt;
+  const PrayerTrackerEntriesCompanion({
+    this.id = const Value.absent(),
+    this.date = const Value.absent(),
+    this.fajr = const Value.absent(),
+    this.dhuhr = const Value.absent(),
+    this.asr = const Value.absent(),
+    this.maghrib = const Value.absent(),
+    this.isha = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  PrayerTrackerEntriesCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime date,
+    this.fajr = const Value.absent(),
+    this.dhuhr = const Value.absent(),
+    this.asr = const Value.absent(),
+    this.maghrib = const Value.absent(),
+    this.isha = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  }) : date = Value(date);
+  static Insertable<PrayerTrackerEntry> custom({
+    Expression<int>? id,
+    Expression<DateTime>? date,
+    Expression<bool>? fajr,
+    Expression<bool>? dhuhr,
+    Expression<bool>? asr,
+    Expression<bool>? maghrib,
+    Expression<bool>? isha,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (date != null) 'date': date,
+      if (fajr != null) 'fajr': fajr,
+      if (dhuhr != null) 'dhuhr': dhuhr,
+      if (asr != null) 'asr': asr,
+      if (maghrib != null) 'maghrib': maghrib,
+      if (isha != null) 'isha': isha,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  PrayerTrackerEntriesCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? date,
+    Value<bool>? fajr,
+    Value<bool>? dhuhr,
+    Value<bool>? asr,
+    Value<bool>? maghrib,
+    Value<bool>? isha,
+    Value<DateTime>? updatedAt,
+  }) {
+    return PrayerTrackerEntriesCompanion(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      fajr: fajr ?? this.fajr,
+      dhuhr: dhuhr ?? this.dhuhr,
+      asr: asr ?? this.asr,
+      maghrib: maghrib ?? this.maghrib,
+      isha: isha ?? this.isha,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (fajr.present) {
+      map['fajr'] = Variable<bool>(fajr.value);
+    }
+    if (dhuhr.present) {
+      map['dhuhr'] = Variable<bool>(dhuhr.value);
+    }
+    if (asr.present) {
+      map['asr'] = Variable<bool>(asr.value);
+    }
+    if (maghrib.present) {
+      map['maghrib'] = Variable<bool>(maghrib.value);
+    }
+    if (isha.present) {
+      map['isha'] = Variable<bool>(isha.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PrayerTrackerEntriesCompanion(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
+          ..write('fajr: $fajr, ')
+          ..write('dhuhr: $dhuhr, ')
+          ..write('asr: $asr, ')
+          ..write('maghrib: $maghrib, ')
+          ..write('isha: $isha, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $PrayerCacheEntriesTable prayerCacheEntries =
       $PrayerCacheEntriesTable(this);
+    late final $PrayerTrackerEntriesTable prayerTrackerEntries =
+      $PrayerTrackerEntriesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [prayerCacheEntries];
+    List<DatabaseSchemaEntity> get allSchemaEntities => [
+      prayerCacheEntries,
+      prayerTrackerEntries,
+      ];
 }
 
 typedef $$PrayerCacheEntriesTableCreateCompanionBuilder =
@@ -1088,9 +1597,281 @@ typedef $$PrayerCacheEntriesTableProcessedTableManager =
       PrefetchHooks Function()
     >;
 
+typedef $$PrayerTrackerEntriesTableCreateCompanionBuilder =
+    PrayerTrackerEntriesCompanion Function({
+      Value<int> id,
+      required DateTime date,
+      Value<bool> fajr,
+      Value<bool> dhuhr,
+      Value<bool> asr,
+      Value<bool> maghrib,
+      Value<bool> isha,
+      Value<DateTime> updatedAt,
+    });
+typedef $$PrayerTrackerEntriesTableUpdateCompanionBuilder =
+    PrayerTrackerEntriesCompanion Function({
+      Value<int> id,
+      Value<DateTime> date,
+      Value<bool> fajr,
+      Value<bool> dhuhr,
+      Value<bool> asr,
+      Value<bool> maghrib,
+      Value<bool> isha,
+      Value<DateTime> updatedAt,
+    });
+
+class $$PrayerTrackerEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $PrayerTrackerEntriesTable> {
+  $$PrayerTrackerEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get fajr => $composableBuilder(
+    column: $table.fajr,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dhuhr => $composableBuilder(
+    column: $table.dhuhr,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get asr => $composableBuilder(
+    column: $table.asr,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get maghrib => $composableBuilder(
+    column: $table.maghrib,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isha => $composableBuilder(
+    column: $table.isha,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PrayerTrackerEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $PrayerTrackerEntriesTable> {
+  $$PrayerTrackerEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get fajr => $composableBuilder(
+    column: $table.fajr,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dhuhr => $composableBuilder(
+    column: $table.dhuhr,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get asr => $composableBuilder(
+    column: $table.asr,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get maghrib => $composableBuilder(
+    column: $table.maghrib,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isha => $composableBuilder(
+    column: $table.isha,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PrayerTrackerEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PrayerTrackerEntriesTable> {
+  $$PrayerTrackerEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<bool> get fajr =>
+      $composableBuilder(column: $table.fajr, builder: (column) => column);
+
+  GeneratedColumn<bool> get dhuhr =>
+      $composableBuilder(column: $table.dhuhr, builder: (column) => column);
+
+  GeneratedColumn<bool> get asr =>
+      $composableBuilder(column: $table.asr, builder: (column) => column);
+
+  GeneratedColumn<bool> get maghrib => $composableBuilder(
+    column: $table.maghrib,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isha =>
+      $composableBuilder(column: $table.isha, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$PrayerTrackerEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PrayerTrackerEntriesTable,
+          PrayerTrackerEntry,
+          $$PrayerTrackerEntriesTableFilterComposer,
+          $$PrayerTrackerEntriesTableOrderingComposer,
+          $$PrayerTrackerEntriesTableAnnotationComposer,
+          $$PrayerTrackerEntriesTableCreateCompanionBuilder,
+          $$PrayerTrackerEntriesTableUpdateCompanionBuilder,
+          (
+            PrayerTrackerEntry,
+            BaseReferences<
+              _$AppDatabase,
+              $PrayerTrackerEntriesTable,
+              PrayerTrackerEntry
+            >,
+          ),
+          PrayerTrackerEntry,
+          PrefetchHooks Function()
+        > {
+  $$PrayerTrackerEntriesTableTableManager(
+    _$AppDatabase db,
+    $PrayerTrackerEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PrayerTrackerEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PrayerTrackerEntriesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$PrayerTrackerEntriesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<bool> fajr = const Value.absent(),
+                Value<bool> dhuhr = const Value.absent(),
+                Value<bool> asr = const Value.absent(),
+                Value<bool> maghrib = const Value.absent(),
+                Value<bool> isha = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => PrayerTrackerEntriesCompanion(
+                id: id,
+                date: date,
+                fajr: fajr,
+                dhuhr: dhuhr,
+                asr: asr,
+                maghrib: maghrib,
+                isha: isha,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime date,
+                Value<bool> fajr = const Value.absent(),
+                Value<bool> dhuhr = const Value.absent(),
+                Value<bool> asr = const Value.absent(),
+                Value<bool> maghrib = const Value.absent(),
+                Value<bool> isha = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => PrayerTrackerEntriesCompanion.insert(
+                id: id,
+                date: date,
+                fajr: fajr,
+                dhuhr: dhuhr,
+                asr: asr,
+                maghrib: maghrib,
+                isha: isha,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PrayerTrackerEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PrayerTrackerEntriesTable,
+      PrayerTrackerEntry,
+      $$PrayerTrackerEntriesTableFilterComposer,
+      $$PrayerTrackerEntriesTableOrderingComposer,
+      $$PrayerTrackerEntriesTableAnnotationComposer,
+      $$PrayerTrackerEntriesTableCreateCompanionBuilder,
+      $$PrayerTrackerEntriesTableUpdateCompanionBuilder,
+      (
+        PrayerTrackerEntry,
+        BaseReferences<
+          _$AppDatabase,
+          $PrayerTrackerEntriesTable,
+          PrayerTrackerEntry
+        >,
+      ),
+      PrayerTrackerEntry,
+      PrefetchHooks Function()
+    >;
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
   $$PrayerCacheEntriesTableTableManager get prayerCacheEntries =>
       $$PrayerCacheEntriesTableTableManager(_db, _db.prayerCacheEntries);
+  $$PrayerTrackerEntriesTableTableManager get prayerTrackerEntries =>
+      $$PrayerTrackerEntriesTableTableManager(_db, _db.prayerTrackerEntries);
 }
