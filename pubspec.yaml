@@ -69,6 +69,7 @@ dependencies:
   flutter_upgrade_version: ^1.1.8
   jiffy: ^6.4.4
   super_icons: ^1.0.3
+  url_launcher: ^6.3.2
 
 
 dev_dependencies:
